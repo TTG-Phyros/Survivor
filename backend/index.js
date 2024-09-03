@@ -16,12 +16,13 @@ app.use(bodyParser.json());
 
 // Configurer la connexion à PostgreSQL
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'survivor',
-  password: 'postgres',
-  port: 5432,
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
 });
+
 
 
 // app.get('/api/token', async (req, res) => {
@@ -29,7 +30,7 @@ const pool = new Pool({
 //   if (req.query.id) {
 //     id = req.query.id;
 //   }
-  
+
 //   if (!id) {
 //     return res.status(400).send('ID parameter is required');
 //   }
@@ -39,11 +40,11 @@ const pool = new Pool({
 
 // const verifyToken = (req, res, next) => {
 //   const token = req.header('Authorization');
-  
+
 //   if (!token) {
 //     return res.status(401).json({ message: 'No token, authorization denied' });
 //   }
-  
+
 //   try {
 //     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 //     req.user = decoded.id;

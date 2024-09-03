@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { fetchEmployees } from './api/Api';
+import moment from 'moment';
+import { fetchEmployees, fetchEmployeeByID } from './api/Api';
 import './App.css';
 
 interface Employee {
@@ -16,7 +17,7 @@ function App() {
   const [employees, setEmployees] = useState<Employee[]>([]);
 
   useEffect(() => {
-    fetchEmployees()
+    fetchEmployeeByID(2)
       .then(data => {
         setEmployees(data);
       })
@@ -31,7 +32,7 @@ function App() {
       <ul>
         {employees.map(employee => (
           <li key={employee.id}>
-            {employee.firstname} - {employee.email} - {employee.lastname} - {employee.gender} - {employee.job} - {employee.birthdate.toString()}
+            {employee.firstname} - {employee.email} - {employee.lastname} - {employee.gender} - {employee.job} - {moment(employee.birthdate).format('DD/MM/YYYY')}
           </li>
         ))}
       </ul>
