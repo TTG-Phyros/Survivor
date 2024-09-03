@@ -7,6 +7,9 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const port = 5000;
 
+// Récupérer variables d'environnement
+require('dotenv').config();
+
 // Configurer le middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -19,6 +22,7 @@ const pool = new Pool({
   password: 'postgres',
   port: 5432,
 });
+
 
 // app.get('/api/token', async (req, res) => {
 //   var id;
