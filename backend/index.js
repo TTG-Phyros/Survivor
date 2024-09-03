@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Pool } = require('pg');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 
 const app = express();
 const port = 5000;
@@ -23,6 +24,10 @@ const pool = new Pool({
   port: process.env.PG_PORT,
 });
 
+// Définir l'URL de base pour l'API distante
+const DISTANT_API_BASE_URL = 'https://soul-connection.fr/api';
+const API_KEY = process.env.API_KEY;
+var ACCOUNT_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJqZWFubmUubWFydGluQHNvdWwtY29ubmVjdGlvbi5mciIsIm5hbWUiOiJKZWFubmUiLCJzdXJuYW1lIjoiTWFydGluIiwiZXhwIjoxNzI3MTY5MTcxfQ.6GIkltTh6LBjLDIr_XAKCkPv5VlvNCbjGfbI5jRl5aA';
 
 
 // app.get('/api/token', async (req, res) => {
@@ -66,7 +71,7 @@ app.get('/api/employees', async (req, res) => {
 });
 
 // Endpoint pour connecter un employé
-// app.get('/api/employees/login', verifyToken, async (req,res) => {
+// app.get('/api/employees/login', verifyToken, async (req,res) => {j
 //   try {
 //     // const result = await pool.query('');
 //     // res.json(result.rows);
@@ -307,6 +312,133 @@ app.get('/api/clothes/clothe_id/image', async (req,res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour refresh les données des employés
+app.get('/api/refresh_data/employees', async (req,res) => {
+  try {
+    const response = await axios.get(`${DISTANT_API_BASE_URL}/employees`, {
+      headers: {
+        'X-Group-Authorization': `${API_KEY}`,
+        'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+      }
+    });
+    const ids = response.data.map(({ id }) => id);
+    console.log(ids);
+
+    ids.forEach(async id => {
+      const response = await axios.get(`${DISTANT_API_BASE_URL}/employees/${id}`, {
+        headers: {
+          'X-Group-Authorization': `${API_KEY}`,
+          'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+        }
+      });
+      console.log(response.data);
+
+      try {
+        console.log(`Importing employee n°${id}`);
+        const existing_line = await pool.query('SELECT * FROM employees WHERE id = $1', [`${id}`]);
+
+        if (existing_line.rows.length > 0) {
+          await pool.query('UPDATE employees SET email=$1, firstname=$2, lastname=$3, birthdate=$4, gender=$5, job=$6 WHERE id=$7',
+            [`${response.data.email}`, `${response.data.surname}`, `${response.data.name}`,
+              `${response.data.birth_date}`, `${response.data.gender}`, `${response.data.work}`, `${response.data.id}`]);
+        } else {
+          await pool.query('INSERT INTO employees (id, email, firstname, lastname, birthdate, gender, job, image) VALUES ($1, $2, $3, $4, $5, $6, $7, NULL)',
+            [`${response.data.id}`, `${response.data.email}`, `${response.data.surname}`,
+              `${response.data.name}`, `${response.data.birth_date}`, `${response.data.gender}`, `${response.data.work}`]);
+        }
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Insert / Update Error');
+      }
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('ID array loop Error');
+  }
+});
+
+// Endpoint pour refresh les données des clients
+app.get('/api/refresh_data/customers', async (req,res) => {
+  try {
+    const response = await axios.get(`${DISTANT_API_BASE_URL}/customers`, {
+      headers: {
+        'X-Group-Authorization': `${API_KEY}`,
+        'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+      }
+    });
+    const ids = response.data.map(({ id }) => id);
+    console.log(ids);
+
+    ids.forEach(async id => {
+      const response = await axios.get(`${DISTANT_API_BASE_URL}/customers/${id}`, {
+        headers: {
+          'X-Group-Authorization': `${API_KEY}`,
+          'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+        }
+      });
+      console.log(response.data);
+
+      try {
+        console.log(`Importing customer n°${id}`);
+        const existing_line = await pool.query('SELECT * FROM customers WHERE id = $1', [`${id}`]);
+
+        if (existing_line.rows.length > 0) {
+          await pool.query('UPDATE customers SET email=$1, firstname=$2, lastname=$3, birthdate=$4, gender=$5, description=$6, astrological_sign=$7, phone_number=$8, address=$9 WHERE id=$10',
+            [`${response.data.email}`, `${response.data.surname}`, `${response.data.name}`,
+              `${response.data.birth_date}`, `${response.data.gender}`, `${response.data.description}`,
+              `${response.data.astrological_sign}`, `${response.data.phone_number}`, `${response.data.address}`, `${response.data.id}`]);
+        } else {
+          await pool.query('INSERT INTO customers (id, email, firstname, lastname, birthdate, gender, description, astrological_sign, phone_number, address, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NULL)',
+            [`${response.data.id}`, `${response.data.email}`, `${response.data.surname}`, `${response.data.name}`,
+              `${response.data.birth_date}`, `${response.data.gender}`, `${response.data.description}`,
+              `${response.data.astrological_sign}`, `${response.data.phone_number}`, `${response.data.address}`]);
+        }
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Insert / Update Error');
+      }
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('ID array loop Error');
+  }
+});
+
+// Endpoint pour refresh les données des vêtements
+app.get('/api/refresh_data/clothes', async (req,res) => {
+  try {
+    const customer_ids = await pool.query('SELECT id FROM customers');
+    console.log(customer_ids.rows);
+    
+    customer_ids.rows.forEach(async ({id}) => {
+      const response = await axios.get(`${DISTANT_API_BASE_URL}/customers/${id}/clothes`, {
+        headers: {
+          'X-Group-Authorization': `${API_KEY}`,
+          'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+        }
+      });
+
+      response.data.forEach(async row => {
+        try {
+          console.log(`Importing cloth n°${row.id}`);
+          const existing_line = await pool.query('SELECT * FROM clothes WHERE id = $1', [`${row.id}`]);
+          if (existing_line.rows.length > 0) {
+            await pool.query('UPDATE clothes SET type=$1 WHERE id=$2', [`${row.type}`, `${row.id}`]);
+          } else {
+            await pool.query('INSERT INTO clothes (id, type, image) VALUES ($1, $2, NULL)', [`${row.id}`, `${row.type}`]);
+          }
+        } catch (err) {
+          console.error(err.message);
+          res.status(500).send('Insert / Update Error');
+        }
+      });
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('ID array loop Error');
   }
 });
 

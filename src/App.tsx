@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { fetchEmployees, fetchEmployeeByID } from './api/Api';
+import { fetchEmployees, fetchEmployeeByID, fetchDistantEmployees, fetchDistantCustomers, fetchDistantClothes } from './api/Api';
 import './App.css';
 
 interface Employee {
@@ -17,7 +17,16 @@ function App() {
   const [employees, setEmployees] = useState<Employee[]>([]);
 
   useEffect(() => {
-    fetchEmployeeByID(2)
+    // fetchDistantEmployees().catch(error => {
+    //   console.error('Il y a eu une erreur!', error);
+    // });
+    // fetchDistantCustomers().catch(error => {
+    //   console.error('Il y a eu une erreur!', error);
+    // });
+    // fetchDistantClothes().catch(error => {
+    //   console.error('Il y a eu une erreur!', error);
+    // });
+    fetchEmployees()
       .then(data => {
         setEmployees(data);
       })

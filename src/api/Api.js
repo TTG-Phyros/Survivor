@@ -32,3 +32,39 @@ export const fetchEmployeeByID = async (id) => {
     throw error;
   }
 };
+
+/**
+ * Fonction pour récupérer les informations des employés depuis l'API distante
+**/
+export const fetchDistantEmployees = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/employees`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les informations des clients depuis l'API distante
+**/
+export const fetchDistantCustomers = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/customers`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les informations des vêtements depuis l'API distante
+**/
+export const fetchDistantClothes = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/clothes`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
