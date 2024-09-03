@@ -659,7 +659,7 @@ app.get('/api/refresh_data/clothes', async (req,res) => {
   try {
     const customer_ids = await pool.query('SELECT id FROM customers');
     console.log(customer_ids.rows);
-    
+
     customer_ids.rows.forEach(async ({id}) => {
       const response = await axios.get(`${DISTANT_API_BASE_URL}/customers/${id}/clothes`, {
         headers: {
@@ -722,7 +722,7 @@ app.get('/api/refresh_data/tips', async (req,res) => {
 });
 
 // Endpoint pour refresh les données des rencontres
-app.get('/api/refresh_data/encounter', async (req,res) => {
+app.get('/api/refresh_data/encounters', async (req,res) => {
   try {
     const response = await axios.get(`${DISTANT_API_BASE_URL}/encounters`, {
       headers: {
