@@ -315,6 +315,251 @@ app.get('/api/clothes/clothe_id/image', async (req,res) => {
   }
 });
 
+// Endpoint pour supprimer les employés
+app.get('/api/delete/employees', async (req, res) => {
+  try {
+    const result = await pool.query('DROP TABLE employees');
+    res.json("Object has been deleted");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur de serveur' });
+  }
+});
+
+// Endpoint pour supprimer un employé par ID
+app.get('/api/delete/employees/employee_id', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE FROM employees WHERE id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer l'image d'un employé par ID
+app.get('/api/delete/employees/employee_id/image', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE image FROM employees WHERE id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer les clients
+app.get('/api/delete/customers', async (req,res) => {
+  try {
+    const result = await pool.query('DROP TABLE customers');
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer un client par ID
+app.get('/api/delete/customers/customer_id', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE FROM customers WHERE id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer l'image d'un client par ID
+app.get('/api/delete/customers/customer_id/image', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE image FROM customers WHERE id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer les historiques de paiement d'un client par ID
+app.get('/api/delete/customers/customer_id/payments_history', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE FROM payments WHERE customer_id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer les vêtements d'un client par ID
+app.get('/api/delete/customers/customer_id/clothes', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE FROM clothes WHERE customer_id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer les rencontres
+app.get('/api/delete/encounters', async (req,res) => {
+  try {
+    const result = await pool.query('DELETE FROM encounters');
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer une rencontre par ID
+app.get('/api/delete/encounters/encounter_id', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE FROM encounters WHERE id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer les rencontres d'un client par ID
+app.get('/api/delete/encounters/customer/customer_id', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE FROM encounters WHERE customer_id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer les conseils
+app.get('/api/delete/tips', async (req,res) => {
+  try {
+    const result = await pool.query('DROP TABLE tips');
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer les évenements
+app.get('/api/delete/events', async (req,res) => {
+  try {
+    const result = await pool.query('DROP TABLE events');
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer un évenement par ID
+app.get('/api/delete/events/event_id', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE FROM events WHERE id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour supprimer l'image d'un vêtement par ID
+app.get('/api/delete/clothes/clothe_id/image', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
+  if (!id) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    const result = await pool.query('DELETE image FROM clothes WHERE id = $1', [`${id}`]);
+    res.json("Object has been deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Endpoint pour refresh les données des employés
 app.get('/api/refresh_data/employees', async (req,res) => {
   try {
@@ -341,11 +586,11 @@ app.get('/api/refresh_data/employees', async (req,res) => {
         const existing_line = await pool.query('SELECT * FROM employees WHERE id = $1', [`${id}`]);
 
         if (existing_line.rows.length > 0) {
-          await pool.query('UPDATE employees SET email=$1, firstname=$2, lastname=$3, birthdate=$4, gender=$5, job=$6 WHERE id=$7',
+          await pool.query('UPDATE employees SET email=$1, firstname=$3, lastname=$2, birthdate=$4, gender=$5, job=$6 WHERE id=$7',
             [`${response.data.email}`, `${response.data.surname}`, `${response.data.name}`,
               `${response.data.birth_date}`, `${response.data.gender}`, `${response.data.work}`, `${response.data.id}`]);
         } else {
-          await pool.query('INSERT INTO employees (id, email, firstname, lastname, birthdate, gender, job, image) VALUES ($1, $2, $3, $4, $5, $6, $7, NULL)',
+          await pool.query('INSERT INTO employees (id, email, firstname, lastname, birthdate, gender, job, image) VALUES ($1, $2, $4, $3, $5, $6, $7, NULL)',
             [`${response.data.id}`, `${response.data.email}`, `${response.data.surname}`,
               `${response.data.name}`, `${response.data.birth_date}`, `${response.data.gender}`, `${response.data.work}`]);
         }
@@ -354,6 +599,7 @@ app.get('/api/refresh_data/employees', async (req,res) => {
         res.status(500).send('Insert / Update Error');
       }
     });
+    res.json("Employees have been refreshed");
   } catch (err) {
     console.error(err.message);
     res.status(500).send('ID array loop Error');
@@ -386,12 +632,12 @@ app.get('/api/refresh_data/customers', async (req,res) => {
         const existing_line = await pool.query('SELECT * FROM customers WHERE id = $1', [`${id}`]);
 
         if (existing_line.rows.length > 0) {
-          await pool.query('UPDATE customers SET email=$1, firstname=$2, lastname=$3, birthdate=$4, gender=$5, description=$6, astrological_sign=$7, phone_number=$8, address=$9 WHERE id=$10',
+          await pool.query('UPDATE customers SET email=$1, firstname=$3, lastname=$2, birthdate=$4, gender=$5, description=$6, astrological_sign=$7, phone_number=$8, address=$9 WHERE id=$10',
             [`${response.data.email}`, `${response.data.surname}`, `${response.data.name}`,
               `${response.data.birth_date}`, `${response.data.gender}`, `${response.data.description}`,
               `${response.data.astrological_sign}`, `${response.data.phone_number}`, `${response.data.address}`, `${response.data.id}`]);
         } else {
-          await pool.query('INSERT INTO customers (id, email, firstname, lastname, birthdate, gender, description, astrological_sign, phone_number, address, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NULL)',
+          await pool.query('INSERT INTO customers (id, email, firstname, lastname, birthdate, gender, description, astrological_sign, phone_number, address, image) VALUES ($1, $2, $4, $3, $5, $6, $7, $8, $9, $10, NULL)',
             [`${response.data.id}`, `${response.data.email}`, `${response.data.surname}`, `${response.data.name}`,
               `${response.data.birth_date}`, `${response.data.gender}`, `${response.data.description}`,
               `${response.data.astrological_sign}`, `${response.data.phone_number}`, `${response.data.address}`]);
@@ -401,6 +647,7 @@ app.get('/api/refresh_data/customers', async (req,res) => {
         res.status(500).send('Insert / Update Error');
       }
     });
+    res.json("Customers have been refreshed");
   } catch (err) {
     console.error(err.message);
     res.status(500).send('ID array loop Error');
@@ -436,6 +683,132 @@ app.get('/api/refresh_data/clothes', async (req,res) => {
         }
       });
     });
+    res.json("Clothes have been refreshed");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('ID array loop Error');
+  }
+});
+
+// Endpoint pour refresh les données des conseils
+app.get('/api/refresh_data/tips', async (req,res) => {
+  try {
+    const response = await axios.get(`${DISTANT_API_BASE_URL}/tips`, {
+      headers: {
+        'X-Group-Authorization': `${API_KEY}`,
+        'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+      }
+    });
+
+    response.data.forEach(async row => {
+      try {
+        console.log(`Importing tip n°${row.id}`);
+        const existing_line = await pool.query('SELECT * FROM tips WHERE id = $1', [`${row.id}`]);
+        if (existing_line.rows.length > 0) {
+          await pool.query('UPDATE tips SET title=$1, tip=$2 WHERE id=$3', [`${row.title}`, `${row.tip}`, `${row.id}`]);
+        } else {
+          await pool.query('INSERT INTO tips (id, title, tip) VALUES ($1, $2, $3)', [`${row.id}`, `${row.title}`, `${row.tip}`]);
+        }
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Insert / Update Error');
+      }
+    });
+    res.json("Tips have been refreshed");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('ID array loop Error');
+  }
+});
+
+// Endpoint pour refresh les données des rencontres
+app.get('/api/refresh_data/encounter', async (req,res) => {
+  try {
+    const response = await axios.get(`${DISTANT_API_BASE_URL}/encounters`, {
+      headers: {
+        'X-Group-Authorization': `${API_KEY}`,
+        'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+      }
+    });
+    const ids = response.data.map(({ id }) => id);
+    console.log(ids);
+
+    ids.forEach(async id => {
+      const response = await axios.get(`${DISTANT_API_BASE_URL}/encounters/${id}`, {
+        headers: {
+          'X-Group-Authorization': `${API_KEY}`,
+          'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+        }
+      });
+      console.log(response.data);
+
+      try {
+        console.log(`Importing encounter n°${id}`);
+        const existing_line = await pool.query('SELECT * FROM encounters WHERE id = $1', [`${id}`]);
+
+        if (existing_line.rows.length > 0) {
+          await pool.query('UPDATE encounters SET customer_id=$1, date=$2, rating=$3, comment=$4, source=$5 WHERE id=$6',
+            [`${response.data.customer_id}`, `${response.data.date}`, `${response.data.rating}`,
+              `${response.data.comment}`, `${response.data.source}`, `${response.data.id}`]);
+        } else {
+          await pool.query('INSERT INTO encounters (id, customer_id, date, rating, comment, source) VALUES ($1, $2, $3, $4, $5, $6)',
+            [`${response.data.id}`, `${response.data.customer_id}`, `${response.data.date}`,
+              `${response.data.rating}`, `${response.data.comment}`, `${response.data.source}`]);
+        }
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Insert / Update Error');
+      }
+    });
+    res.json("Encounters have been refreshed");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('ID array loop Error');
+  }
+});
+
+// Endpoint pour refresh les données des évenements
+app.get('/api/refresh_data/events', async (req,res) => {
+  try {
+    const response = await axios.get(`${DISTANT_API_BASE_URL}/events`, {
+      headers: {
+        'X-Group-Authorization': `${API_KEY}`,
+        'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+      }
+    });
+    const ids = response.data.map(({ id }) => id);
+    console.log(ids);
+
+    ids.forEach(async id => {
+      const response = await axios.get(`${DISTANT_API_BASE_URL}/events/${id}`, {
+        headers: {
+          'X-Group-Authorization': `${API_KEY}`,
+          'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+        }
+      });
+      console.log(response.data);
+
+      try {
+        console.log(`Importing event n°${id}`);
+        const existing_line = await pool.query('SELECT * FROM events WHERE id = $1', [`${id}`]);
+
+        if (existing_line.rows.length > 0) {
+          await pool.query('UPDATE events SET name=$1, date=$2, max_participants=$3, location_x=$4, location_y=$5, type=$6, employee_id=$7, location_name=$8 WHERE id=$9',
+            [`${response.data.name}`, `${response.data.date}`, `${response.data.max_participants}`,
+              `${response.data.location_x}`, `${response.data.location_y}`, `${response.data.type}`,
+              `${response.data.employee_id}`, `${response.data.location_name}`, `${response.data.id}`]);
+        } else {
+          await pool.query('INSERT INTO events (id, name, date, max_participants, location_x, location_y, type, employee_id, location_name) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+            [`${response.data.id}`, `${response.data.name}`, `${response.data.date}`,
+              `${response.data.max_participants}`, `${response.data.location_x}`, `${response.data.location_y}`,
+              `${response.data.type}`, `${response.data.employee_id}`, `${response.data.location_name}`]);
+        }
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Insert / Update Error');
+      }
+    });
+    res.json("Events have been refreshed");
   } catch (err) {
     console.error(err.message);
     res.status(500).send('ID array loop Error');
