@@ -15,3 +15,20 @@ export const fetchEmployees = async () => {
     throw error;
   }
 };
+
+/**
+ * Fonction pour récupérer un employé par ID depuis l'API.
+**/
+export const fetchEmployeeByID = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/employees/employee_id`, {
+      params: {
+        id: id
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
