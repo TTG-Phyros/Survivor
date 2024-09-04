@@ -15,7 +15,7 @@ interface Employee {
 
 function App() {
   const [employees, setEmployees] = useState<Employee[]>([]);
-  
+
   useEffect(() => {
     // fetchDistantEmployees().catch(error => {
     //   console.error('Il y a eu une erreur!', error);
