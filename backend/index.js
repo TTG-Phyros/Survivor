@@ -96,19 +96,18 @@ app.get('/api/employees/:id', async (req, res) => {
 });
 
 // Endpoint pour récupérer l'image d'un employé par ID
-app.get('/api/employees/:id/image', async (req, res) => {
-  const { id } = req.params;
+app.get('/api/employees/employee_id/image', async (req,res) => {
+  var id;
+  if (req.query.id) {
+    id = req.query.id;
+  }
+
   if (!id) {
     return res.status(400).send('ID parameter is required');
   }
   try {
-    const result = await pool.query('SELECT image FROM employees WHERE id = $1', [id]);
-    if (result.rows.length > 0) {
-      res.type('image/jpeg'); // Changez le type selon le format de l'image
-      res.send(result.rows[0].image); // Assurez-vous que l'image est stockée sous forme de buffer
-    } else {
-      res.status(404).send('Image not found');
-    }
+    const result = await pool.query('SELECT image FROM employees WHERE id = $1', [`${id}`]);
+    res.json(result.rows);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
