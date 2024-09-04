@@ -59,7 +59,8 @@ function App() {
     //   .catch(error => {
     //     console.error('Il y a eu une erreur!', error);
     //   });
-    // api.connectEmployee();
+    api.connectEmployee();
+    api.fetchDistantPayments();
     // disconnectEmployee();
     // fetchEmployees()
     // .then(data => {

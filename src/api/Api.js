@@ -70,14 +70,26 @@ export const fetchDistantClothes = async () => {
 };
 
 /**
+ * Fonction pour récupérer les informations des paiements depuis l'API distante
+**/
+export const fetchDistantPayments = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/payments`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
  * Fonction pour connecter un compte employée
 **/
 export const connectEmployee = async () => {
   try {
     await axios.post(`${API_BASE_URL}/employees/login`,
       {
-        email: "etienne.roussel@soul-connection.fr",
-        password: "kaguyaSamaL0VEIsWar2015"
+        email: "jeanne.martin@soul-connection.fr",
+        password: "naouLeA82oeirn"
       }
     );
   } catch (error) {

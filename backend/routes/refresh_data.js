@@ -332,4 +332,43 @@ router.get('/events', async (req, res) => {
   }
 });
 
+// Endpoint pour refresh les données des paiements
+router.get('/payments', async (req, res) => {
+  try {
+    const customer_ids = await pool.query('SELECT id FROM customers');
+    const ids = customer_ids.rows.map(row => row.id);
+
+    await Promise.all(ids.map(async (id) => {
+      const response = await axios.get(`${global.DISTANT_API_BASE_URL}/customers/${id}/payments_history`, {
+        headers: {
+          'X-Group-Authorization': global.API_KEY,
+          'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
+        }
+      });
+
+      await Promise.all(response.data.map(async (row) => {
+        try {
+          // console.log(`Importing payment n°${row.id}`);
+          const existing_line = await pool.query('SELECT * FROM payments WHERE id = $1', [row.id]);
+          if (existing_line.rows.length > 0) {
+            await pool.query('UPDATE payments SET date=$1, payment_method=$2, amount=$3, comment=$4 WHERE id=$5',
+              [row.date, row.payment_method, row.amount, row.comment, row.id]);
+          } else {
+            await pool.query('INSERT INTO payments (id, date, payment_method, amount, comment) VALUES ($1, $2, $3, $4, $5)',
+              [row.id, row.date, row.payment_method, row.amount, row.comment]);
+          }
+        } catch (err) {
+          console.error(err.message);
+          res.status(500).send('Insert / Update Error');
+        }
+      }));
+    }));
+
+    res.json({status: 'success', message: 'Payments have been refreshed'});
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;
