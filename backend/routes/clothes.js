@@ -30,7 +30,6 @@ router.delete('/:id/image', async (req, res) => {
     }
 
     try {
-      // Mettre à jour la colonne `image` pour le vêtement spécifique
       const result = await pool.query('UPDATE clothes SET image = NULL WHERE id = $1', [id]);
 
       if (result.rowCount === 0) {

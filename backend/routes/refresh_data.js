@@ -166,42 +166,49 @@ router.get('/tips', async (req, res) => {
 });
 
 // Endpoint pour refresh les données des rencontres
-router.get('/encounters', async (req, res) => {
+router.get('/encounters', async (req,res) => {
   try {
     const response = await axios.get(`${DISTANT_API_BASE_URL}/encounters`, {
       headers: {
-        'X-Group-Authorization': API_KEY,
+        'X-Group-Authorization': `${API_KEY}`,
         'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
       }
     });
     const ids = response.data.map(({ id }) => id);
+    //console.log(ids);
 
-    await Promise.all(ids.map(async (id) => {
-      const encounterResponse = await axios.get(`${DISTANT_API_BASE_URL}/encounters/${id}`, {
+    ids.forEach(async id => {
+      const response = await axios.get(`${DISTANT_API_BASE_URL}/encounters/${id}`, {
         headers: {
-          'X-Group-Authorization': API_KEY,
+          'X-Group-Authorization': `${API_KEY}`,
           'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
         }
       });
+      //console.log(response.data);
 
-      const encounterData = encounterResponse.data;
-      const existing_line = await pool.query('SELECT * FROM encounters WHERE id = $1', [id]);
+      try {
+        //console.log(`Importing encounter n°${id}`);
+        const existing_line = await pool.query('SELECT * FROM encounters WHERE id = $1', [`${id}`]);
 
-      if (existing_line.rows.length > 0) {
-        await pool.query('UPDATE encounters SET customer_id=$1, date=$2, rating=$3, comment=$4, source=$5 WHERE id=$6',
-          [encounterData.customer_id, encounterData.date, encounterData.rating,
-            encounterData.comment, encounterData.source, id]);
-      } else {
-        await pool.query('INSERT INTO encounters (id, customer_id, date, rating, comment, source) VALUES ($1, $2, $3, $4, $5, $6)',
-          [id, encounterData.customer_id, encounterData.date,
-            encounterData.rating, encounterData.comment, encounterData.source]);
+        if (existing_line.rows.length > 0) {
+          await pool.query('UPDATE encounters SET customer_id=$1, date=$2, rating=$3, comment=$4, source=$5 WHERE id=$6',
+            [`${response.data.customer_id}`, `${response.data.date}`, `${response.data.rating}`,
+              `${response.data.comment}`, `${response.data.source}`, `${response.data.id}`]);
+        } else {
+          await pool.query('INSERT INTO encounters (id, customer_id, date, rating, comment, source) VALUES ($1, $2, $3, $4, $5, $6)',
+            [`${response.data.id}`, `${response.data.customer_id}`, `${response.data.date}`,
+              `${response.data.rating}`, `${response.data.comment}`, `${response.data.source}`]);
+        }
+      } catch (err) {
+        console.error({status: 'error', message: err.message});
+        res.status(500).send('Insert / Update Error');
       }
-    }));
-
+    });
     res.json({status: 'success', message: 'Encounters have been refreshed'});
+
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.error({status: 'error', message: err.message});
+    res.status(500).send('ID array loop Error');
   }
 });
 
