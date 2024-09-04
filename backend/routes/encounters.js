@@ -4,6 +4,10 @@ const pool = require('../db');
 
 // Endpoint pour récupérer les rencontres
 router.get('/', async (req,res) => {
+    if (!global.ACCOUNT_TOKEN) {
+      console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+    }
     try {
       const result = await pool.query('SELECT * FROM encounters');
       res.json(result.rows);
@@ -15,6 +19,10 @@ router.get('/', async (req,res) => {
 
 // Endpoint pour récupérer une rencontre par ID
 router.get('/:id', async (req, res) => {
+    if (!global.ACCOUNT_TOKEN) {
+      console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+    }
   const { id } = req.params;
   if (!id) {
     return res.status(400).send('ID parameter is required');
@@ -30,6 +38,10 @@ router.get('/:id', async (req, res) => {
 
 // Endpoint pour récupérer les rencontres d'un client par ID
 router.get('/customer/:id', async (req, res) => {
+    if (!global.ACCOUNT_TOKEN) {
+      console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+    }
   const { id } = req.params;
   if (!id) {
     return res.status(400).send('ID parameter is required');
@@ -45,6 +57,10 @@ router.get('/customer/:id', async (req, res) => {
 
 // Endpoint pour supprimer les rencontres
 router.delete('/', async (req, res) => {
+    if (!global.ACCOUNT_TOKEN) {
+      console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+    }
     try {
       await pool.query('DELETE FROM encounters');
       res.json("All encounters have been deleted");
@@ -57,6 +73,10 @@ router.delete('/', async (req, res) => {
 
 // Endpoint pour supprimer une rencontre par ID
 router.delete('/:id', async (req, res) => {
+    if (!global.ACCOUNT_TOKEN) {
+      console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+    }
   const { id } = req.params;
 
   if (!id) {
@@ -77,6 +97,10 @@ router.delete('/:id', async (req, res) => {
 
 // Endpoint pour supprimer les rencontres d'un client par ID
 router.delete('/customer/:id', async (req, res) => {
+    if (!global.ACCOUNT_TOKEN) {
+      console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+    }
   const { id } = req.params;
 
   if (!id) {

@@ -3,27 +3,23 @@ const router = express.Router();
 const pool = require('../db');
 const axios = require('axios');
 
-const DISTANT_API_BASE_URL = 'https://soul-connection.fr/api';
-const API_KEY = process.env.API_KEY;
-var ACCOUNT_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJqZWFubmUubWFydGluQHNvdWwtY29ubmVjdGlvbi5mciIsIm5hbWUiOiJKZWFubmUiLCJzdXJuYW1lIjoiTWFydGluIiwiZXhwIjoxNzI3MTY5MTcxfQ.6GIkltTh6LBjLDIr_XAKCkPv5VlvNCbjGfbI5jRl5aA';
-
 // Endpoint pour refresh les données des employés
 router.get('/employees', async (req, res) => {
     try {
-      const response = await axios.get(`${DISTANT_API_BASE_URL}/employees`, {
+      const response = await axios.get(`${global.DISTANT_API_BASE_URL}/employees`, {
         headers: {
-          'X-Group-Authorization': API_KEY,
-          'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+          'X-Group-Authorization': global.API_KEY,
+          'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
         },
       });
 
       const ids = response.data.map(({ id }) => id);
 
       await Promise.all(ids.map(async (id) => {
-        const employeeResponse = await axios.get(`${DISTANT_API_BASE_URL}/employees/${id}`, {
+        const employeeResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/employees/${id}`, {
           headers: {
-            'X-Group-Authorization': API_KEY,
-            'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+            'X-Group-Authorization': global.API_KEY,
+            'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
           },
         });
 
@@ -59,19 +55,19 @@ router.get('/employees', async (req, res) => {
 // Endpoint pour refresh les données des clients
 router.get('/customers', async (req, res) => {
     try {
-      const response = await axios.get(`${DISTANT_API_BASE_URL}/customers`, {
+      const response = await axios.get(`${global.DISTANT_API_BASE_URL}/customers`, {
         headers: {
-          'X-Group-Authorization': API_KEY,
-          'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+          'X-Group-Authorization': global.API_KEY,
+          'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
         }
       });
       const ids = response.data.map(({ id }) => id);
 
       await Promise.all(ids.map(async (id) => {
-        const customerResponse = await axios.get(`${DISTANT_API_BASE_URL}/customers/${id}`, {
+        const customerResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/customers/${id}`, {
           headers: {
-            'X-Group-Authorization': API_KEY,
-            'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+            'X-Group-Authorization': global.API_KEY,
+            'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
           }
         });
 
@@ -105,10 +101,10 @@ router.get('/clothes', async (req, res) => {
       const ids = customer_ids.rows.map(row => row.id);
 
       await Promise.all(ids.map(async (id) => {
-        const response = await axios.get(`${DISTANT_API_BASE_URL}/customers/${id}/clothes`, {
+        const response = await axios.get(`${global.DISTANT_API_BASE_URL}/customers/${id}/clothes`, {
           headers: {
-            'X-Group-Authorization': API_KEY,
-            'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+            'X-Group-Authorization': global.API_KEY,
+            'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
           }
         });
 
@@ -137,10 +133,10 @@ router.get('/clothes', async (req, res) => {
 // Endpoint pour refresh les données des conseils
 router.get('/tips', async (req, res) => {
   try {
-    const response = await axios.get(`${DISTANT_API_BASE_URL}/tips`, {
+    const response = await axios.get(`${global.DISTANT_API_BASE_URL}/tips`, {
       headers: {
-        'X-Group-Authorization': API_KEY,
-        'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+        'X-Group-Authorization': global.API_KEY,
+        'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
       }
     });
 
@@ -168,19 +164,19 @@ router.get('/tips', async (req, res) => {
 // Endpoint pour refresh les données des rencontres
 router.get('/encounters', async (req, res) => {
   try {
-    const response = await axios.get(`${DISTANT_API_BASE_URL}/encounters`, {
+    const response = await axios.get(`${global.DISTANT_API_BASE_URL}/encounters`, {
       headers: {
-        'X-Group-Authorization': API_KEY,
-        'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+        'X-Group-Authorization': global.API_KEY,
+        'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
       }
     });
     const ids = response.data.map(({ id }) => id);
 
     await Promise.all(ids.map(async (id) => {
-      const encounterResponse = await axios.get(`${DISTANT_API_BASE_URL}/encounters/${id}`, {
+      const encounterResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/encounters/${id}`, {
         headers: {
-          'X-Group-Authorization': API_KEY,
-          'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+          'X-Group-Authorization': global.API_KEY,
+          'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
         }
       });
 
@@ -208,19 +204,19 @@ router.get('/encounters', async (req, res) => {
 // Endpoint pour refresh les données des évenements
 router.get('/events', async (req, res) => {
   try {
-    const response = await axios.get(`${DISTANT_API_BASE_URL}/events`, {
+    const response = await axios.get(`${global.DISTANT_API_BASE_URL}/events`, {
       headers: {
-        'X-Group-Authorization': API_KEY,
-        'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+        'X-Group-Authorization': global.API_KEY,
+        'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
       }
     });
     const ids = response.data.map(({ id }) => id);
 
     await Promise.all(ids.map(async (id) => {
-      const eventResponse = await axios.get(`${DISTANT_API_BASE_URL}/events/${id}`, {
+      const eventResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/events/${id}`, {
         headers: {
-          'X-Group-Authorization': API_KEY,
-          'Authorization': `Bearer ${ACCOUNT_TOKEN}`,
+          'X-Group-Authorization': global.API_KEY,
+          'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
         }
       });
 

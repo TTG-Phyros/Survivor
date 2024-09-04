@@ -68,3 +68,33 @@ export const fetchDistantClothes = async () => {
     throw error;
   }
 };
+
+/**
+ * Fonction pour connecter un compte employée
+**/
+export const connectEmployee = async () => {
+  try {
+    await axios.post(`${API_BASE_URL}/employees/login`, 
+      {
+        email: "etienne.roussel@soul-connection.fr",
+        password: "kaguyaSamaL0VEIsWar2015"
+      }
+    );
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour déconnecter un compte employée
+**/
+export const disconnectEmployee = async () => {
+  try {
+    await axios.post(`${API_BASE_URL}/employees/logout`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+

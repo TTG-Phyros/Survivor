@@ -8,6 +8,13 @@ const port = 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Récupérer variables d'environnement
+require('dotenv').config();
+
+// Variables globales
+global.DISTANT_API_BASE_URL = 'https://soul-connection.fr/api';
+global.API_KEY = process.env.API_KEY;
+
 // Importer les routes
 const clothesRoutes = require('./routes/clothes');
 const customerRoutes = require('./routes/customers');

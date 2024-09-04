@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { fetchEmployees, fetchEmployeeByID, fetchDistantEmployees, fetchDistantCustomers, fetchDistantClothes } from './api/Api';
+import { fetchEmployees, fetchEmployeeByID, fetchDistantEmployees, fetchDistantCustomers, fetchDistantClothes, connectEmployee, disconnectEmployee } from './api/Api';
 import './App.css';
 
 interface Employee {
@@ -26,13 +26,22 @@ function App() {
     // fetchDistantClothes().catch(error => {
     //   console.error('Il y a eu une erreur!', error);
     // });
+    // fetchEmployees()
+    //   .then(data => {
+    //     setEmployees(data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Il y a eu une erreur!', error);
+    //   });
+    // connectEmployee();
+    // disconnectEmployee();
     fetchEmployees()
-      .then(data => {
-        setEmployees(data);
-      })
-      .catch(error => {
-        console.error('Il y a eu une erreur!', error);
-      });
+    .then(data => {
+      setEmployees(data);
+    })
+    .catch(error => {
+      console.error('Il y a eu une erreur!', error);
+    });
   }, []);
 
   return (
