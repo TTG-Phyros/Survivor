@@ -35,6 +35,7 @@ function App() {
     //   });
     // connectEmployee();
     // disconnectEmployee();
+    connectEmployee();
     fetchEmployees()
     .then(data => {
       setEmployees(data);
