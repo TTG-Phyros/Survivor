@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { fetchEmployees, fetchEmployeeByID, fetchDistantEmployees, fetchDistantCustomers, fetchDistantClothes, connectEmployee, disconnectEmployee } from './api/Api';
+import * as api from'./api/Api';
 import './App.css';
 
 interface Employee {
@@ -15,7 +15,7 @@ interface Employee {
 
 function App() {
   const [employees, setEmployees] = useState<Employee[]>([]);
-
+  
   useEffect(() => {
     // fetchDistantEmployees().catch(error => {
     //   console.error('Il y a eu une erreur!', error);
@@ -35,13 +35,44 @@ function App() {
     //   });
     // connectEmployee();
     // disconnectEmployee();
-    fetchEmployees()
-    .then(data => {
-      setEmployees(data);
-    })
-    .catch(error => {
-      console.error('Il y a eu une erreur!', error);
-    });
+    // fetchEmployees()
+    // .then(data => {
+    //   setEmployees(data);
+    // })
+    // .catch(error => {
+    //   console.error('Il y a eu une erreur!', error);
+    // });
+    // fetchDistantEmployeesImages();
+    // getEmployeeImage();   // fetchDistantEmployees().catch(error => {
+    //   console.error('Il y a eu une erreur!', error);
+    // });
+    // fetchDistantCustomers().catch(error => {
+    //   console.error('Il y a eu une erreur!', error);
+    // });
+    // fetchDistantClothes().catch(error => {
+    //   console.error('Il y a eu une erreur!', error);
+    // });
+    // fetchEmployees()
+    //   .then(data => {
+    //     setEmployees(data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Il y a eu une erreur!', error);
+    //   });
+    // api.connectEmployee();
+    // disconnectEmployee();
+    // fetchEmployees()
+    // .then(data => {
+    //   setEmployees(data);
+    // })
+    // .catch(error => {
+    //   console.error('Il y a eu une erreur!', error);
+    // });
+    // api.fetchDistantEmployeesImages();
+    // api.fetchDistantCustomersImages();
+    // api.fetchDistantClothesImages();
+    // getEmployeeImage();
+
   }, []);
 
   return (

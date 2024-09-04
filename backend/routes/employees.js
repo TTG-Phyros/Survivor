@@ -87,7 +87,7 @@ router.get('/employee_id/image', async (req,res) => {
   }
   try {
     const result = await pool.query('SELECT image FROM employees WHERE id = $1', [`${id}`]);
-    res.json(result.rows);
+    res.json({ image : Buffer.from(result.rows[0].image).toString('base64') });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

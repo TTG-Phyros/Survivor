@@ -15,6 +15,10 @@ require('dotenv').config();
 global.DISTANT_API_BASE_URL = 'https://soul-connection.fr/api';
 global.API_KEY = process.env.API_KEY;
 
+// TEMP -- A ENLEVER
+global.ACCOUNT_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJqZWFubmUubWFydGluQHNvdWwtY29ubmVjdGlvbi5mciIsIm5hbWUiOiJKZWFubmUiLCJzdXJuYW1lIjoiTWFydGluIiwiZXhwIjoxNzI3MjY2MzQ1fQ.RT1JVMi75Y2KMU5P_C35lPNhU0MjQRLud8K0d1EklMk";
+
+
 // Importer les routes
 const clothesRoutes = require('./routes/clothes');
 const customerRoutes = require('./routes/customers');

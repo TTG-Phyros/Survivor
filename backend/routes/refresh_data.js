@@ -52,6 +52,33 @@ router.get('/employees', async (req, res) => {
     }
 });
 
+// Endpoint pour refresh les données des employés
+router.get('/employees/images', async (req, res) => {
+  try {
+    const employees_ids = await pool.query('SELECT id FROM employees');
+    const ids = employees_ids.rows.map(row => row.id);
+
+    await Promise.all(ids.map(async (id) => {
+      const imageResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/employees/${id}/image`, {
+        headers: {
+          'X-Group-Authorization': global.API_KEY,
+          'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
+        },
+        responseType: 'arraybuffer'
+      });
+
+      const imageData = imageResponse.data;
+      // console.log(imageData);
+      await pool.query('UPDATE employees SET image=$1 WHERE id=$2', [imageData, id]);
+    }));
+
+    res.json({ status: 'success', message: 'Employees images have been refreshed' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ status: 'error', message: 'Server Error' });
+  }
+});
+
 // Endpoint pour refresh les données des clients
 router.get('/customers', async (req, res) => {
     try {
@@ -94,6 +121,33 @@ router.get('/customers', async (req, res) => {
     }
 });
 
+// Endpoint pour refresh les données des clients
+router.get('/customers/images', async (req, res) => {
+  try {
+    const customers_ids = await pool.query('SELECT id FROM customers');
+    const ids = customers_ids.rows.map(row => row.id);
+
+    await Promise.all(ids.map(async (id) => {
+      const imageResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/customers/${id}/image`, {
+        headers: {
+          'X-Group-Authorization': global.API_KEY,
+          'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
+        },
+        responseType: 'arraybuffer'
+      });
+
+      const imageData = imageResponse.data;
+      // console.log(imageData);
+      await pool.query('UPDATE customers SET image=$1 WHERE id=$2', [imageData, id]);
+    }));
+
+    res.json({ status: 'success', message: 'Customers images have been refreshed' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ status: 'error', message: 'Server Error' });
+  }
+});
+
 // Endpoint pour refresh les données des vêtements
 router.get('/clothes', async (req, res) => {
     try {
@@ -128,6 +182,33 @@ router.get('/clothes', async (req, res) => {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
+});
+
+// Endpoint pour refresh les données des vêtements
+router.get('/clothes/images', async (req, res) => {
+  try {
+    const clothes_ids = await pool.query('SELECT id FROM clothes');
+    const ids = clothes_ids.rows.map(row => row.id);
+
+    await Promise.all(ids.map(async (id) => {
+      const imageResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/clothes/${id}/image`, {
+        headers: {
+          'X-Group-Authorization': global.API_KEY,
+          'Authorization': `Bearer ${global.ACCOUNT_TOKEN}`,
+        },
+        responseType: 'arraybuffer'
+      });
+
+      const imageData = imageResponse.data;
+      // console.log(imageData);
+      await pool.query('UPDATE clothes SET image=$1 WHERE id=$2', [imageData, id]);
+    }));
+
+    res.json({ status: 'success', message: 'Clothes images have been refreshed' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ status: 'error', message: 'Server Error' });
+  }
 });
 
 // Endpoint pour refresh les données des conseils

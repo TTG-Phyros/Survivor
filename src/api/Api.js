@@ -98,3 +98,55 @@ export const disconnectEmployee = async () => {
   }
 };
 
+/**
+ * Fonction pour refresh les images des employés depuis l'API distante
+**/
+export const fetchDistantEmployeesImages = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/employees/images`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer l'image d'un employé
+**/
+export const getEmployeeImage = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/employees/employee_id/image`, {
+      params: {
+        id: id
+      }
+    });
+    return response.data.image;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour refresh les images des employés depuis l'API distante
+**/
+export const fetchDistantCustomersImages = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/customers/images`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour refresh les images des employés depuis l'API distante
+**/
+export const fetchDistantClothesImages = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/clothes/images`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
