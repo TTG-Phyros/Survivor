@@ -82,6 +82,42 @@ export const fetchDistantPayments = async () => {
 };
 
 /**
+ * Fonction pour récupérer les informations des evenements depuis l'API distante
+**/
+export const fetchDistantEvents = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/events`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les informations des rencontres depuis l'API distante
+**/
+export const fetchDistantEncounters = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/encounters`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les informations des conseils depuis l'API distante
+**/
+export const fetchDistantTips = async () => {
+  try {
+    await axios.get(`${API_BASE_URL}/refresh_data/tips`);
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
  * Fonction pour connecter un compte employée
 **/
 export const connectEmployee = async () => {

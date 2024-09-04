@@ -313,13 +313,13 @@ router.get('/events', async (req, res) => {
       const existing_line = await pool.query('SELECT * FROM events WHERE id = $1', [id]);
 
       if (existing_line.rows.length > 0) {
-        await pool.query('UPDATE events SET name=$1, date=$2, max_participants=$3, location_x=$4, location_y=$5, type=$6, employee_id=$7, location_name=$8 WHERE id=$9',
-          [eventData.name, eventData.date, eventData.max_participants,
+        await pool.query('UPDATE events SET name=$1, date=$2, duration=$3, max_participants=$4, location_x=$5, location_y=$6, type=$7, employee_id=$8, location_name=$9 WHERE id=$10',
+          [eventData.name, eventData.date, eventData.duration, eventData.max_participants,
             eventData.location_x, eventData.location_y, eventData.type,
             eventData.employee_id, eventData.location_name, id]);
       } else {
-        await pool.query('INSERT INTO events (id, name, date, max_participants, location_x, location_y, type, employee_id, location_name) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-          [id, eventData.name, eventData.date,
+        await pool.query('INSERT INTO events (id, name, date, duration, max_participants, location_x, location_y, type, employee_id, location_name) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+          [id, eventData.name, eventData.date, eventData.duration,
             eventData.max_participants, eventData.location_x, eventData.location_y,
             eventData.type, eventData.employee_id, eventData.location_name]);
       }

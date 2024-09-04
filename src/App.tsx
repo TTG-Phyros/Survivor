@@ -60,7 +60,7 @@ function App() {
     //     console.error('Il y a eu une erreur!', error);
     //   });
     api.connectEmployee();
-    api.fetchDistantPayments();
+    api.fetchDistantEvents();
     // disconnectEmployee();
     // fetchEmployees()
     // .then(data => {
