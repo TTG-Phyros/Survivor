@@ -29,7 +29,6 @@ const DISTANT_API_BASE_URL = 'https://soul-connection.fr/api';
 const API_KEY = process.env.API_KEY;
 var ACCOUNT_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJqZWFubmUubWFydGluQHNvdWwtY29ubmVjdGlvbi5mciIsIm5hbWUiOiJKZWFubmUiLCJzdXJuYW1lIjoiTWFydGluIiwiZXhwIjoxNzI3MTY5MTcxfQ.6GIkltTh6LBjLDIr_XAKCkPv5VlvNCbjGfbI5jRl5aA';
 
-
 // app.get('/api/token', async (req, res) => {
 //   var id;
 //   if (req.query.id) {
@@ -629,7 +628,7 @@ app.get('/api/refresh_data/customers', async (req, res) => {
       }
     }));
 
-    res.json("Customers have been refreshed");
+    res.json({status: 'success', message: 'Customers have been refreshed'});
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -665,7 +664,7 @@ app.get('/api/refresh_data/clothes', async (req, res) => {
       }));
     }));
 
-    res.json("Clothes have been refreshed");
+    res.json({status: 'success', message: 'Clothes have been refreshed'});
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -696,7 +695,7 @@ app.get('/api/refresh_data/tips', async (req, res) => {
       }
     }));
 
-    res.json("Tips have been refreshed");
+    res.json({status: 'success', message: 'Tips have been refreshed'});
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -736,7 +735,7 @@ app.get('/api/refresh_data/encounters', async (req, res) => {
       }
     }));
 
-    res.json("Encounters have been refreshed");
+    res.json({status: 'success', message: 'Encounters have been refreshed'});
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -778,7 +777,7 @@ app.get('/api/refresh_data/events', async (req, res) => {
       }
     }));
 
-    res.json("Events have been refreshed");
+    res.json({status: 'success', message: 'Events have been refreshed'});
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
