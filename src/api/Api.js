@@ -74,7 +74,7 @@ export const fetchDistantClothes = async () => {
 **/
 export const connectEmployee = async () => {
   try {
-    await axios.post(`${API_BASE_URL}/employees/login`, 
+    await axios.post(`${API_BASE_URL}/employees/login`,
       {
         email: "etienne.roussel@soul-connection.fr",
         password: "kaguyaSamaL0VEIsWar2015"
