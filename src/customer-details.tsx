@@ -7,7 +7,7 @@ import * as api from './api/Api.js'
 const CustomerDetails: React.FC = () => {
   const navigate = useNavigate();
   return (
-    <div className="customer-details">
+    <div className="container">
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">

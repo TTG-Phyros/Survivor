@@ -1,5 +1,5 @@
 // src/Dashboard.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import {
   PieChart,
@@ -36,7 +36,20 @@ const Dashboard: React.FC = () => {
     { name: '01 Jul', events: 3 },
     { name: '02 Jul', events: 2 },
     { name: '03 Jul', events: 4 },
-    { name: '30 Jul', events: 5 }
+    { name: '04 Jul', events: 5 },
+    { name: '05 Jul', events: 5 },
+    { name: '06 Jul', events: 5 },
+    { name: '07 Jul', events: 5 },
+    { name: '08 Jul', events: 5 },
+    { name: '09 Jul', events: 5 },
+    { name: '10 Jul', events: 5 },
+    { name: '11 Jul', events: 5 },
+    { name: '12 Jul', events: 5 },
+    { name: '13 Jul', events: 5 },
+    { name: '14 Jul', events: 5 },
+    { name: '15 Jul', events: 5 },
+    { name: '16 Jul', events: 5 },
+    { name: '17 Jul', events: 5 }
   ];
 
   const pieChartData = [
@@ -88,23 +101,63 @@ const Dashboard: React.FC = () => {
       text: 'Customers Overview'
     },
     axisY: {
-      title: 'Bounce Rate',
-      suffix: '%'
+      title: 'Customers Number',
+      suffix: ''
     },
     axisX: {
-      title: 'Day of Period',
-      prefix: 'D'
+      title: 'Date',
+      suffix: ''
     },
     data: [
       {
         type: 'line',
-        toolTipContent: 'Day {x}: {y}%',
+        toolTipContent: '{x}: {y}',
         dataPoints: getChartData()
       }
     ]
   };
 
   const navigate = useNavigate();
+
+  const [customerCount, setCustomerCount] = useState<number | null>(null);
+  const [coachCount, setCoachCount] = useState<number | null>(null);
+  const [customerWithEncountersCount, setCustomerWithEncountersCount] = useState<number | null>(null);
+  const [eventsDayCount, setEventsDayCount] = useState<number | null>(null);
+  const [eventsWeekCount, setEventsWeekCount] = useState<number | null>(null);
+  const [eventsMonthCount, setEventsMonthCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    api.getCustomersCount().then(count => {
+        setCustomerCount(count);
+      }).catch(error => {
+        console.error('Failed to fetch customer count:', error);
+      });
+    api.getCoachesCount().then(count => {
+        setCoachCount(count);
+      }).catch(error => {
+        console.error('Failed to fetch customer count:', error);
+      });
+    api.getCustomersWithEncountersCount().then(count => {
+        setCustomerWithEncountersCount(count);
+      }).catch(error => {
+        console.error('Failed to fetch customer count:', error);
+      });
+    api.getEventsDayCount().then(count => {
+        setEventsDayCount(count);
+      }).catch(error => {
+        console.error('Failed to fetch customer count:', error);
+      });
+    api.getEventsWeekCount().then(count => {
+        setEventsWeekCount(count);
+      }).catch(error => {
+        console.error('Failed to fetch customer count:', error);
+      });
+    api.getEventsMonthCount().then(count => {
+        setEventsMonthCount(count);
+      }).catch(error => {
+        console.error('Failed to fetch customer count:', error);
+      });
+  }, []);
 
   return (
     <div className="container">
@@ -129,10 +182,7 @@ const Dashboard: React.FC = () => {
           <p>Welcome!</p>
         </div>
         <div className="header-buttons">
-          <button
-            className="button"
-            onClick={() => handleTimeRangeChange('1m')}
-          >
+          <button className="button" onClick={() => handleTimeRangeChange('1m')}>
             Last 30 Days
           </button>
           <button className="button button-primary">Reports</button>
@@ -169,17 +219,17 @@ const Dashboard: React.FC = () => {
 
           <div className="stat-container">
             <div className="stat-item">
-              <h2>932</h2>
+              <h2>{customerCount !== null ? customerCount : 'Loading...'}</h2>
               <p>Customers</p>
               <span>↑ 12.37%</span>
             </div>
             <div className="stat-item">
-              <h2>28.49%</h2>
+              <h2>{customerCount !== null && customerWithEncountersCount !== null ? `${Math.round(customerWithEncountersCount / customerCount * 10000) / 100}%` : 'Loading...'}</h2>
               <p>Doing meetings</p>
               <span className="negative">↓ 12.37%</span>
             </div>
             <div className="stat-item">
-              <h2>34</h2>
+              <h2>{customerCount !== null && coachCount !== null ? Math.round(customerCount / coachCount) : 'Loading...'}</h2>
               <p>Customers by coach</p>
             </div>
           </div>
@@ -193,17 +243,17 @@ const Dashboard: React.FC = () => {
           <div className="stat-container">
             <div className="stat-item">
               <p>Monthly</p>
-              <h2>83</h2>
+              <h2>{eventsMonthCount !== null ? eventsMonthCount : 'Loading...'}</h2>
               <span>↑ 4.63%</span>
             </div>
             <div className="stat-item">
               <p>Weekly</p>
-              <h2>20%</h2>
+              <h2>{eventsWeekCount !== null ? eventsWeekCount : 'Loading...'}</h2>
               <span className="negative">↓ 1.92%</span>
             </div>
             <div className="stat-item">
               <p>Daily(avg)</p>
-              <h2>3</h2>
+              <h2>{eventsDayCount !== null ? eventsDayCount : 'Loading...'}</h2>
               <span>↑ 3.45%</span>
             </div>
           </div>

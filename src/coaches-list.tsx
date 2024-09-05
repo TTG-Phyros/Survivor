@@ -232,7 +232,7 @@ const CoachesList: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="coaches-list-container">
+    <div className="container">
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">

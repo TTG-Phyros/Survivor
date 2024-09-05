@@ -37,7 +37,7 @@ const SoulConnection_Login: React.FC = () => {
                         onChange={(e) => setEmail(e.target.value)}
                     />
 
-                    <label htmlFor="motdepasse" style={styles.label}>Mots de passe :</label>
+                    <label htmlFor="motdepasse" style={styles.label}>Mot de passe :</label>
                     <input
                         type="password"
                         id="motdepasse"

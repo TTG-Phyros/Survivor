@@ -48,6 +48,36 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Endpoint pour récupérer le nombre d'employés
+router.get('/count', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM employees');
+    res.json({ status: 'success', value: result.rows[0].count  });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour récupérer le nombre de coach
+router.get('/coach/count', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM employees WHERE job = \'Coach\'');
+    res.json({ status: 'success', value: result.rows[0].count  });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Endpoint pour récupérer un employé par ID
 router.get('/:id', async (req, res) => {
   if (!req.headers.token || req.headers.token === 'undefined') {
