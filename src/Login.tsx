@@ -9,17 +9,18 @@ const SoulConnection_Login: React.FC = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(false);
 
     const handleLogin = (email:string, password:string) => {
-        console.log("Email:", email);
-        console.log("Password:", password);
-        api.connectEmployee(email, password).then(() => {
-            window.location.reload();
-            navigate('/dashboard');
+        api.connectEmployee(email, password).then((response) => {
+            if (response) {
+                window.location.reload();
+                navigate('/dashboard');
+            } else {
+                setError(true);
+            }
         });
     };
-
-
 
     return (
         <div style={styles.container}>
@@ -49,6 +50,9 @@ const SoulConnection_Login: React.FC = () => {
                     <button type="submit" className="button-64" role="button">
                         <span className="text">Valider</span>
                     </button>
+                    {error && (
+                        <p style={{ color: 'red' }}>Identifiant ou mot de passe invalide !</p>
+                    )}
                 </form>
             </div>
             <div style={styles.rightSection}>
@@ -106,7 +110,6 @@ const styles = {
         height: 'auto',
         marginLeft: '-105px',  // Décalage de 15 pixels vers la gauche
         borderRadius: '50%',  // Double the border-radius
-        
     }
 };
 

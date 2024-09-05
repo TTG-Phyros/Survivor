@@ -166,9 +166,9 @@ router.get('/clothes', async (req, res) => {
           try {
             const existing_line = await pool.query('SELECT * FROM clothes WHERE id = $1', [row.id]);
             if (existing_line.rows.length > 0) {
-              await pool.query('UPDATE clothes SET type=$1 WHERE id=$2', [row.type, row.id]);
+              await pool.query('UPDATE clothes SET type=$1, customer_id=$2 WHERE id=$3', [row.type, id, row.id]);
             } else {
-              await pool.query('INSERT INTO clothes (id, type, image) VALUES ($1, $2, NULL)', [row.id, row.type]);
+              await pool.query('INSERT INTO clothes (id, type, image, customer_id) VALUES ($1, $2, NULL, $3)', [row.id, row.type, id]);
             }
           } catch (err) {
             console.error(err.message);

@@ -134,8 +134,12 @@ export const connectEmployee = async (email, password) => {
         password: password
       }
     );
-    // console.log(response.data.token);
-    cookies.set("ACCOUNT_TOKEN", response.data.token, { expires: 1 });
+    if (response.data.status === 'success') {
+      cookies.set("ACCOUNT_TOKEN", response.data.token, { expires: 1 });
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -160,7 +164,7 @@ export const disconnectEmployee = async () => {
 export const checkConnexionEmployee = async () => {
   try {
     const token = cookies.get("ACCOUNT_TOKEN");
-    if (!token || token == 'undefined') {
+    if (!token || token === 'undefined') {
       console.log("Check : Not connected");
       return false;
     }

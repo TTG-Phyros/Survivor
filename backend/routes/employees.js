@@ -40,11 +40,11 @@ router.post('/login', async (req, res) => {
               'X-Group-Authorization': global.API_KEY
           }
       }
-  );
+    );
     res.json({ status: 'success', message: 'User has been connected', token : loginResponse.data.access_token });
   } catch (error) {
+    res.json({ status: 'failure', message: 'User has not been connected' });
     console.error(error);
-    res.status(500).json({ error: 'Erreur de serveur' });
   }
 });
 
