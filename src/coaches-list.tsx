@@ -240,6 +240,8 @@ const CoachesList: React.FC = () => {
           <button className="navbar-link" onClick={() => navigate("/customers")}>Customers</button>
           <button className="navbar-link" onClick={() => navigate("/tips")}>Tips</button>
           <button className="navbar-link" onClick={() => navigate("/events")}>Events</button>
+          <button className="navbar-link" onClick={() => navigate("/clothes")}>Clothes</button>
+          <button className="navbar-link" onClick={() => navigate("/compatibility")}>Compatibility</button>
         </nav>
         <div className="navbar-actions">
           <button className="navbar-icon">🔔</button>

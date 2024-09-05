@@ -7,12 +7,13 @@ body {
 
 .coaches-list-container {
   width: 100%;
+  background-image: none;
   font-size: 23px;
 }
 
 .navbar {
   display: flex;
-  flex-wrap: wrap; /* Add this line */
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   background-color: white;

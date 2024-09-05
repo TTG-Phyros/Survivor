@@ -5,6 +5,8 @@ import Dashboard from './Dashboard';
 import Login from './Login';
 import CoachesList from './coaches-list';
 import CustomerDetails from './customer-details';
+import Clothes from './clothes';
+import AstroTest from './astro-test';
 import * as api from'./api/Api';
 import { useState } from 'react';
 
@@ -23,6 +25,8 @@ const App: React.FC = () => {
         <Route path="/login" element={connected ? <Dashboard/> : <Login />} />
         <Route path="/coaches" element={connected ? <CoachesList /> : <Login />} />
         <Route path="/customers" element={connected ? <CustomerDetails /> : <Login />} />
+        <Route path="/clothes" element={connected ? <Clothes /> : <Login />} />
+        <Route path="/compatibility" element={connected ? <AstroTest /> : <Login />} />
       </Routes>
     </Router>
   );

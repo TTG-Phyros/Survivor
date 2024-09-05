@@ -46,6 +46,7 @@
 }
 
 .button-primary:hover {
+  background-image: none;
   background-color: #003d99;
 }
 

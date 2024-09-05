@@ -1,0 +1,67 @@
+.customer-selection {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.astro-test {
+  display: flex;
+  flex-wrap: wrap; /* Correction de la faute de frappe */
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-image: url('/public/mdr-astrologie.jpg');
+  background-size: 100%;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.labelastrotest,
+label {
+  display: block;
+  font-size: 34px; /* Agrandit la police des étiquettes à 34px */
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+h1 {
+  font-size: 42px; /* Agrandit la police du titre principal à 42px */
+}
+
+input,
+select {
+  width: 100%;
+  font-size: 2em;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  font-size: 2em;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.result {
+  width: 70vw;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 2em;
+}
