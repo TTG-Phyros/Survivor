@@ -46,3 +46,59 @@ background: none;
     min-width: 300px; /* Doubled */
 }
 }
+
+/* Add responsive styles in your CSS file */
+@media (max-width: 768px) {
+    .button-64 span {
+        padding: 10px 50px; /* Reduced padding for smaller screens */
+    }
+
+    .button-64 {
+        font-size: 24px;
+        min-width: 150px; /* Adjust the button size for tablets */
+    }
+
+    .leftSection {
+        padding: 20px; /* Reduced padding on smaller screens */
+    }
+
+    .title {
+        font-size: 2.5rem; /* Reduced title size for smaller screens */
+    }
+
+    .input {
+        font-size: 1.1rem; /* Adjusted input font size */
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        flex-direction: column; /* Stack sections vertically on small devices */
+    }
+
+    .rightSection {
+        display: none; /* Hide the right section on mobile devices */
+    }
+
+    .leftSection {
+        padding: 20px;
+        width: 100%;
+    }
+
+    .title {
+        font-size: 2rem; /* Further reduce title size for mobile */
+    }
+
+    .input {
+        font-size: 1rem; /* Smaller input font for mobile */
+    }
+
+    .button-64 {
+        font-size: 18px;
+        min-width: 100px;
+    }
+
+    .button-64 span {
+        padding: 8px 20px;
+    }
+}
