@@ -107,7 +107,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="container">
+    <div className="dashboard-container">
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">
