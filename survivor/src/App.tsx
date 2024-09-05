@@ -1,42 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom'; // Importation des composants de React Router
+import SoulConnection_Login from './Login'; // Importation de la page de connexion
+import Dashboard from './Dashboard'; // Importation de la page de tableau de bord
 import './App.css';
 
-interface Employee {
-  id: number;
-  email: string;
-  firstname: string;
-  lastname: string;
-  gender: string;
-  job: string;
-  birthdate: Date;
-}
-
-function App() {
-  const [employees, setEmployees] = useState<Employee[]>([]);
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/employees')
-      .then(response => {
-        setEmployees(response.data);
-      })
-      .catch(error => {
-        console.error('Il y a eu une erreur!', error);
-      });
-  }, []);
-
+const App: React.FC = () => {
   return (
-    <main>
-      <h1>Liste des employés</h1>
-      <ul>
-        {employees.map(employee => (
-          <li key={employee.id}>
-            {employee.firstname} - {employee.email} - {employee.lastname} - {employee.gender} - {employee.job} - {employee.birthdate.toString()}
-          </li>
-        ))}
-      </ul>
-    </main>
+    <Router>
+      <div className="App">
+        <Routes>
+          {/* Définition de la route de la page de connexion */}
+          <Route path="/" element={<SoulConnection_Login />} />
+          {/* Définition de la route de la page du tableau de bord */}
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
