@@ -141,3 +141,55 @@
   background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 140 140" width="14" height="14" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 140,0 70,70" fill="black"/></svg>') no-repeat right 10px center;
   background-color: white;
 }
+
+.navbar-logo {
+  font-size: 40px;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 40px;
+}
+
+.coaches-list-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 40px 20px;
+  border-bottom: 1px solid #bfbfbf;
+  font-weight: bold;
+}
+.navbar-link {
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: #333;
+  cursor: pointer;
+}
+
+.navbar-link.active {
+  color: #007bff;
+}
+
+.navbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.navbar-icon {
+  background: none;
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+}
