@@ -40,11 +40,41 @@ router.post('/login', async (req, res) => {
               'X-Group-Authorization': global.API_KEY
           }
       }
-  );
+    );
     res.json({ status: 'success', message: 'User has been connected', token : loginResponse.data.access_token });
   } catch (error) {
+    res.json({ status: 'failure', message: 'User has not been connected' });
     console.error(error);
-    res.status(500).json({ error: 'Erreur de serveur' });
+  }
+});
+
+// Endpoint pour récupérer le nombre d'employés
+router.get('/count', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM employees');
+    res.json({ status: 'success', value: result.rows[0].count  });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour récupérer le nombre de coach
+router.get('/coach/count', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM employees WHERE job = \'Coach\'');
+    res.json({ status: 'success', value: result.rows[0].count  });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 });
 
