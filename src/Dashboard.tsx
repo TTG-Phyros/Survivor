@@ -22,7 +22,7 @@ const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const Dashboard: React.FC = () => {
   const [timeRange, setTimeRange] = useState('7d');
-  const [days, setDays] = useState(30); // État par défaut pour le nombre de jours
+  const [days, setDays] = useState(30);
 
   const handleTimeRangeChange = (range: string) => {
     setTimeRange(range);

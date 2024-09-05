@@ -1,0 +1,106 @@
+/* Base styles for desktop */
+.navbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 40px 20px;
+    border-bottom: 1px solid #bfbfbf;
+    font-weight: bold;
+}
+
+.navbar-logo {
+    font-size: 40px;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 40px;
+}
+
+.navbar-link {
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: #333;
+    cursor: pointer;
+}
+
+.navbar-link.active {
+    color: #007bff;
+}
+
+.navbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.navbar-icon {
+    background: none;
+    border: none;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+/* Responsive styles for tablets */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 30px 10px;
+    }
+
+    .navbar-logo {
+        font-size: 30px;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .navbar-link {
+        font-size: 24px;
+    }
+
+    .navbar-actions {
+        gap: 20px;
+    }
+
+    .navbar-icon {
+        font-size: 30px;
+    }
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 480px) {
+    .navbar {
+        flex-direction: column;
+        padding: 20px 5px;
+    }
+
+    .navbar-logo {
+        font-size: 24px;
+    }
+
+    .navbar-links {
+        display: none; /* Hide links by default */
+    }
+
+    .navbar-actions {
+        margin-top: 10px;
+    }
+
+    .navbar-icon {
+        font-size: 24px;
+    }
+
+    .navbar-toggle {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 30px;
+        cursor: pointer;
+    }
+}

@@ -46,7 +46,7 @@ const SoulConnection_Login: React.FC = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
 
-                    <button type="submit" className="button-64" role="button">
+                    <button type="submit" className="button-64">
                         <span className="text">Valider</span>
                     </button>
                     {error && (
