@@ -1,19 +1,28 @@
 // src/App.tsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Login from './Login';
 import CoachesList from './coaches-list';
 import CustomerDetails from './customer-details';
+import * as api from'./api/Api';
+import { useState } from 'react';
 
 const App: React.FC = () => {
+  const [connected, setConnected] = useState<boolean | undefined>(undefined);
+  api.checkConnexionEmployee()
+  .then((answer) => {
+    setConnected(answer);
+  });
+
   return (
     <Router>
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/coaches" element={<CoachesList />} />
-        <Route path="/customers" element={<CustomerDetails />} />
+        <Route path="/" element={connected ? <Dashboard /> : <Login />} />
+        <Route path="/dashboard" element={connected ? <Dashboard /> : <Login />} />
+        <Route path="/login" element={connected ? <Dashboard/> : <Login />} />
+        <Route path="/coaches" element={connected ? <CoachesList /> : <Login />} />
+        <Route path="/customers" element={connected ? <CustomerDetails /> : <Login />} />
       </Routes>
     </Router>
   );

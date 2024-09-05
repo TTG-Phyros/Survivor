@@ -1,28 +1,53 @@
 import React from 'react';
+import { useState } from 'react';
 import './Login.css'
 import { useNavigate } from 'react-router';
+import * as api from'./api/Api';
 
 const SoulConnection_Login: React.FC = () => {
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        
-        navigate('/dashboard');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleLogin = (email:string, password:string) => {
+        console.log("Email:", email);
+        console.log("Password:", password);
+        api.connectEmployee(email, password).then(() => {
+            window.location.reload();
+            navigate('/dashboard');
+        });
     };
+
+
 
     return (
         <div style={styles.container}>
             <div style={styles.leftSection}>
                 <h1 style={styles.title}>Soul Connection</h1>
-                <form style={styles.form}>
+                <form style={styles.form} onSubmit={(e) => {e.preventDefault(); handleLogin(email, password);}}>
                     <label htmlFor="identifiant" style={styles.label}>Identifiant :</label>
-                    <input type="text" id="identifiant" placeholder="john.smith@example.com" style={styles.input} />
-                    
+                    <input
+                        type="text"
+                        id="identifiant"
+                        placeholder="john.smith@example.com"
+                        style={styles.input}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+
                     <label htmlFor="motdepasse" style={styles.label}>Mots de passe :</label>
-                    <input type="password" id="motdepasse" placeholder="12345678" style={styles.input} />
-                    
-                    <button className="button-64" role="button">
-                        <span className="text">valider</span>
+                    <input
+                        type="password"
+                        id="motdepasse"
+                        placeholder="123456"
+                        style={styles.input}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    <button type="submit" className="button-64" role="button">
+                        <span className="text">Valider</span>
                     </button>
                 </form>
             </div>
@@ -31,7 +56,7 @@ const SoulConnection_Login: React.FC = () => {
             </div>
         </div>
     );
-};
+}
 
 const styles = {
     container: {

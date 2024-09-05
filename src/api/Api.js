@@ -154,6 +154,24 @@ export const disconnectEmployee = async () => {
   }
 };
 
+/**
+ * Fonction pour checker si un compte employée est connecté
+**/
+export const checkConnexionEmployee = async () => {
+  try {
+    const token = cookies.get("ACCOUNT_TOKEN");
+    if (!token || token == 'undefined') {
+      console.log("Check : Not connected");
+      return false;
+    }
+    console.log("Check : Connected");
+    return true;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
 
 /**
  * Fonction pour refresh les images des employés depuis l'API distante
