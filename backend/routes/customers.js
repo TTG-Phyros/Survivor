@@ -47,6 +47,21 @@ router.get('/count/encounters', async (req,res) => {
   }
 });
 
+// Endpoint pour récupérer les infos basiques des clients
+router.get('/basic_infos', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    const result = await pool.query('SELECT id, firstname, lastname, email, phone_number, astrological_sign FROM customers');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Endpoint pour récupérer un client par ID
 router.get('/:id', async (req, res) => {
   if (!req.headers.token || req.headers.token === 'undefined') {

@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./astro-test.css";
 import { useNavigate } from 'react-router';
+import * as api from './api/Api.js'
 
 const AstroTest: React.FC = () => {
   const [selectedCustomer1, setSelectedCustomer1] = useState<number | null>(null);
   const [selectedCustomer2, setSelectedCustomer2] = useState<number | null>(null);
   const [result, setResult] = useState<string | null>(null);
+  const [customersInfo, setCustomersInfo] = useState([
+    {
+        id: 0,
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone_number: '',
+        astrological_sign: ''
+    }
+  ]);
 
   const compatibilityData: { [key: string]: string } = {
     "Bélier&Bélier": "65% Bélier & Bélier : Tout va bien entre 2 Béliers, même si leur entêtement mutuel peut leur jouer des tours. Attention de bien ménager les égos de tout le monde.",
@@ -153,73 +164,47 @@ const AstroTest: React.FC = () => {
     "Poisson&Poisson": "80% Poisson & Poisson : Entre 2 Poissons, le courant passe généralement plutôt bien. Encore faut-il que ces 2 poissons suivent le courant dans le même sens. Ils ont tous les 2, une grande sensibilité et un esprit créatif très développé. Leur relation sera généralement intense, bien que parfois mouvementée.",
   };
 
-  const customers = [
-    { id: 1, firstName: "Alice", lastName: "Dupont", email: "alice@example.com", phone: "123-456-7890", AstroSigne: "Cancer" },
-    { id: 2, firstName: "Bob", lastName: "Martin", email: "bob@example.com", phone: "234-567-8901", AstroSigne: "Poisson" },
-    { id: 3, firstName: "Charlie", lastName: "Dubois", email: "charlie@example.com", phone: "345-678-9012", AstroSigne: "Bélier" },
-    { id: 4, firstName: "Diana", lastName: "Lefevre", email: "diana@example.com", phone: "456-789-0123", AstroSigne: "Vierge" },
-    { id: 5, firstName: "Ethan", lastName: "Leroy", email: "ethan@example.com", phone: "567-890-1234", AstroSigne: "Taureau" },
-    { id: 6, firstName: "Fiona", lastName: "Moreau", email: "fiona@example.com", phone: "678-901-2345", AstroSigne: "Balance" },
-    { id: 7, firstName: "George", lastName: "Bernard", email: "george@example.com", phone: "789-012-3456", AstroSigne: "Sagittaire" },
-    { id: 8, firstName: "Hannah", lastName: "Caron", email: "hannah@example.com", phone: "890-123-4567", AstroSigne: "Capricorne" },
-    { id: 9, firstName: "Ian", lastName: "Petit", email: "ian@example.com", phone: "901-234-5678", AstroSigne: "Gémeaux" },
-    { id: 10, firstName: "Julia", lastName: "Blanc", email: "julia@example.com", phone: "012-345-6789", AstroSigne: "Lion" },
-    { id: 11, firstName: "Kevin", lastName: "Dupuis", email: "kevin@example.com", phone: "123-456-7891", AstroSigne: "Scorpion" },
-    { id: 12, firstName: "Laura", lastName: "Robert", email: "laura@example.com", phone: "234-567-8902", AstroSigne: "Verseau" },
-    { id: 13, firstName: "Mike", lastName: "Simon", email: "mike@example.com", phone: "345-678-9013", AstroSigne: "Capricorne" },
-    { id: 14, firstName: "Nina", lastName: "Laurent", email: "nina@example.com", phone: "456-789-0124", AstroSigne: "Bélier" },
-    { id: 15, firstName: "Oliver", lastName: "Girard", email: "oliver@example.com", phone: "567-890-1235", AstroSigne: "Poisson" },
-    { id: 16, firstName: "Paula", lastName: "Lefebvre", email: "paula@example.com", phone: "678-901-2346", AstroSigne: "Vierge" },
-    { id: 17, firstName: "Quincy", lastName: "Morel", email: "quincy@example.com", phone: "789-012-3457", AstroSigne: "Taureau" },
-    { id: 18, firstName: "Rachel", lastName: "Martin", email: "rachel@example.com", phone: "890-123-4568", AstroSigne: "Balance" },
-    { id: 19, firstName: "Steve", lastName: "Garcia", email: "steve@example.com", phone: "901-234-5679", AstroSigne: "Sagittaire" },
-    { id: 20, firstName: "Tina", lastName: "Dumas", email: "tina@example.com", phone: "012-345-6790", AstroSigne: "Gémeaux" },
-    { id: 21, firstName: "Ursula", lastName: "Thomas", email: "ursula@example.com", phone: "123-456-7892", AstroSigne: "Lion" },
-    { id: 22, firstName: "Victor", lastName: "Moreau", email: "victor@example.com", phone: "234-567-8903", AstroSigne: "Scorpion" },
-    { id: 23, firstName: "Wendy", lastName: "Dubois", email: "wendy@example.com", phone: "345-678-9014", AstroSigne: "Verseau" },
-    { id: 24, firstName: "Xander", lastName: "Bernard", email: "xander@example.com", phone: "456-789-0125", AstroSigne: "Cancer" },
-    { id: 25, firstName: "Yvonne", lastName: "Caron", email: "yvonne@example.com", phone: "567-890-1236", AstroSigne: "Poisson" },
-    { id: 26, firstName: "Zach", lastName: "Leclerc", email: "zach@example.com", phone: "678-901-2347", AstroSigne: "Bélier" },
-    { id: 27, firstName: "Amy", lastName: "Parker", email: "amy@example.com", phone: "789-012-3458", AstroSigne: "Vierge" },
-    { id: 28, firstName: "Ben", lastName: "Gauthier", email: "ben@example.com", phone: "890-123-4569", AstroSigne: "Taureau" },
-    { id: 29, firstName: "Catherine", lastName: "Lemoine", email: "catherine@example.com", phone: "901-234-5670", AstroSigne: "Balance" },
-    { id: 30, firstName: "Daniel", lastName: "Gros", email: "daniel@example.com", phone: "012-345-6791", AstroSigne: "Sagittaire" },
-    { id: 31, firstName: "Ella", lastName: "Blanchard", email: "ella@example.com", phone: "123-456-7894", AstroSigne: "Capricorne" },
-    { id: 32, firstName: "Frank", lastName: "Rousseau", email: "frank@example.com", phone: "234-567-8904", AstroSigne: "Gémeaux" },
-    { id: 33, firstName: "Grace", lastName: "Vidal", email: "grace@example.com", phone: "345-678-9015", AstroSigne: "Lion" },
-    { id: 34, firstName: "Harry", lastName: "Martel", email: "harry@example.com", phone: "456-789-0126", AstroSigne: "Scorpion" },
-    { id: 35, firstName: "Isabel", lastName: "Boucher", email: "isabel@example.com", phone: "567-890-1237", AstroSigne: "Verseau" },
-    { id: 36, firstName: "Jack", lastName: "Lemoine", email: "jack@example.com", phone: "678-901-2348", AstroSigne: "Cancer" },
-    { id: 37, firstName: "Karen", lastName: "Petit", email: "karen@example.com", phone: "789-012-3459", AstroSigne: "Poisson" },
-    { id: 38, firstName: "Leo", lastName: "Leroy", email: "leo@example.com", phone: "890-123-4570", AstroSigne: "Bélier" },
-    { id: 39, firstName: "Mia", lastName: "Lefevre", email: "mia@example.com", phone: "901-234-5671", AstroSigne: "Vierge" },
-    { id: 40, firstName: "Nate", lastName: "Tissot", email: "nate@example.com", phone: "012-345-6792", AstroSigne: "Taureau" },
-    { id: 41, firstName: "Olivia", lastName: "Guerin", email: "olivia@example.com", phone: "123-456-7894", AstroSigne: "Balance" },
-    { id: 42, firstName: "Paul", lastName: "Perrin", email: "paul@example.com", phone: "234-567-8905", AstroSigne: "Sagittaire" },
-    { id: 43, firstName: "Quinn", lastName: "Bernard", email: "quinn@example.com", phone: "345-678-9016", AstroSigne: "Capricorne" },
-    { id: 44, firstName: "Rachel", lastName: "Dumas", email: "rachel@example.com", phone: "456-789-0127", AstroSigne: "Gémeaux" },
-    { id: 45, firstName: "Sam", lastName: "Martin", email: "sam@example.com", phone: "567-890-1238", AstroSigne: "Lion" },
-    { id: 46, firstName: "Tina", lastName: "Thomas", email: "tina@example.com", phone: "678-901-2349", AstroSigne: "Scorpion" },
-    { id: 47, firstName: "Uma", lastName: "Robert", email: "uma@example.com", phone: "789-012-3460", AstroSigne: "Verseau" },
-    { id: 48, firstName: "Vera", lastName: "Vidal", email: "vera@example.com", phone: "890-123-4571", AstroSigne: "Cancer" },
-    { id: 49, firstName: "Will", lastName: "Garcia", email: "will@example.com", phone: "901-234-5672", AstroSigne: "Poisson" },
-    { id: 50, firstName: "Xena", lastName: "Parker", email: "xena@example.com", phone: "012-345-6793", AstroSigne: "Bélier" }
-  ];
+  useEffect(() => {
+    api.getCustomersBasicInfos().then(infos => {
+        const astrologicalSignMap: { [key: string]: string } = {
+          'Aries': 'Bélier',
+          'Taurus': 'Taureau',
+          'Gemini': 'Gémeaux',
+          'Cancer': 'Cancer',
+          'Leo': 'Lion',
+          'Virgo': 'Vierge',
+          'Libra': 'Balance',
+          'Scorpio': 'Scorpion',
+          'Sagittarius': 'Sagittaire',
+          'Capricorn': 'Capricorne',
+          'Aquarius': 'Verseau',
+          'Pisces': 'Poissons'
+        };
+        
+        infos = infos.map((row: { astrological_sign: string; }) => ({
+          ...row,
+          astrological_sign: astrologicalSignMap[row.astrological_sign]
+        }));
+        setCustomersInfo(infos);
+      }).catch(error => {
+        console.error('Failed to fetch customer count:', error);
+      });
+  }, []);
 
   const handleCompatibilityCheck = () => {
     if (selectedCustomer1 === null || selectedCustomer2 === null) {
       return;
     }
 
-    const customer1 = customers.find(customer => customer.id === selectedCustomer1);
-    const customer2 = customers.find(customer => customer.id === selectedCustomer2);
+    const customer1 = customersInfo.find(customer => customer.id === selectedCustomer1);
+    const customer2 = customersInfo.find(customer => customer.id === selectedCustomer2);
 
     if (!customer1 || !customer2) {
       return;
     }
 
-    const key = `${customer1.AstroSigne}&${customer2.AstroSigne}`;
-    const reversedKey = `${customer2.AstroSigne}&${customer1.AstroSigne}`;
+    const key = `${customer1.astrological_sign}&${customer2.astrological_sign}`;
+    const reversedKey = `${customer2.astrological_sign}&${customer1.astrological_sign}`;
     const compatibilityResult = compatibilityData[key] || compatibilityData[reversedKey] || "Aucune compatibilité définie pour cette combinaison.";
 
     setResult(compatibilityResult);
@@ -232,18 +217,18 @@ const AstroTest: React.FC = () => {
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">
-          <button className="navbar-link" onClick={() => navigate("/dashboard")}>Dashboard</button>
-          <button className="navbar-link active" onClick={() => navigate("/coaches")}>Coaches</button>
-          <button className="navbar-link" onClick={() => navigate("/customers")}>Customers</button>
-          <button className="navbar-link" onClick={() => navigate("/tips")}>Tips</button>
-          <button className="navbar-link" onClick={() => navigate("/events")}>Events</button>
-          <button className="navbar-link" onClick={() => navigate("/clothes")}>Clothes</button>
-          <button className="navbar-link" onClick={() => navigate("/compatibility")}>Compatibility</button>
+          <button className="navbar-link" onClick={() => {navigate("/dashboard"); window.location.reload()}}>Dashboard</button>
+          <button className="navbar-link" onClick={() => {navigate("/coaches"); window.location.reload()}}>Coaches</button>
+          <button className="navbar-link" onClick={() => {navigate("/customers"); window.location.reload()}}>Customers</button>
+          <button className="navbar-link" onClick={() => {navigate("/tips"); window.location.reload()}}>Tips</button>
+          <button className="navbar-link" onClick={() => {navigate("/events"); window.location.reload()}}>Events</button>
+          <button className="navbar-link" onClick={() => {navigate("/clothes"); window.location.reload()}}>Clothes</button>
+          <button className="navbar-link active" onClick={() => {navigate("/compatibility"); window.location.reload()}}>Compatibility</button>
         </nav>
         <div className="navbar-actions">
           <button className="navbar-icon">🔔</button>
           <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={() => navigate("/login")}>👤</button>
+          <button className="navbar-icon" onClick={() => {api.disconnectEmployee(); window.location.reload()}}>👤</button>
         </div>
       </header>
       <div className="astro-test">
@@ -258,9 +243,9 @@ const AstroTest: React.FC = () => {
               value={selectedCustomer1 ?? ''}
             >
               <option value="">Sélectionnez le premier client</option>
-              {customers.map(customer => (
+              {customersInfo.map(customer => (
                 <option key={customer.id} value={customer.id}>
-                  {customer.firstName} {customer.lastName} ({customer.AstroSigne})
+                  {customer.firstname} {customer.lastname} ({customer.astrological_sign})
                 </option>
               ))}
             </select>
@@ -272,9 +257,9 @@ const AstroTest: React.FC = () => {
               value={selectedCustomer2 ?? ''}
             >
               <option value="">Sélectionnez le deuxième client</option>
-              {customers.map(customer => (
+              {customersInfo.map(customer => (
                 <option key={customer.id} value={customer.id}>
-                  {customer.firstName} {customer.lastName} ({customer.AstroSigne})
+                  {customer.firstname} {customer.lastname} ({customer.astrological_sign})
                 </option>
               ))}
             </select>

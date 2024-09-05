@@ -236,7 +236,7 @@ export const fetchDistantClothesImages = async () => {
 /**
  * Fonction pour récupérer le nombre d'employé
 **/
-export const getEmployeesCount = async (id) => {
+export const getEmployeesCount = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/employees/count`, {
       headers: {
@@ -253,7 +253,7 @@ export const getEmployeesCount = async (id) => {
 /**
  * Fonction pour récupérer le nombre de coach
 **/
-export const getCoachesCount = async (id) => {
+export const getCoachesCount = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/employees/coach/count`, {
       headers: {
@@ -270,7 +270,7 @@ export const getCoachesCount = async (id) => {
 /**
  * Fonction pour récupérer le nombre de client
 **/
-export const getCustomersCount = async (id) => {
+export const getCustomersCount = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/customers/count`, {
       headers: {
@@ -288,7 +288,7 @@ export const getCustomersCount = async (id) => {
 /**
  * Fonction pour récupérer le nombre de client qui ont eu des rencontres
 **/
-export const getCustomersWithEncountersCount = async (id) => {
+export const getCustomersWithEncountersCount = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/customers/count/encounters`, {
       headers: {
@@ -305,7 +305,7 @@ export const getCustomersWithEncountersCount = async (id) => {
 /**
  * Fonction pour récupérer le nombre d'évenements'
 **/
-export const getEventsCount = async (id) => {
+export const getEventsCount = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/events/count`, {
       headers: {
@@ -322,7 +322,7 @@ export const getEventsCount = async (id) => {
 /**
  * Fonction pour récupérer le nombre d'évenements du jour'
 **/
-export const getEventsDayCount = async (id) => {
+export const getEventsDayCount = async (i) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/events/count/day`, {
       headers: {
@@ -339,7 +339,7 @@ export const getEventsDayCount = async (id) => {
 /**
  * Fonction pour récupérer le nombre d'évenements de la semaine'
 **/
-export const getEventsWeekCount = async (id) => {
+export const getEventsWeekCount = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/events/count/week`, {
       headers: {
@@ -356,7 +356,7 @@ export const getEventsWeekCount = async (id) => {
 /**
  * Fonction pour récupérer le nombre d'évenements du mois'
 **/
-export const getEventsMonthCount = async (id) => {
+export const getEventsMonthCount = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/events/count/month`, {
       headers: {
@@ -364,6 +364,40 @@ export const getEventsMonthCount = async (id) => {
       }
     });
     return response.data.value;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les clients
+**/
+export const getCustomers = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/customers`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les infos basiques des clients
+**/
+export const getCustomersBasicInfos = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/customers/basic_infos`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
