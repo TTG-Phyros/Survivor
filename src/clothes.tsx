@@ -5,22 +5,22 @@ import { useNavigate } from 'react-router-dom';
 const Clothes: React.FC = () => {
   const navigate = useNavigate();
 
-  // État pour chaque type de vêtement
+  
   const [hatCount, setHatCount] = useState(0);
   const [clientCount, setClientCount] = useState(0);
   const [topCount, setTopCount] = useState(0);
   const [bottomCount, setBottomCount] = useState(0);
   const [shoesCount, setShoesCount] = useState(0);
-  const [selectedClient, setSelectedClient] = useState(''); // New state for selected client
+  const [selectedClient, setSelectedClient] = useState(''); 
 
-  // URLs des images (à remplacer par tes propres URLs)
+  
   const hatImageUrl = 'url_de_votre_image_chapeau.jpg';
   const clientImageUrl = 'url_de_votre_image_client.jpg';
   const topImageUrl = 'url_de_votre_image_haut.jpg';
   const bottomImageUrl = 'url_de_votre_image_bas.jpg';
   const shoesImageUrl = 'url_de_votre_image_chaussures.jpg';
 
-  // Liste des clients à choisir
+  
   const clients = ['Client 1', 'Client 2', 'Client 3', 'Client 4'];
 
   const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -29,7 +29,7 @@ const Clothes: React.FC = () => {
 
   return (
     <div className="clothes">
-      {/* Barre de navigation */}
+      
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">
@@ -51,7 +51,7 @@ const Clothes: React.FC = () => {
       <h1>Clothes Page</h1>
       <p>Welcome to the clothes section! Here you can find various clothing items.</p>
 
-      {/* Dropdown for selecting the first client */}
+      
       <div className="dropdown-container">
         <label htmlFor="client-select">Sélectionnez le premier client</label>
         <select id="client-select" value={selectedClient} onChange={handleClientChange}>
@@ -64,7 +64,7 @@ const Clothes: React.FC = () => {
         </select>
       </div>
 
-      {/* Chapeau */}
+      
       <div className="navigation-container">
         <button className="arrow-button" onClick={() => setHatCount(hatCount - 1)}>
           ←
@@ -78,7 +78,7 @@ const Clothes: React.FC = () => {
         </button>
       </div>
 
-      {/* Image du client */}
+      
       <div className="navigation-container">
         <button className="arrow-button" onClick={() => setClientCount(clientCount - 1)}>
           ←
@@ -92,7 +92,7 @@ const Clothes: React.FC = () => {
         </button>
       </div>
 
-      {/* Haut */}
+      
       <div className="navigation-container">
         <button className="arrow-button" onClick={() => setTopCount(topCount - 1)}>
           ←
@@ -106,7 +106,7 @@ const Clothes: React.FC = () => {
         </button>
       </div>
 
-      {/* Bas */}
+      
       <div className="navigation-container">
         <button className="arrow-button" onClick={() => setBottomCount(bottomCount - 1)}>
           ←
@@ -120,7 +120,7 @@ const Clothes: React.FC = () => {
         </button>
       </div>
 
-      {/* Chaussures */}
+      
       <div className="navigation-container">
         <button className="arrow-button" onClick={() => setShoesCount(shoesCount - 1)}>
           ←

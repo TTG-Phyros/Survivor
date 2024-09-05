@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 400px; /* Ajuster selon tes besoins */
+  width: 400px; 
   margin-top: 20px;
 }
 
@@ -50,7 +50,7 @@
   font-weight: bold;
 }
 
-/* Styling for the dropdown */
+
 .dropdown-container {
   margin-top: 20px;
 }
