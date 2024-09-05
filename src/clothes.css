@@ -5,6 +5,13 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 20px;
+  background-color: #f4f7fd; /* Light gray background */
+}
+
+.container {
+  padding: 20px;
+  background-color: #f4f7fd;
 }
 
 .navigation-container {

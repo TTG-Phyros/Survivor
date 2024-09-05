@@ -44,7 +44,11 @@ export const fetchEmployeeByID = async (id) => {
 **/
 export const fetchDistantEmployees = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/employees`);
+    await axios.get(`${API_BASE_URL}/refresh_data/employees`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -56,7 +60,11 @@ export const fetchDistantEmployees = async () => {
 **/
 export const fetchDistantCustomers = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/customers`);
+    await axios.get(`${API_BASE_URL}/refresh_data/customers`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -68,7 +76,11 @@ export const fetchDistantCustomers = async () => {
 **/
 export const fetchDistantClothes = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/clothes`);
+    await axios.get(`${API_BASE_URL}/refresh_data/clothes`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -80,7 +92,11 @@ export const fetchDistantClothes = async () => {
 **/
 export const fetchDistantPayments = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/payments`);
+    await axios.get(`${API_BASE_URL}/refresh_data/payments`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -92,7 +108,11 @@ export const fetchDistantPayments = async () => {
 **/
 export const fetchDistantEvents = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/events`);
+    await axios.get(`${API_BASE_URL}/refresh_data/events`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -104,7 +124,11 @@ export const fetchDistantEvents = async () => {
 **/
 export const fetchDistantEncounters = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/encounters`);
+    await axios.get(`${API_BASE_URL}/refresh_data/encounters`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -116,7 +140,11 @@ export const fetchDistantEncounters = async () => {
 **/
 export const fetchDistantTips = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/tips`);
+    await axios.get(`${API_BASE_URL}/refresh_data/tips`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -182,7 +210,11 @@ export const checkConnexionEmployee = async () => {
 **/
 export const fetchDistantEmployeesImages = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/employees/images`);
+    await axios.get(`${API_BASE_URL}/refresh_data/employees/images`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -214,7 +246,11 @@ export const getEmployeeImage = async (id) => {
 **/
 export const fetchDistantCustomersImages = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/customers/images`);
+    await axios.get(`${API_BASE_URL}/refresh_data/customers/images`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -226,7 +262,11 @@ export const fetchDistantCustomersImages = async () => {
 **/
 export const fetchDistantClothesImages = async () => {
   try {
-    await axios.get(`${API_BASE_URL}/refresh_data/clothes/images`);
+    await axios.get(`${API_BASE_URL}/refresh_data/clothes/images`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -393,6 +433,23 @@ export const getCustomers = async () => {
 export const getCustomersBasicInfos = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/customers/basic_infos`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les vếtements d'un client
+**/
+export const getCustomerClothes = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/customers/${id}/clothes`, {
       headers: {
         token: `${cookies.get("ACCOUNT_TOKEN")}`
       }

@@ -213,7 +213,7 @@ const AstroTest: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="customer-selection">
+    <div className="container ">
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">

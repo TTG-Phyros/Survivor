@@ -10,7 +10,13 @@ router.get('/', async (req, res) => {
   }
   try {
     const result = await pool.query('SELECT * FROM customers');
-    res.json(result.rows);
+    res.json(result.rows.map(row => {
+      const imageBase64 = row.image ? Buffer.from(row.image).toString('base64') : null;
+      return {
+          ...row,
+          image: imageBase64
+      };
+    }));
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -131,7 +137,13 @@ router.get('/:id/clothes', async (req, res) => {
   }
   try {
     const result = await pool.query('SELECT * FROM clothes WHERE customer_id = $1', [id]);
-    res.json(result.rows);
+    res.json(result.rows.map(row => {
+      const imageBase64 = row.image ? Buffer.from(row.image).toString('base64') : null;
+      return {
+          ...row,
+          image: imageBase64
+      };
+    }));
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

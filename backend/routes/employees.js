@@ -14,7 +14,13 @@ router.get('/', async (req, res) => {
   console.log("token is good");
   try {
     const result = await pool.query('SELECT * FROM employees');
-    res.json(result.rows);
+    res.json(result.rows.map(row => {
+      const imageBase64 = row.image ? Buffer.from(row.image).toString('base64') : null;
+      return {
+          ...row,
+          image: imageBase64
+      };
+    }));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erreur de serveur' });

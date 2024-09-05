@@ -9,7 +9,7 @@ router.get('/employees', async (req, res) => {
       const response = await axios.get(`${global.DISTANT_API_BASE_URL}/employees`, {
         headers: {
           'X-Group-Authorization': global.API_KEY,
-          'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+          'Authorization': `Bearer ${req.headers.token}`,
         },
       });
 
@@ -19,7 +19,7 @@ router.get('/employees', async (req, res) => {
         const employeeResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/employees/${id}`, {
           headers: {
             'X-Group-Authorization': global.API_KEY,
-            'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+            'Authorization': `Bearer ${req.headers.token}`,
           },
         });
 
@@ -62,7 +62,7 @@ router.get('/employees/images', async (req, res) => {
       const imageResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/employees/${id}/image`, {
         headers: {
           'X-Group-Authorization': global.API_KEY,
-          'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+          'Authorization': `Bearer ${req.headers.token}`,
         },
         responseType: 'arraybuffer'
       });
@@ -85,7 +85,7 @@ router.get('/customers', async (req, res) => {
       const response = await axios.get(`${global.DISTANT_API_BASE_URL}/customers`, {
         headers: {
           'X-Group-Authorization': global.API_KEY,
-          'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+          'Authorization': `Bearer ${req.headers.token}`,
         }
       });
       const ids = response.data.map(({ id }) => id);
@@ -94,7 +94,7 @@ router.get('/customers', async (req, res) => {
         const customerResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/customers/${id}`, {
           headers: {
             'X-Group-Authorization': global.API_KEY,
-            'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+            'Authorization': `Bearer ${req.headers.token}`,
           }
         });
 
@@ -131,7 +131,7 @@ router.get('/customers/images', async (req, res) => {
       const imageResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/customers/${id}/image`, {
         headers: {
           'X-Group-Authorization': global.API_KEY,
-          'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+          'Authorization': `Bearer ${req.headers.token}`,
         },
         responseType: 'arraybuffer'
       });
@@ -158,7 +158,7 @@ router.get('/clothes', async (req, res) => {
         const response = await axios.get(`${global.DISTANT_API_BASE_URL}/customers/${id}/clothes`, {
           headers: {
             'X-Group-Authorization': global.API_KEY,
-            'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+            'Authorization': `Bearer ${req.headers.token}`,
           }
         });
 
@@ -194,7 +194,7 @@ router.get('/clothes/images', async (req, res) => {
       const imageResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/clothes/${id}/image`, {
         headers: {
           'X-Group-Authorization': global.API_KEY,
-          'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+          'Authorization': `Bearer ${req.headers.token}`,
         },
         responseType: 'arraybuffer'
       });
@@ -217,7 +217,7 @@ router.get('/tips', async (req, res) => {
     const response = await axios.get(`${global.DISTANT_API_BASE_URL}/tips`, {
       headers: {
         'X-Group-Authorization': global.API_KEY,
-        'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+        'Authorization': `Bearer ${req.headers.token}`,
       }
     });
 
@@ -248,7 +248,7 @@ router.get('/encounters', async (req, res) => {
       const response = await axios.get(`${global.DISTANT_API_BASE_URL}/encounters`, {
         headers: {
           'X-Group-Authorization': global.API_KEY,
-          'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+          'Authorization': `Bearer ${req.headers.token}`,
         }
       });
 
@@ -260,7 +260,7 @@ router.get('/encounters', async (req, res) => {
           const response = await axios.get(`${global.DISTANT_API_BASE_URL}/encounters/${id}`, {
             headers: {
               'X-Group-Authorization': `${global.API_KEY}`,
-              'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+              'Authorization': `Bearer ${req.headers.token}`,
             }
           });
 
@@ -296,7 +296,7 @@ router.get('/events', async (req, res) => {
     const response = await axios.get(`${global.DISTANT_API_BASE_URL}/events`, {
       headers: {
         'X-Group-Authorization': global.API_KEY,
-        'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+        'Authorization': `Bearer ${req.headers.token}`,
       }
     });
     const ids = response.data.map(({ id }) => id);
@@ -305,7 +305,7 @@ router.get('/events', async (req, res) => {
       const eventResponse = await axios.get(`${global.DISTANT_API_BASE_URL}/events/${id}`, {
         headers: {
           'X-Group-Authorization': global.API_KEY,
-          'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+          'Authorization': `Bearer ${req.headers.token}`,
         }
       });
 
@@ -342,7 +342,7 @@ router.get('/payments', async (req, res) => {
       const response = await axios.get(`${global.DISTANT_API_BASE_URL}/customers/${id}/payments_history`, {
         headers: {
           'X-Group-Authorization': global.API_KEY,
-          'Authorization': `Bearer ${!req.headers.token || req.headers.token === 'undefined'}`,
+          'Authorization': `Bearer ${req.headers.token}`,
         }
       });
 

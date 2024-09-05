@@ -1,38 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './clothes.css';
 import { useNavigate } from 'react-router-dom';
 import * as api from './api/Api';
+
+let hats: any = [""];
+let tops: any = [""];
+let bottoms: any = [""];
+let shoes: any = [""];
+
+const processClothes = async (id: number) => {
+  try {
+      const clothes = await api.getCustomerClothes(id);
+
+      clothes.forEach((item: { type: string; }) => {
+          switch(item.type) {
+              case 'hat/cap':
+                  hats.push(item);
+                  break;
+              case 'top':
+                  tops.push(item);
+                  break;
+              case 'bottom':
+                  bottoms.push(item);
+                  break;
+              case 'shoes':
+                  shoes.push(item);
+                  break;
+              default:
+                  console.warn(`Unknown type: ${item.type}`);
+          }
+      });
+      console.log(`image : ${tops[1].image}`);
+  } catch (error) {
+      console.error('Failed to fetch or process clothes:', error);
+  }
+};
 
 const Clothes: React.FC = () => {
   const navigate = useNavigate();
   
   const [hatCount, setHatCount] = useState(0);
-  const [clientCount, setClientCount] = useState(0);
   const [topCount, setTopCount] = useState(0);
   const [bottomCount, setBottomCount] = useState(0);
   const [shoesCount, setShoesCount] = useState(0);
-  const [selectedClient, setSelectedClient] = useState(''); 
+  const [selectedClient, setSelectedClient] = useState(0);   
+  const [customersInfo, setCustomersInfo] = useState([
+    {
+      id: 0,
+      email: '',
+      firstname: '',
+      lastname: '',
+      birth_date: '',
+      gender: '',
+      description: '',
+      astrological_sign: '',
+      phone_number: '',
+      address: '',
+      image: ''
+    }
+  ]);
 
-  const hatImageUrl = 'url_de_votre_image_chapeau.jpg';
-  const clientImageUrl = 'url_de_votre_image_client.jpg';
-  const topImageUrl = 'url_de_votre_image_haut.jpg';
-  const bottomImageUrl = 'url_de_votre_image_bas.jpg';
-  const shoesImageUrl = 'url_de_votre_image_chaussures.jpg';
+
   
-  const clients = ['Client 1', 'Client 2', 'Client 3', 'Client 4'];
+  useEffect(() => {
+    api.getCustomers().then(infos => {
+        setCustomersInfo(infos);
+      }).catch(error => {
+        console.error('Failed to fetch customer count:', error);
+      });
+  }, []);
   
-  const resetCounts = () => {
+  const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = parseInt(event.target.value, 10);
+    setSelectedClient(value)
+    console.log(customersInfo.find(customer => customer.id === value));
+    hats = [""];
+    tops = [""];
+    bottoms = [""];
+    shoes = [""];
+    processClothes(value);
     setHatCount(0);
-    setClientCount(0);
     setTopCount(0);
     setBottomCount(0);
-    setShoesCount(0);
+    setShoesCount(0); 
   };
 
-  const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedClient(event.target.value);
-    resetCounts(); 
-  };
+  function increase_count(list : any, index : number) {
+      if (!list[index + 1]) {
+        return 0;
+      } else {
+        return index + 1;
+      }
+  }
+
+  function decrease_count(list : any, index : number) {
+    if (!list[index - 1]) {
+      return 0;
+    } else {
+      return index - 1;
+    }
+}
 
   return (
     <div>
@@ -64,81 +131,75 @@ const Clothes: React.FC = () => {
         <div className="dropdown-container">
           <label htmlFor="client-select">Sélectionnez le premier client</label>
           <select id="client-select" value={selectedClient} onChange={handleClientChange}>
-            <option value="">Sélectionnez le premier client</option>
-            {clients.map((client, index) => (
-              <option key={index} value={client}>
-                {client}
-              </option>
-            ))}
+            <option value={0}>Sélectionnez le premier client</option>
+            {customersInfo.map(customer => (
+                <option key={customer.id} value={customer.id}>
+                  {customer.firstname} {customer.lastname}
+                </option>
+              ))}
           </select>
         </div>
 
         
         <div className="navigation-container">
-          <button className="arrow-button" onClick={() => setHatCount(hatCount - 1)}>
+          <button className="arrow-button" onClick={() => setHatCount(decrease_count(hats, hatCount))}>
             ←
           </button>
           <div className="clothing-item-container">
-            <img src={hatImageUrl} alt="Chapeau" className="clothing-image" />
+            <img src={hatCount !== 0 ? `data:image/png;base64,${hats[hatCount].image}` : ''} alt="Chapeau" className="clothing-image" />
             <p>{hatCount}</p>
           </div>
-          <button className="arrow-button" onClick={() => setHatCount(hatCount + 1)}>
+          <button className="arrow-button" onClick={() => setHatCount(increase_count(hats, hatCount))}>
             →
           </button>
         </div>
 
-        
         <div className="navigation-container">
-          <button className="arrow-button" onClick={() => setClientCount(clientCount - 1)}>
-            ←
-          </button>
+          <div className="arrow-button"></div>
           <div className="clothing-item-container">
-            <img src={clientImageUrl} alt="Image de profil du client" className="clothing-image" />
-            <p>{clientCount}</p>
+            <img src={selectedClient !== 0 ? `data:image/png;base64,${customersInfo[selectedClient].image}` : ''} alt="Client" className="clothing-image" />
           </div>
-          <button className="arrow-button" onClick={() => setClientCount(clientCount + 1)}>
-            →
-          </button>
+          <div className="arrow-button"></div>
         </div>
 
         
         <div className="navigation-container">
-          <button className="arrow-button" onClick={() => setTopCount(topCount - 1)}>
+          <button className="arrow-button" onClick={() => setTopCount(decrease_count(tops, topCount))}>
             ←
           </button>
           <div className="clothing-item-container">
-            <img src={topImageUrl} alt="Haut" className="clothing-image" />
+            <img src={topCount !== 0 ? `data:image/png;base64,${tops[topCount].image}` : ''} alt="Haut" className="clothing-image" />
             <p>{topCount}</p>
           </div>
-          <button className="arrow-button" onClick={() => setTopCount(topCount + 1)}>
+          <button className="arrow-button" onClick={() => setTopCount(increase_count(tops, topCount))}>
             →
           </button>
         </div>
 
         
         <div className="navigation-container">
-          <button className="arrow-button" onClick={() => setBottomCount(bottomCount - 1)}>
+          <button className="arrow-button" onClick={() => setBottomCount(decrease_count(bottoms, bottomCount))}>
             ←
           </button>
           <div className="clothing-item-container">
-            <img src={bottomImageUrl} alt="Bas" className="clothing-image" />
+            <img src={bottomCount !== 0 ? `data:image/png;base64,${bottoms[bottomCount].image}` : ''} alt="Bas" className="clothing-image" />
             <p>{bottomCount}</p>
           </div>
-          <button className="arrow-button" onClick={() => setBottomCount(bottomCount + 1)}>
+          <button className="arrow-button" onClick={() => setBottomCount(increase_count(bottoms, bottomCount))}>
             →
           </button>
         </div>
 
         
         <div className="navigation-container">
-          <button className="arrow-button" onClick={() => setShoesCount(shoesCount - 1)}>
+          <button className="arrow-button" onClick={() => setShoesCount(decrease_count(shoes, shoesCount))}>
             ←
           </button>
           <div className="clothing-item-container">
-            <img src={shoesImageUrl} alt="Chaussures" className="clothing-image" />
+            <img src={shoesCount !== 0 ? `data:image/png;base64,${shoes[shoesCount].image}` : ''} alt="Chaussures" className="clothing-image" />
             <p>{shoesCount}</p>
           </div>
-          <button className="arrow-button" onClick={() => setShoesCount(shoesCount + 1)}>
+          <button className="arrow-button" onClick={() => setShoesCount(increase_count(shoes, shoesCount))}>
             →
           </button>
         </div>
