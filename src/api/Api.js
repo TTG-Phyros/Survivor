@@ -1,4 +1,6 @@
 import axios from 'axios';
+const cookies = require('js-cookie');
+
 
 // Définir l'URL de base pour l'API
 const API_BASE_URL = 'http://localhost:5000/api';
@@ -8,7 +10,11 @@ const API_BASE_URL = 'http://localhost:5000/api';
 **/
 export const fetchEmployees = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/employees`);
+    const response = await axios.get(`${API_BASE_URL}/employees`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
@@ -21,9 +27,9 @@ export const fetchEmployees = async () => {
 **/
 export const fetchEmployeeByID = async (id) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/employees/employee_id`, {
-      params: {
-        id: id
+    const response = await axios.get(`${API_BASE_URL}/employees/${id}`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
       }
     });
     return response.data;
@@ -120,14 +126,16 @@ export const fetchDistantTips = async () => {
 /**
  * Fonction pour connecter un compte employée
 **/
-export const connectEmployee = async () => {
+export const connectEmployee = async (email, password) => {
   try {
-    await axios.post(`${API_BASE_URL}/employees/login`,
+    const response = await axios.post(`${API_BASE_URL}/employees/login`,
       {
-        email: "jeanne.martin@soul-connection.fr",
-        password: "naouLeA82oeirn"
+        email: email,
+        password: password
       }
     );
+    // console.log(response.data.token);
+    cookies.set("ACCOUNT_TOKEN", response.data.token, { expires: 1 });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
@@ -139,12 +147,13 @@ export const connectEmployee = async () => {
 **/
 export const disconnectEmployee = async () => {
   try {
-    await axios.post(`${API_BASE_URL}/employees/logout`);
+    cookies.remove("ACCOUNT_TOKEN");
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
     throw error;
   }
 };
+
 
 /**
  * Fonction pour refresh les images des employés depuis l'API distante

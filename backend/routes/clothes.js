@@ -3,16 +3,12 @@ const router = express.Router();
 const pool = require('../db');
 
 // Endpoint pour récupérer l'image d'un vêtement par ID
-router.get('/clothe_id/image', async (req,res) => {
-    if (!global.ACCOUNT_TOKEN) {
+router.get('/:id/image', async (req,res) => {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }
-    var id;
-    if (req.query.id) {
-      id = req.query.id;
-    }
-
+    const { id } = req.params;
     if (!id) {
       return res.status(400).send('ID parameter is required');
     }
@@ -27,7 +23,7 @@ router.get('/clothe_id/image', async (req,res) => {
 
 // Endpoint pour supprimer l'image d'un vêtement par ID
 router.delete('/:id/image', async (req, res) => {
-    if (!global.ACCOUNT_TOKEN) {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }

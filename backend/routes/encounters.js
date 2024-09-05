@@ -4,7 +4,7 @@ const pool = require('../db');
 
 // Endpoint pour récupérer les rencontres
 router.get('/', async (req,res) => {
-    if (!global.ACCOUNT_TOKEN) {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }
@@ -19,7 +19,7 @@ router.get('/', async (req,res) => {
 
 // Endpoint pour récupérer une rencontre par ID
 router.get('/:id', async (req, res) => {
-    if (!global.ACCOUNT_TOKEN) {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }
@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
 
 // Endpoint pour récupérer les rencontres d'un client par ID
 router.get('/customer/:id', async (req, res) => {
-    if (!global.ACCOUNT_TOKEN) {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }
@@ -57,7 +57,7 @@ router.get('/customer/:id', async (req, res) => {
 
 // Endpoint pour supprimer les rencontres
 router.delete('/', async (req, res) => {
-    if (!global.ACCOUNT_TOKEN) {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }
@@ -73,7 +73,7 @@ router.delete('/', async (req, res) => {
 
 // Endpoint pour supprimer une rencontre par ID
 router.delete('/:id', async (req, res) => {
-    if (!global.ACCOUNT_TOKEN) {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }
@@ -97,7 +97,7 @@ router.delete('/:id', async (req, res) => {
 
 // Endpoint pour supprimer les rencontres d'un client par ID
 router.delete('/customer/:id', async (req, res) => {
-    if (!global.ACCOUNT_TOKEN) {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }

@@ -4,7 +4,7 @@ const pool = require('../db');
 
 // Endpoint pour récupérer les conseils
 router.get('/', async (req, res) => {
-    if (!global.ACCOUNT_TOKEN) {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 
 // Endpoint pour supprimer les conseils
 router.delete('/', async (req, res) => {
-    if (!global.ACCOUNT_TOKEN) {
+    if (!req.headers.token || req.headers.token === 'undefined') {
       console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
     }

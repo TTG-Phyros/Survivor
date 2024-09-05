@@ -52,16 +52,16 @@ function App() {
     // fetchDistantClothes().catch(error => {
     //   console.error('Il y a eu une erreur!', error);
     // });
-    // fetchEmployees()
-    //   .then(data => {
-    //     setEmployees(data);
-    //   })
-    //   .catch(error => {
-    //     console.error('Il y a eu une erreur!', error);
-    //   });
-    api.connectEmployee();
-    api.fetchDistantEvents();
-    // disconnectEmployee();
+    // api.connectEmployee("jeanne.martin@soul-connection.fr", "naouLeA82oeirn");
+    // api.disconnectEmployee();
+    api.fetchEmployees()
+      .then(data => {
+        setEmployees(data);
+      })
+      .catch(error => {
+        console.error('Il y a eu une erreur!', error);
+      });
+    // api.fetchDistantEvents();
     // fetchEmployees()
     // .then(data => {
     //   setEmployees(data);
