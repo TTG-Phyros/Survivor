@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Clothes: React.FC = () => {
   const navigate = useNavigate();
-
   
   const [hatCount, setHatCount] = useState(0);
   const [clientCount, setClientCount] = useState(0);
@@ -13,18 +12,25 @@ const Clothes: React.FC = () => {
   const [shoesCount, setShoesCount] = useState(0);
   const [selectedClient, setSelectedClient] = useState(''); 
 
-  
   const hatImageUrl = 'url_de_votre_image_chapeau.jpg';
   const clientImageUrl = 'url_de_votre_image_client.jpg';
   const topImageUrl = 'url_de_votre_image_haut.jpg';
   const bottomImageUrl = 'url_de_votre_image_bas.jpg';
   const shoesImageUrl = 'url_de_votre_image_chaussures.jpg';
-
   
   const clients = ['Client 1', 'Client 2', 'Client 3', 'Client 4'];
+  
+  const resetCounts = () => {
+    setHatCount(0);
+    setClientCount(0);
+    setTopCount(0);
+    setBottomCount(0);
+    setShoesCount(0);
+  };
 
   const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedClient(event.target.value);
+    resetCounts(); 
   };
 
   return (
