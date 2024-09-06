@@ -1,0 +1,69 @@
+/* Tips.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+  }
+  
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .container {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  header {
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin: 0;
+  }
+  
+  .tips-table {
+    width: 100%;
+    border-collapse: collapse;
+    transition: 300ms;
+  }
+  
+  .tip-row {
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .tip-title {
+    background-color: #ffffff;
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .tip-title:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .tip-title.active {
+    background-color: #d0e0ff;
+    font-weight: bold;
+  }
+  
+  .tip-content-row {
+    background-color: #f9f9f9;
+    transition: max-height 0.3s ease-out;
+    overflow: hidden;
+  }
+  
+  .tip-content {
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+  }
+  
