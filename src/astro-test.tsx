@@ -62,7 +62,7 @@ const AstroTest: React.FC = () => {
           'Sagittarius': 'Sagittaire',
           'Capricorn': 'Capricorne',
           'Aquarius': 'Verseau',
-          'Pisces': 'Poisson'
+          'Pisces': 'Poissons'
         };
 
         infos = infos.map((row: { astrological_sign: string; }) => ({
