@@ -156,7 +156,13 @@ const Clothes: React.FC = () => {
         <div className="navigation-container">
           <div className="arrow-button"></div>
           <div className="clothing-item-container">
-            <img src={selectedClient !== 0 ? `data:image/png;base64,${customersInfo[selectedClient].image}` : ''} alt="Client" className="clothing-image" />
+          <img 
+            src={selectedClient !== 0 ? (() => {
+                    const customer = customersInfo.find(customer => customer.id === selectedClient);
+                    return customer ? `data:image/png;base64,${customer.image}` : '';
+                  })() : ''}
+            alt="Client" className="clothing-image"
+          />
           </div>
           <div className="arrow-button"></div>
         </div>
