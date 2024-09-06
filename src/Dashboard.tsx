@@ -2,17 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import {
-  PieChart,
-  Pie,
-  Tooltip,
-  BarChart,
-  XAxis,
-  YAxis,
-  Legend,
-  CartesianGrid,
-  Bar,
-  LabelList,
-  Label
+    PieChart,
+    Pie,
+    Tooltip,
+    BarChart,
+    XAxis,
+    YAxis,
+    Legend,
+    CartesianGrid,
+    Bar,
+    LabelList,
+    Label
 } from 'recharts';
 import CanvasJSReact from '@canvasjs/react-charts';
 import { useNavigate } from 'react-router';

@@ -16,7 +16,6 @@ body {
 }
 
 .astro-test {
-  /* Centrer le formulaire */
   margin: 0 auto;
   margin-top: 1%;
   text-align: center;
@@ -44,7 +43,7 @@ label {
 }
 
 h1 {
-  font-size: 42px; /* Agrandit la police du titre principal à 42px */
+  font-size: 42px;
 }
 
 
