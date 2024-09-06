@@ -5,7 +5,7 @@ import Dashboard from './Dashboard';
 import Login from './Login';
 import CoachesList from './coaches-list';
 import CustomerDetails from './customer-details';
-import Clothes from './clothes';
+import Clothes from './Clothes';
 import AstroTest from './astro-test';
 import * as api from'./api/Api';
 import { useState } from 'react';

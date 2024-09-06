@@ -5,8 +5,8 @@ const axios = require('axios');
 
 // Endpoint pour récupérer les employés
 router.get('/', async (req, res) => {
-  console.log(req.headers.token);
-  console.log(req.headers);
+  // console.log(req.headers.token);
+  // console.log(req.headers);
   if (!req.headers.token || req.headers.token === 'undefined') {
     console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });

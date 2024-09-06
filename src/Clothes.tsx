@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './clothes.css';
+import './Clothes.css';
 import { useNavigate } from 'react-router-dom';
 import * as api from './api/Api';
 
@@ -38,12 +38,12 @@ const processClothes = async (id: number) => {
 
 const Clothes: React.FC = () => {
   const navigate = useNavigate();
-  
+
   const [hatCount, setHatCount] = useState(0);
   const [topCount, setTopCount] = useState(0);
   const [bottomCount, setBottomCount] = useState(0);
   const [shoesCount, setShoesCount] = useState(0);
-  const [selectedClient, setSelectedClient] = useState(0);   
+  const [selectedClient, setSelectedClient] = useState(0);
   const [customersInfo, setCustomersInfo] = useState([
     {
       id: 0,
@@ -61,7 +61,7 @@ const Clothes: React.FC = () => {
   ]);
 
 
-  
+
   useEffect(() => {
     api.getCustomers().then(infos => {
         setCustomersInfo(infos);
@@ -69,7 +69,7 @@ const Clothes: React.FC = () => {
         console.error('Failed to fetch customer count:', error);
       });
   }, []);
-  
+
   const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = parseInt(event.target.value, 10);
     setSelectedClient(value)
@@ -82,7 +82,7 @@ const Clothes: React.FC = () => {
     setHatCount(0);
     setTopCount(0);
     setBottomCount(0);
-    setShoesCount(0); 
+    setShoesCount(0);
   };
 
   function increase_count(list : any, index : number) {
@@ -104,7 +104,7 @@ const Clothes: React.FC = () => {
   return (
     <div>
       <div className="container">
-        
+
         <header className="navbar">
           <div className="navbar-logo">Soul Connection</div>
           <nav className="navbar-links">
@@ -127,11 +127,11 @@ const Clothes: React.FC = () => {
         <h1>Clothes Page</h1>
         <p>Welcome to the clothes section! Here you can find various clothing items.</p>
 
-        
+
         <div className="dropdown-container">
-          <label htmlFor="client-select">Sélectionnez le premier client</label>
+          <label htmlFor="client-select">Sélectionnez un client</label>
           <select id="client-select" value={selectedClient} onChange={handleClientChange}>
-            <option value={0}>Sélectionnez le premier client</option>
+            <option value={0}>Sélectionnez un client</option>
             {customersInfo.map(customer => (
                 <option key={customer.id} value={customer.id}>
                   {customer.firstname} {customer.lastname}
@@ -140,14 +140,13 @@ const Clothes: React.FC = () => {
           </select>
         </div>
 
-        
+
         <div className="navigation-container">
           <button className="arrow-button" onClick={() => setHatCount(decrease_count(hats, hatCount))}>
             ←
           </button>
           <div className="clothing-item-container">
             <img src={hatCount !== 0 ? `data:image/png;base64,${hats[hatCount].image}` : ''} alt="Chapeau" className="clothing-image" />
-            <p>{hatCount}</p>
           </div>
           <button className="arrow-button" onClick={() => setHatCount(increase_count(hats, hatCount))}>
             →
@@ -162,42 +161,39 @@ const Clothes: React.FC = () => {
           <div className="arrow-button"></div>
         </div>
 
-        
+
         <div className="navigation-container">
           <button className="arrow-button" onClick={() => setTopCount(decrease_count(tops, topCount))}>
             ←
           </button>
           <div className="clothing-item-container">
             <img src={topCount !== 0 ? `data:image/png;base64,${tops[topCount].image}` : ''} alt="Haut" className="clothing-image" />
-            <p>{topCount}</p>
           </div>
           <button className="arrow-button" onClick={() => setTopCount(increase_count(tops, topCount))}>
             →
           </button>
         </div>
 
-        
+
         <div className="navigation-container">
           <button className="arrow-button" onClick={() => setBottomCount(decrease_count(bottoms, bottomCount))}>
             ←
           </button>
           <div className="clothing-item-container">
             <img src={bottomCount !== 0 ? `data:image/png;base64,${bottoms[bottomCount].image}` : ''} alt="Bas" className="clothing-image" />
-            <p>{bottomCount}</p>
           </div>
           <button className="arrow-button" onClick={() => setBottomCount(increase_count(bottoms, bottomCount))}>
             →
           </button>
         </div>
 
-        
+
         <div className="navigation-container">
           <button className="arrow-button" onClick={() => setShoesCount(decrease_count(shoes, shoesCount))}>
             ←
           </button>
           <div className="clothing-item-container">
             <img src={shoesCount !== 0 ? `data:image/png;base64,${shoes[shoesCount].image}` : ''} alt="Chaussures" className="clothing-image" />
-            <p>{shoesCount}</p>
           </div>
           <button className="arrow-button" onClick={() => setShoesCount(increase_count(shoes, shoesCount))}>
             →
