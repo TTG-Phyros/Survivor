@@ -21,16 +21,27 @@
 }
 
 .profile-picture {
-  width: 80px;
-  height: 80px;
+  width: 30%;
+  height: 30%;
   border-radius: 50%;
+  margin: 0 auto;
+  margin-bottom: 2%;
+
 }
 
+.peater{
+  flex-wrap: wrap;
+  font-size: 1.5em;
+  font-weight: bold;
+  border-bottom: 1px solid #bfbfbf;
+}
 .statistics {
   display: flex;
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
+  border-bottom: 1px solid #bfbfbf;
+    border-top: 1px solid #bfbfbf;
 }
 
 .statistics div span {
@@ -48,7 +59,6 @@
   width: 95%;
 }
 
-/* Table styles */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -60,7 +70,6 @@ table th, table td {
   border-bottom: 1px solid #bfbfbf;
 }
 
-/* Navbar */
 .navbar {
   display: flex;
   flex-wrap: wrap;
@@ -74,21 +83,11 @@ table th, table td {
 .navbar-link {
   background: none;
   border: none;
-  font-size: clamp(1.2rem, 2.5vw, 2rem); /* Responsive font size */
+  font-size: clamp(1.2rem, 2.5vw, 2rem); 
   color: #333;
   cursor: pointer;
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .navbar-links {
-    flex-direction: column;
-    gap: 10px;
 .customer-details {
     display: flex;
     flex-wrap: wrap;
@@ -96,7 +95,11 @@ table th, table td {
     background-color: #f7f8fa;
     flex-direction: column;
   }
-
+  table th, table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #bfbfbf;
+  }
   .sidebar {
     flex-wrap: wrap;
     background-color: #fff;
@@ -106,9 +109,21 @@ table th, table td {
     margin-bottom: 20px;
     margin-right: 20px;
   }
-  .sidebara {
-    border-bottom: 1px solid #bfbfbf;
+  
+  @media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
   }
+
+  .sidebar, .meeting-paymentbox, .recent-meetings, .payment-history {
+    width: 100%;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    gap: 10px;
+
   .title-of-page {
     margin-left: 20px;
     font-size: 30px;
@@ -117,7 +132,6 @@ table th, table td {
 
   .profile-section {
     flex-wrap: wrap;
-    text-align: center;
     margin-bottom: 20px;
     border-bottom: 1px solid #bfbfbf;
   }
@@ -130,9 +144,10 @@ table th, table td {
   }
 
   .profile-section h2 {
-    margin: 0;
     font-size: 22px;
-    font-weight: 600;
+    text-align: center;
+    margin-top: 1%;
+    margin-left: 1%;
   }
   .meeting-paymentbox {
     background-color: #fff;
@@ -196,12 +211,6 @@ table th, table td {
     border-collapse: collapse;
   }
 
-  table th, table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #bfbfbf;
-  }
-
   .source {
     color: #4a90e2;
     font-weight: bold;
@@ -257,11 +266,6 @@ table th, table td {
     font-size: 40px;
     cursor: pointer;
   }
-
-  }
-
-  .sidebar, .meeting-paymentbox, .recent-meetings, .payment-history {
-    width: 100%;
   }
 
   .statistics {

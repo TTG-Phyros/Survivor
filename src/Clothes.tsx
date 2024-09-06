@@ -60,8 +60,6 @@ const Clothes: React.FC = () => {
     }
   ]);
 
-
-
   useEffect(() => {
     api.getCustomers().then(infos => {
         setCustomersInfo(infos);
@@ -156,7 +154,7 @@ const Clothes: React.FC = () => {
         <div className="navigation-container">
           <div className="arrow-button"></div>
           <div className="clothing-item-container">
-          <img 
+          <img
             src={selectedClient !== 0 ? (() => {
                     const customer = customersInfo.find(customer => customer.id === selectedClient);
                     return customer ? `data:image/png;base64,${customer.image}` : '';
