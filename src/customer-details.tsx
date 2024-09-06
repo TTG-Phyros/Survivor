@@ -36,7 +36,7 @@ const CustomerDetails: React.FC = () => {
                   alt="Francis Mitcham"
                   className="profile-picture"
                 />
-                <h2>Francis Mitcham</h2>
+                <div className="peater">Francis Mitcham</div>
               </div>
               <div className="contact-info">
                 <p>
