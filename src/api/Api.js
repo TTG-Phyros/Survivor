@@ -343,7 +343,7 @@ export const getCustomersWithEncountersCount = async () => {
 };
 
 /**
- * Fonction pour récupérer le nombre d'évenements'
+ * Fonction pour récupérer le nombre d'évenements
 **/
 export const getEventsCount = async () => {
   try {
@@ -360,7 +360,7 @@ export const getEventsCount = async () => {
 };
 
 /**
- * Fonction pour récupérer le nombre d'évenements du jour'
+ * Fonction pour récupérer le nombre d'évenements du jour
 **/
 export const getEventsDayCount = async (i) => {
   try {
@@ -377,7 +377,7 @@ export const getEventsDayCount = async (i) => {
 };
 
 /**
- * Fonction pour récupérer le nombre d'évenements de la semaine'
+ * Fonction pour récupérer le nombre d'évenements de la semaine
 **/
 export const getEventsWeekCount = async () => {
   try {
@@ -394,7 +394,7 @@ export const getEventsWeekCount = async () => {
 };
 
 /**
- * Fonction pour récupérer le nombre d'évenements du mois'
+ * Fonction pour récupérer le nombre d'évenements du mois
 **/
 export const getEventsMonthCount = async () => {
   try {
@@ -450,6 +450,55 @@ export const getCustomersBasicInfos = async () => {
 export const getCustomerClothes = async (id) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/customers/${id}/clothes`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+// /**
+//  * Fonction pour appeler toutes les fonctions de fetch sans les images
+// **/
+// export const fetchAllRoutesWithoutImages = async () => {
+//   try {
+//     fetchDistantEmployees();
+//     fetchDistantCustomers();
+//     fetchDistantClothes();
+//     fetchDistantEvents();
+//     fetchDistantTips();
+//     fetchDistantEncounters();
+//     fetchDistantPayments();
+//   } catch (error) {
+//     console.error('Il y a eu une erreur!', error);
+//     throw error;
+//   }
+// };
+
+// /**
+//  * Fonction pour appeler toutes les fonctions de fetch d'images
+// **/
+// export const fetchAllRoutesOnlyImages = async () => {
+//   try {
+//     fetchDistantEmployeesImages();
+//     fetchDistantCustomersImages();
+//     fetchDistantClothesImages();
+//   } catch (error) {
+//     console.error('Il y a eu une erreur!', error);
+//     throw error;
+//   }
+// };
+
+/**
+ * Fonction pour récupérer les tips
+**/
+export const getTips = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/tips`, {
       headers: {
         token: `${cookies.get("ACCOUNT_TOKEN")}`
       }
