@@ -461,37 +461,37 @@ export const getCustomerClothes = async (id) => {
   }
 };
 
-// /**
-//  * Fonction pour appeler toutes les fonctions de fetch sans les images
-// **/
-// export const fetchAllRoutesWithoutImages = async () => {
-//   try {
-//     fetchDistantEmployees();
-//     fetchDistantCustomers();
-//     fetchDistantClothes();
-//     fetchDistantEvents();
-//     fetchDistantTips();
-//     fetchDistantEncounters();
-//     fetchDistantPayments();
-//   } catch (error) {
-//     console.error('Il y a eu une erreur!', error);
-//     throw error;
-//   }
-// };
+/**
+ * Fonction pour appeler toutes les fonctions de fetch sans les images
+**/
+export const fetchAllRoutesWithoutImages = async () => {
+  try {
+    fetchDistantEmployees();
+    fetchDistantCustomers();
+    fetchDistantClothes();
+    fetchDistantEvents();
+    fetchDistantTips();
+    fetchDistantEncounters();
+    fetchDistantPayments();
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
 
-// /**
-//  * Fonction pour appeler toutes les fonctions de fetch d'images
-// **/
-// export const fetchAllRoutesOnlyImages = async () => {
-//   try {
-//     fetchDistantEmployeesImages();
-//     fetchDistantCustomersImages();
-//     fetchDistantClothesImages();
-//   } catch (error) {
-//     console.error('Il y a eu une erreur!', error);
-//     throw error;
-//   }
-// };
+/**
+ * Fonction pour appeler toutes les fonctions de fetch d'images
+**/
+export const fetchAllRoutesOnlyImages = async () => {
+  try {
+    fetchDistantEmployeesImages();
+    fetchDistantCustomersImages();
+    fetchDistantClothesImages();
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
 
 /**
  * Fonction pour récupérer les tips
