@@ -36,7 +36,7 @@ router.get('/employees', async (req, res) => {
           );
         } else {
           await pool.query(
-            'INSERT INTO employees (id, email, firstname, lastname, birthdate, gender, job, image) VALUES ($1, $2, $4, $3, $5, $6, $7, NULL)',
+            'INSERT INTO employees (id, email, password, token, firstname, lastname, birthdate, gender, job, image) VALUES ($1, $2, NULL, NULL, $4, $3, $5, $6, $7, NULL)',
             [
               id, employeeData.email, employeeData.surname,
               employeeData.name, employeeData.birth_date, employeeData.gender, employeeData.work,

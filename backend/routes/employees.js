@@ -33,6 +33,10 @@ router.post('/login', async (req, res) => {
   if (!email || !password) {
     return res.status(400).send('email and password parameters are required');
   }
+  const employeesResult = await pool.query('SELECT * FROM employees WHERE email=$1', [ email ]);
+  if (password.length > 0 && employeesResult.rows.length > 0 && employeesResult.rows[0].password === global.MD5(password)) {
+    return res.json({ status: 'success', message: 'User has been connected', token : employeesResult.rows[0].token });
+  }
   try {
     const loginResponse = await axios.post(
       `${global.DISTANT_API_BASE_URL}/employees/login`,
@@ -46,6 +50,12 @@ router.post('/login', async (req, res) => {
               'X-Group-Authorization': global.API_KEY
           }
       }
+    );
+    var MD5result = global.MD5(password);
+    await pool.query('UPDATE employees SET password=$1, token=$2 WHERE email=$3',
+      [
+        MD5result, loginResponse.data.access_token, email
+      ]
     );
     res.json({ status: 'success', message: 'User has been connected', token : loginResponse.data.access_token });
   } catch (error) {

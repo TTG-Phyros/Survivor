@@ -18,8 +18,8 @@ const App: React.FC = () => {
   .then((answer) => {
     setConnected(answer);
   });
-  // api.fetchDistantClothes();
-  // api.fetchDistantCustomers();
+  // api.fetchDistantEmployees();
+  // api.fetchDistantEmployeesImages();
   return (
     <Router>
       <Routes>
