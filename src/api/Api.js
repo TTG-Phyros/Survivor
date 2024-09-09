@@ -308,6 +308,23 @@ export const getCoachesCount = async () => {
 };
 
 /**
+ * Fonction pour récupérer les coach
+**/
+export const getCoaches = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/employees/coach`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
  * Fonction pour récupérer le nombre de client
 **/
 export const getCustomersCount = async () => {
@@ -594,6 +611,54 @@ export const getTips = async () => {
     throw error;
   }
 };
+
+/**
+ * Fonction pour ajouter un employé
+**/
+export const addEmployee = async (employeeData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/employees`, {
+      email: employeeData.email,
+      firstname: employeeData.firstname,
+      lastname: employeeData.lastname,
+      birthdate: employeeData.birthdate,
+      gender: employeeData.gender,
+      job: employeeData.job,
+      image: employeeData.image,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout d\'un employé :', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour ajouter un client
+**/
+export const addCustomer = async (customerData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/customers`, {
+      email: customerData.email,
+      firstname: customerData.firstname,
+      lastname: customerData.lastname,
+      birthdate: customerData.birthdate,
+      gender: customerData.gender,
+      description: customerData.description,
+      astrological_sign: customerData.astrological_sign,
+      phone_number: customerData.phone_number,
+      address: customerData.address,
+      image: customerData.image,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout d\'un client :', error.response?.data || error.message);
+    throw error;
+  }
+};
+
 
 /**
  * Fonction pour récupérer les infos basiques des clients

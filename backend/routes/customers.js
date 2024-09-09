@@ -23,6 +23,38 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Endpoint pour ajouter un nouveau client
+router.post('/', async (req, res) => {
+  const { email, firstname, lastname, birthdate, gender, description, astrological_sign, phone_number, address, image } = req.body;
+
+  if (!email || !firstname || !lastname || !birthdate || !gender || !description, !astrological_sign, !phone_number, !address) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  let imageBinary = null;
+  if (image) {
+    try {
+      imageBinary = Buffer.from(image, 'base64');
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid image format' });
+    }
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO customers (email, firstname, lastname, birthdate, gender, description, astrological_sign, phone_number, address, image)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       RETURNING *`,
+      [email, firstname, lastname, birthdate, gender, description, astrological_sign, phone_number, address, imageBinary]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur de serveur' });
+  }
+});
+
 // Endpoint pour récupérer le nombre de clients
 router.get('/count', async (req,res) => {
   if (!req.headers.token || req.headers.token === 'undefined') {

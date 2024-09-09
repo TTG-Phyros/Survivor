@@ -1,14 +1,15 @@
 import "./coaches-list.css";
-import React, {useState, useEffect} from "react";
-import { useNavigate } from "react-router-dom"
-import * as api from './api/Api.js'
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getCoaches, disconnectEmployee } from './api/Api';
 
 interface Coach {
   id: number;
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
-  phone: string;
-  numberOfCustomers: number;
+  phone?: string;
+  numberOfCustomers?: number;
 }
 
 interface Customer {
@@ -17,73 +18,6 @@ interface Customer {
   email: string;
   phone: string;
 }
-
-const coachesData: Coach[] = [
-  {
-    id: 1,
-    name: "Bobby Gilbert",
-    email: "bobby@softnio.com",
-    phone: "+342 675-6578",
-    numberOfCustomers: 12,
-  },
-  {
-    id: 2,
-    name: "Olivia Poulsen",
-    email: "olivia@apple.com",
-    phone: "+782 332-8328",
-    numberOfCustomers: 18,
-  },
-  {
-    id: 3,
-    name: "Heather Marshall",
-    email: "marshall@reakitt.com",
-    phone: "+342 545-5639",
-    numberOfCustomers: 9,
-  },
-  {
-    id: 4,
-    name: "Benjamin Harris",
-    email: "info@mediavest.com",
-    phone: "+342 675-6578",
-    numberOfCustomers: 12,
-  },
-  {
-    id: 5,
-    name: "Joshua Kennedy",
-    email: "joshua@softnio.com",
-    phone: "+323 345-8676",
-    numberOfCustomers: 8,
-  },
-  {
-    id: 6,
-    name: "Justine Bauwens",
-    email: "bauwens@kline.com",
-    phone: "+657 879-3214",
-    numberOfCustomers: 11,
-  },
-  {
-    id: 7,
-    name: "Ethan Hunter",
-    email: "ethan@bergerpaints.com",
-    phone: "+435 675-2345",
-    numberOfCustomers: 19,
-  },
-  {
-    id: 8,
-    name: "Justine Bauwens",
-    email: "justine@acstext.com",
-    phone: "+978 546-2342",
-    numberOfCustomers: 21,
-  },
-  {
-    id: 9,
-    name: "Summer Powell",
-    email: "info@youngone.com",
-    phone: "+435 433-8767",
-    numberOfCustomers: 7,
-  },
-  // metre les donner de la bdd
-];
 
 const customersData: Customer[] = [
   {
@@ -102,11 +36,9 @@ const customersData: Customer[] = [
 
 const CoachesList: React.FC = () => {
   const [menuVisible, setMenuVisible] = useState<number | null>(null);
-  const [isCustomerModalOpen, setIsCustomerModalOpen] =
-    useState<boolean>(false);
+  const [isCustomerModalOpen, setIsCustomerModalOpen] = useState<boolean>(false);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
-  const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] =
-    useState<boolean>(false);
+  const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] = useState<boolean>(false);
   const [newCoach, setNewCoach] = useState({
     firstName: "",
     lastName: "",
@@ -115,14 +47,33 @@ const CoachesList: React.FC = () => {
     birthdate: "",
     other: "",
   });
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-    null
-  );
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [customerSearchQuery, setCustomerSearchQuery] = useState<string>("");
-  const [sortType, setSortType] = useState<"alphabetical" | "byCustomers">(
-    "alphabetical"
-  );
+  const [sortType, setSortType] = useState<"alphabetical" | "byCustomers">("alphabetical");
+  const [coaches, setCoaches] = useState<Coach[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCoaches = async () => {
+      try {
+        const response = await getCoaches();
+        if (response && response.value) {
+          setCoaches(response.value);
+        } else {
+          setError('Aucune donnée de coach disponible');
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des coachs:', error);
+        setError('Erreur lors de la récupération des coachs');
+        setLoading(false);
+      }
+    };
+
+    fetchCoaches();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -137,9 +88,7 @@ const CoachesList: React.FC = () => {
   }, []);
 
   const handleSortChange = () => {
-    setSortType((prev) =>
-      prev === "alphabetical" ? "byCustomers" : "alphabetical"
-    );
+    setSortType(prev => prev === "alphabetical" ? "byCustomers" : "alphabetical");
   };
 
   const handleMenuClick = (id: number) => {
@@ -158,26 +107,19 @@ const CoachesList: React.FC = () => {
     setSearchQuery(event.target.value);
   };
 
-  const handleCustomerSearchChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleCustomerSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCustomerSearchQuery(event.target.value);
   };
 
-  const filteredCustomers = customersData.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
-      customer.email
-        .toLowerCase()
-        .includes(customerSearchQuery.toLowerCase()) ||
-      customer.phone.includes(customerSearchQuery)
+  const filteredCustomers = customersData.filter(customer =>
+    customer.name.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
+    customer.email.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
+    customer.phone.includes(customerSearchQuery)
   );
 
-  const handleFormChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const {name, value} = event.target;
-    setNewCoach((prevState) => ({
+  const handleFormChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setNewCoach(prevState => ({
       ...prevState,
       [name]: value,
     }));
@@ -201,35 +143,40 @@ const CoachesList: React.FC = () => {
   const handleRemoveCustomerSubmit = () => {
     if (selectedCustomer) {
       console.log(`Removing customer: ${selectedCustomer.name}`);
-      // Ajoutez ici la logique pour supprimer le client
     }
     setIsRemoveCustomerModalOpen(false);
   };
 
   const handleActionClick = (action: string, coach: Coach) => {
     if (action === "Delete Coach") {
-      console.log(`Deleting coach: ${coach.name}`);
-      // Ajoutez ici la logique pour supprimer le coach
+      console.log(`Deleting coach: ${coach.firstname} ${coach.lastname}`);
     }
   };
 
-  const sortedCoaches = [...coachesData].sort((a, b) => {
+  const sortedCoaches = [...coaches].sort((a, b) => {
     if (sortType === "alphabetical") {
-      return a.name.localeCompare(b.name);
-    } else if (sortType === "byCustomers") {
+      return a.firstname.localeCompare(b.firstname);
+    } else if (sortType === "byCustomers" && a.numberOfCustomers && b.numberOfCustomers) {
       return b.numberOfCustomers - a.numberOfCustomers;
     }
     return 0;
   });
 
-  const filteredCoaches = sortedCoaches.filter(
-    (coach) =>
-      coach.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      coach.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      coach.phone.includes(searchQuery)
+  const filteredCoaches = sortedCoaches.filter(coach =>
+    coach.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    coach.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    coach.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const navigate = useNavigate();
+
+  if (loading) {
+    return <p>Chargement en cours...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div className="container">
@@ -247,7 +194,7 @@ const CoachesList: React.FC = () => {
         <div className="navbar-actions">
           <button className="navbar-icon">🔔</button>
           <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={() => {api.disconnectEmployee(); window.location.reload()}}>👤</button>
+          <button className="navbar-icon" onClick={() => { disconnectEmployee(); window.location.reload()}}>👤</button>
         </div>
       </header>
       <main className="coaches-list-main">
@@ -268,10 +215,7 @@ const CoachesList: React.FC = () => {
             Add new coach +
           </button>
           <button className="sort-button" onClick={handleSortChange}>
-            Sort by{" "}
-            {sortType === "alphabetical"
-              ? "Number of Customers"
-              : "Alphabetical"}
+            Sort by {sortType === "alphabetical" ? "Number of Customers" : "Alphabetical"}
           </button>
         </div>
 
@@ -286,27 +230,23 @@ const CoachesList: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredCoaches.map((coach) => (
+            {filteredCoaches.map(coach => (
               <tr key={coach.id}>
-                <td>{coach.name}</td>
+                <td>{coach.firstname} {coach.lastname}</td>
                 <td>{coach.email}</td>
-                <td>{coach.phone}</td>
-                <td>{coach.numberOfCustomers}</td>
-
+                <td>{coach.phone || 'N/A'}</td>
+                <td>{coach.numberOfCustomers || '0'}</td>
                 <td className="actions-cell">
                   <button
                     className="actions-button"
                     onClick={() => handleMenuClick(coach.id)}
                   >
-                    {" "}
-                    ⋮{" "}
+                    ⋮
                   </button>
                   {menuVisible === coach.id && (
                     <div className="actions-menu">
                       <button
-                        onClick={() => {
-                          handleAddCustomerClick();
-                        }}
+                        onClick={() => handleAddCustomerClick()}
                       >
                         Add / Remove Customer
                       </button>
@@ -337,7 +277,7 @@ const CoachesList: React.FC = () => {
               />
 
               <ul>
-                {filteredCustomers.map((customer) => (
+                {filteredCustomers.map(customer => (
                   <li key={customer.id}>
                     <div className="customer-info">
                       <div className="customer-name">{customer.name}</div>
@@ -357,12 +297,12 @@ const CoachesList: React.FC = () => {
               </ul>
 
             </div>
-              <button
-                className="close-button"
-                onClick={handleCustomerModalClose}
-              >
-                X
-              </button>
+            <button
+              className="close-button"
+              onClick={handleCustomerModalClose}
+            >
+              X
+            </button>
           </div>
         )}
 

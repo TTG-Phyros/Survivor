@@ -27,6 +27,38 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Endpoint pour ajouter un nouvel employé
+router.post('/', async (req, res) => {
+  const { email, firstname, lastname, birthdate, gender, job, image } = req.body;
+
+  if (!email || !firstname || !lastname || !birthdate || !gender || !job) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  let imageBinary = null;
+  if (image) {
+    try {
+      imageBinary = Buffer.from(image, 'base64');
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid image format' });
+    }
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO employees (email, firstname, lastname, birthdate, gender, job, image)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING *`,
+      [email, firstname, lastname, birthdate, gender, job, imageBinary]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur de serveur' });
+  }
+});
+
 // Endpoint pour connecter un employé
 router.post('/login', async (req, res) => {
   const {email, password} = req.body;
@@ -88,6 +120,21 @@ router.get('/coach/count', async (req,res) => {
   try {
     const result = await pool.query('SELECT COUNT(*) FROM employees WHERE job = \'Coach\'');
     res.json({ status: 'success', value: result.rows[0].count  });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour récupérer le nombre de coach
+router.get('/coach', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    const result = await pool.query('SELECT * FROM employees WHERE job = \'Coach\'');
+    res.json({ status: 'success', value: result.rows });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
