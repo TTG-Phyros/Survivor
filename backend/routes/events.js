@@ -17,6 +17,29 @@ router.get('/', async (req,res) => {
     }
 });
 
+// Endpoint pour ajouter un nouvel event
+router.post('/', async (req, res) => {
+  const { name, date, duration, max_participants, location_x, location_y, type, location_name } = req.body;
+
+  if (!name || !date || !duration || !max_participants || !location_x || !location_y || !type || !location_name) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO events (name, date, duration, max_participants, location_x, location_y, type, location_name)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING *`,
+      [name, date, duration, max_participants, location_x, location_y, type, location_name]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur de serveur avec post events' });
+  }
+});
+
 // Endpoint pour récupérer les évenements du jour
 router.get('/day', async (req,res) => {
   if (!req.headers.token || req.headers.token === 'undefined') {
