@@ -14,12 +14,12 @@ import { useState } from 'react';
 
 const App: React.FC = () => {
   const [connected, setConnected] = useState<boolean | undefined>(undefined);
+  //api.fetchAllRoutesWithoutImages();
+  //api.fetchAllRoutesOnlyImages();
   api.checkConnexionEmployee()
   .then((answer) => {
     setConnected(answer);
   });
-  // api.fetchDistantEmployees();
-  // api.fetchDistantEmployeesImages();
   return (
     <Router>
       <Routes>
