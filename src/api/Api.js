@@ -343,6 +343,91 @@ export const getCustomersWithEncountersCount = async () => {
 };
 
 /**
+ * Fonction pour récupérer les évenements
+**/
+export const getEvents = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/events`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les évenements du jour
+**/
+export const getDayEvents = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/events/day`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les évenements de la semaine
+**/
+export const getWeekEvents = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/events/week`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les évenements du mois
+**/
+export const getMonthEvents = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/events/month`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les évenements du mois
+**/
+export const getEventsViaDelayInDays = async (delay) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/events/delay/days/${delay}`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
  * Fonction pour récupérer le nombre d'évenements
 **/
 export const getEventsCount = async () => {
@@ -466,15 +551,15 @@ export const getCustomerClothes = async (id) => {
 **/
 export const fetchAllRoutesWithoutImages = async () => {
   try {
-    fetchDistantEmployees();
-    fetchDistantCustomers();
-    fetchDistantClothes();
-    fetchDistantEvents();
     fetchDistantTips();
-    fetchDistantEncounters();
-    fetchDistantPayments();
+    // fetchDistantEmployees();
+    // fetchDistantCustomers();
+    // fetchDistantClothes();
+    // fetchDistantEvents();
+    // fetchDistantEncounters();
+    // fetchDistantPayments();
   } catch (error) {
-    console.error('Il y a eu une erreur!', error);
+    console.error('Il y a eu une erreur! Fetch ALL', error);
     throw error;
   }
 };
@@ -499,6 +584,23 @@ export const fetchAllRoutesOnlyImages = async () => {
 export const getTips = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/tips`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les infos basiques des clients
+**/
+export const getCustomersBasicInfosInInterval = async (days) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/customers/basic_infos/${days}`, {
       headers: {
         token: `${cookies.get("ACCOUNT_TOKEN")}`
       }

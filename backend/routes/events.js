@@ -17,6 +17,74 @@ router.get('/', async (req,res) => {
     }
 });
 
+// Endpoint pour récupérer les évenements du jour
+router.get('/day', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    const result = await pool.query('SELECT * FROM events WHERE date > $1::date - INTERVAL \'1 days\'', [currentDate]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour récupérer les évenements de la semaine
+router.get('/week', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    const result = await pool.query('SELECT * FROM events WHERE date > $1::date - INTERVAL \'7 days\'', [currentDate]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour récupérer les évenements du mois
+router.get('/month', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    const result = await pool.query('SELECT * FROM events WHERE date > $1::date - INTERVAL \'1 month\'', [currentDate]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Endpoint pour récupérer les évenements du mois
+router.get('/delay/days/:days', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  const { days } = req.params;
+  if (!days) {
+    return res.status(400).send('Days parameter is required');
+  }
+  try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    const result = await pool.query(`SELECT * FROM events WHERE date > $1::date - INTERVAL \'${days} days\'`, [currentDate]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Endpoint pour récupérer le nombre d'évenements
 router.get('/count', async (req,res) => {
   if (!req.headers.token || req.headers.token === 'undefined') {
@@ -82,10 +150,10 @@ router.get('/count/month', async (req,res) => {
 
 // Endpoint pour récupérer un évenement par ID
 router.get('/:id', async (req, res) => {
-    if (!req.headers.token || req.headers.token === 'undefined') {
-      console.log("The user is not connected")
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
     return res.status(401).json({ error: 'Not connected' });
-    }
+  }
   const { id } = req.params;
   if (!id) {
     return res.status(400).send('ID parameter is required');

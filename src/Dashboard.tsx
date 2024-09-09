@@ -12,7 +12,8 @@ import {
     CartesianGrid,
     Bar,
     LabelList,
-    Label
+    Label,
+    ResponsiveContainer
 } from 'recharts';
 import CanvasJSReact from '@canvasjs/react-charts';
 import { useNavigate } from 'react-router';
@@ -21,36 +22,84 @@ import * as api from './api/Api.js'
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const Dashboard: React.FC = () => {
-  const [timeRange, setTimeRange] = useState('7d');
-  const [days, setDays] = useState(30);
-
-  const handleTimeRangeChange = (range: string) => {
-    setTimeRange(range);
+  interface Event {
+    id: number,
+    name: string,
+    date: string,
+    duration: number,
+    birthdate: string,
+    max_participants: number,
+    location_x: number,
+    location_y: number,
+    type: string,
+    employee_id: number,
+    location_name: string,
   };
+
+  interface Customer {
+    id: number,
+    firstname: string,
+    lastname: string,
+    email: string,
+    phone_number: string,
+    astrological_sign: string,
+    creation_date: string,
+  };
+
+  const [lineChartTimeRange, setLineChartTimeRange] = useState('30');
+  const [globalTimeRangeInDays, setGlobalTimeRangeInDays] = useState('30');
+  const [days, setDays] = useState(30);
+  const [barChartData, setbarChartData] = useState([{
+    date: "",
+    number: 0,
+    array: []
+  }]);
+  const [lineChartData7, setLineChartData7] = useState([{
+    x: new Date(),
+    y: 0,
+  }]);
+  const [lineChartData30, setLineChartData30] = useState([{
+    x: new Date(),
+    y: 0,
+  }]);
+  const [lineChartData90, setLineChartData90] = useState([{
+    x: new Date(),
+    y: 0,
+  }]);
 
   const handleDaysChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setDays(parseInt(event.target.value));
   };
+  
+  function addDays(date: Date, days: number): Date {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
 
-  const barChartData = [
-    { name: '01 Jul', events: 3 },
-    { name: '02 Jul', events: 2 },
-    { name: '03 Jul', events: 4 },
-    { name: '04 Jul', events: 5 },
-    { name: '05 Jul', events: 5 },
-    { name: '06 Jul', events: 5 },
-    { name: '07 Jul', events: 5 },
-    { name: '08 Jul', events: 5 },
-    { name: '09 Jul', events: 5 },
-    { name: '10 Jul', events: 5 },
-    { name: '11 Jul', events: 5 },
-    { name: '12 Jul', events: 5 },
-    { name: '13 Jul', events: 5 },
-    { name: '14 Jul', events: 5 },
-    { name: '15 Jul', events: 5 },
-    { name: '16 Jul', events: 5 },
-    { name: '17 Jul', events: 5 }
-  ];
+  
+  useEffect(() => {
+    api.getEventsViaDelayInDays(globalTimeRangeInDays).then((weekEvents) => {
+      const groupedEvents = weekEvents.reduce((groups: any, event: Event) => {
+        const eventDate = new Date(event.date).toISOString().split('T')[0];
+        if (!groups[eventDate]) {
+          groups[eventDate] = [];
+        }
+        groups[eventDate].push(event);
+        return groups;
+      }, {});
+      const endDate = new Date();
+      const startDate = addDays(new Date(), -(globalTimeRangeInDays));
+      const sortedEventGroups = [];
+      const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+          const dateString = date.toISOString().split('T')[0];
+          const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
+          sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
+      }
+      setbarChartData(sortedEventGroups);
+    });
+  }, []);
 
   const pieChartData = [
     { name: 'Dating app', value: 40 },
@@ -59,58 +108,93 @@ const Dashboard: React.FC = () => {
     { name: 'Organic Search', value: 10 }
   ];
 
-  const getChartData = () => {
-    switch (timeRange) {
-      case '7d':
-        return [
-          { x: 1, y: 64 },
-          { x: 2, y: 61 },
-          { x: 3, y: 60 },
-          { x: 4, y: 58 },
-          { x: 5, y: 59 },
-          { x: 6, y: 60 },
-          { x: 7, y: 62 }
-        ];
-      case '1m':
-        return [
-          { x: 1, y: 64 },
-          { x: 7, y: 61 },
-          { x: 14, y: 58 },
-          { x: 21, y: 54 },
-          { x: 28, y: 59 }
-        ];
-      case '3m':
-        return [
-          { x: 1, y: 64 },
-          { x: 20, y: 61 },
-          { x: 40, y: 54 },
-          { x: 60, y: 59 },
-          { x: 80, y: 64 },
-          { x: 100, y: 59 }
-        ];
-      default:
-        return [];
-    }
+  const handleLineChartTimeRange = (range: string) => {
+    setLineChartTimeRange(range);
   };
+
+  useEffect(() => {
+    api.getCustomersBasicInfosInInterval(7).then((customers) => {
+      const groupedCustomers = customers.reduce((groups: any, customer: Customer) => {
+        const customerDate = new Date(customer.creation_date).toISOString().split('T')[0];
+        if (!groups[customerDate]) {
+          groups[customerDate] = [];
+        }
+        groups[customerDate].push(customer);
+        return groups;
+      }, {});
+      console.log(groupedCustomers)
+      const endDate = new Date();
+      const startDate = addDays(new Date(), -(7));
+      const sortedCustomerGroups = [];
+      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+          const dateString = date.toISOString().split('T')[0];
+          sortedCustomerGroups.push(groupedCustomers[dateString] ? { x : new Date(dateString), y : groupedCustomers[dateString].length } : { x : new Date(dateString), y : 0 });
+      }
+      setLineChartData7(sortedCustomerGroups);
+    });
+
+    api.getCustomersBasicInfosInInterval(30).then((customers) => {
+      const groupedCustomers = customers.reduce((groups: any, customer: Customer) => {
+        const customerDate = new Date(customer.creation_date).toISOString().split('T')[0];
+        if (!groups[customerDate]) {
+          groups[customerDate] = [];
+        }
+        groups[customerDate].push(customer);
+        return groups;
+      }, {});
+      console.log(groupedCustomers)
+      const endDate = new Date();
+      const startDate = addDays(new Date(), -(30));
+      const sortedCustomerGroups = [];
+      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+          const dateString = date.toISOString().split('T')[0];
+          sortedCustomerGroups.push(groupedCustomers[dateString] ? { x : new Date(dateString), y : groupedCustomers[dateString].length } : { x : new Date(dateString), y : 0 });
+      }
+      setLineChartData30(sortedCustomerGroups);
+    });
+
+    api.getCustomersBasicInfosInInterval(90).then((customers) => {
+      const groupedCustomers = customers.reduce((groups: any, customer: Customer) => {
+        const customerDate = new Date(customer.creation_date).toISOString().split('T')[0];
+        if (!groups[customerDate]) {
+          groups[customerDate] = [];
+        }
+        groups[customerDate].push(customer);
+        return groups;
+      }, {});
+      console.log(groupedCustomers)
+      const endDate = new Date();
+      const startDate = addDays(new Date(), -(90));
+      const sortedCustomerGroups = [];
+      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+          const dateString = date.toISOString().split('T')[0];
+          sortedCustomerGroups.push(groupedCustomers[dateString] ? { x : new Date(dateString), y : groupedCustomers[dateString].length } : { x : new Date(dateString), y : 0 });
+      }
+      setLineChartData90(sortedCustomerGroups);
+    });
+  }, []);
+
+  const getChartData = () => ({
+    '7': lineChartData7,
+    '30': lineChartData30,
+    '90': lineChartData90,
+  }[lineChartTimeRange] || []);  
 
   const options = {
     animationEnabled: true,
     exportEnabled: true,
     theme: 'light2',
-    title: {
-      text: 'Customers Overview'
-    },
     axisY: {
-      title: 'Customers Number',
-      suffix: ''
+      title: 'Customers Number'
     },
     axisX: {
       title: 'Date',
-      suffix: ''
+      valueFormatString: "DD MMM",
+      labelAngle: -50
     },
     data: [
       {
-        type: 'line',
+        type: 'area',
         toolTipContent: '{x}: {y}',
         dataPoints: getChartData()
       }
@@ -184,7 +268,7 @@ const Dashboard: React.FC = () => {
           <p>Welcome!</p>
         </div>
         <div className="header-buttons">
-          <button className="button" onClick={() => handleTimeRangeChange('1m')}>
+          <button className="button" onClick={() => setLineChartTimeRange('1m')}>
             Last 30 Days
           </button>
           <button className="button button-primary">Reports</button>
@@ -193,33 +277,36 @@ const Dashboard: React.FC = () => {
 
       <div className="main-content">
         <div className="chart line-chart">
-          <div className="chart-title">Customers Overview</div>
-          <div className="chart-subtitle">
-            When customers have joined in the time.
-          </div>
+          <div className="line-chart-header">
+            <div className="line-chart-title-group">
+              <div className="chart-title">Customers Overview</div>
+              <div className="chart-subtitle">
+                When customers have joined in the time.
+              </div>
+            </div>
 
-          <div className="button-group-right">
-            <button
-              className={`button ${timeRange === '7d' ? 'button-primary' : ''}`}
-              onClick={() => handleTimeRangeChange('7d')}
-            >
-              7d
-            </button>
-            <button
-              className={`button ${timeRange === '1m' ? 'button-primary' : ''}`}
-              onClick={() => handleTimeRangeChange('1m')}
-            >
-              1m
-            </button>
-            <button
-              className={`button ${timeRange === '3m' ? 'button-primary' : ''}`}
-              onClick={() => handleTimeRangeChange('3m')}
-            >
-              3m
-            </button>
+            <div className="button-group-right">
+              <button
+                className={`button ${lineChartTimeRange === '7' ? 'button-primary' : ''}`}
+                onClick={() => handleLineChartTimeRange('7')}
+              >
+                7d
+              </button>
+              <button
+                className={`button ${lineChartTimeRange === '30' ? 'button-primary' : ''}`}
+                onClick={() => handleLineChartTimeRange('30')}
+              >
+                1m
+              </button>
+              <button
+                className={`button ${lineChartTimeRange === '90' ? 'button-primary' : ''}`}
+                onClick={() => handleLineChartTimeRange('90')}
+              >
+                3m
+              </button>
+            </div>
           </div>
-
-          <div className="stat-container">
+          <div className="stat-container" id="statcontainer">
             <div className="stat-item">
               <h2>{customerCount !== null ? customerCount : 'Loading...'}</h2>
               <p>Customers</p>
@@ -259,32 +346,27 @@ const Dashboard: React.FC = () => {
               <span>↑ 3.45%</span>
             </div>
           </div>
-
-          <BarChart
-            width={850}
-            height={540}
-            data={barChartData}
-            margin={{
-              top: 100,
-              right: 30,
-              left: 20,
-              bottom: 30
-            }}
-            barSize={30}
-          >
-            <XAxis dataKey="name" scale="point" padding={{ left: 10, right: 10 }}>
-              <Label value="Days of the Month" offset={-5} position="insideBottom" />
-            </XAxis>
-            <YAxis>
-              <Label value="Number of Events" angle={-90} position="insideLeft" />
-            </YAxis>
-            <Tooltip />
-            <Legend />
-            <CartesianGrid strokeDasharray="3 3" />
-            <Bar dataKey="events" fill="#8884d8" background={{ fill: '#eee' }}>
-              <LabelList dataKey="events" position="top" />
-            </Bar>
-          </BarChart>
+          <div className="barchar-container">
+          <ResponsiveContainer width="97%" height="80%">
+            <BarChart
+              data={barChartData}
+              barSize={30}
+            >
+              <XAxis dataKey="date" scale="point" padding={{ left: 10, right: 10 }}>
+                <Label value="Days of the Month" offset={-5} position="insideBottom" />
+              </XAxis>
+              <YAxis>
+                <Label value="Number of Events" angle={-90} position="insideLeft" />
+              </YAxis>
+              <Tooltip />
+              <Legend />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Bar dataKey="number" fill="#8884d8" background={{ fill: '#eee' }}>
+                <LabelList dataKey="number" position="top" />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+          </div>
         </div>
 
         <div className="chart map-chart">

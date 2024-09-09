@@ -68,6 +68,29 @@ router.get('/basic_infos', async (req,res) => {
   }
 });
 
+// Endpoint pour récupérer les infos basiques des clients dans un intervale de jours
+router.get('/basic_infos/:days', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  const { days } = req.params;
+  if (!days) {
+    return res.status(400).send('ID parameter is required');
+  }
+  try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    const result = await pool.query(
+      `SELECT id, firstname, lastname, email, phone_number, astrological_sign, creation_date FROM customers WHERE creation_date > $1::date - INTERVAL \'${days} days\'`,
+      [currentDate]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Endpoint pour récupérer un client par ID
 router.get('/:id', async (req, res) => {
   if (!req.headers.token || req.headers.token === 'undefined') {
