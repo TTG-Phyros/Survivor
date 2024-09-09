@@ -16,6 +16,7 @@ import {
     ResponsiveContainer
 } from 'recharts';
 import CanvasJSReact from '@canvasjs/react-charts';
+import { WorldMap } from 'react-svg-worldmap';
 import { useNavigate } from 'react-router';
 import * as api from './api/Api.js'
 
@@ -372,6 +373,17 @@ const Dashboard: React.FC = () => {
         <div className="chart map-chart">
           <div className="chart-title">Customers by Country</div>
           <div className="chart-subtitle">Distribution of customers by country.</div>
+          <WorldMap
+            color="blue"
+            valueSuffix=" customers"
+            size="responsive"
+            data={[
+              { country: "US", value: 500 },
+              { country: "CN", value: 300 },
+              { country: "GB", value: 200 },
+              { country: "FR", value: 1200 },
+            ]}
+          />
         </div>
 
         <div className="chart pie-chart">

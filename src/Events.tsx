@@ -86,7 +86,7 @@ const Event: React.FC = () => {
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">
-          <button className="navbar-link" onClick={() => { navigate("/dashboard"); window.location.reload() }}>Dashboard</button>
+          <button className="navbar-link active" onClick={() => { navigate("/dashboard"); window.location.reload() }}>Dashboard</button>
           <button className="navbar-link" onClick={() => { navigate("/coaches"); window.location.reload() }}>Coaches</button>
           <button className="navbar-link" onClick={() => { navigate("/customers"); window.location.reload() }}>Customers</button>
           <button className="navbar-link" onClick={() => { navigate("/tips"); window.location.reload() }}>Tips</button>
@@ -102,8 +102,11 @@ const Event: React.FC = () => {
       </header>
 
       <div className="event-section">
-        <button className="add-event-button" onClick={() => setIsModalOpen(true)}>Add Event</button>
-        <button className="add-event-button" onClick={() => setIsMapEventModalOpen(true)}>Add Map Event</button>
+        <h1>Events</h1>
+        <div className="button-container">
+          <button className="add-event-button" onClick={() => setIsModalOpen(true)}>Add Event</button>
+          <button className="add-event-button" onClick={() => setIsMapEventModalOpen(true)}>Add Map Event</button>
+        </div>
         <Calendar
           tileContent={({ date, view }) => view === 'month' && renderEvents(date)}
         />
