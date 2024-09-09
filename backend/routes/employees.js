@@ -94,6 +94,21 @@ router.get('/coach/count', async (req,res) => {
   }
 });
 
+// Endpoint pour récupérer le nombre de coach
+router.get('/coach', async (req,res) => {
+  if (!req.headers.token || req.headers.token === 'undefined') {
+    console.log("The user is not connected")
+    return res.status(401).json({ error: 'Not connected' });
+  }
+  try {
+    const result = await pool.query('SELECT * FROM employees WHERE job = \'Coach\'');
+    res.json({ status: 'success', value: result.rows });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Endpoint pour récupérer un employé par ID
 router.get('/:id', async (req, res) => {
   if (!req.headers.token || req.headers.token === 'undefined') {

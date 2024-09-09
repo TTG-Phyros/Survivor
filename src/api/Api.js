@@ -308,6 +308,23 @@ export const getCoachesCount = async () => {
 };
 
 /**
+ * Fonction pour récupérer les coach
+**/
+export const getCoaches = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/employees/coach`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
  * Fonction pour récupérer le nombre de client
 **/
 export const getCustomersCount = async () => {
