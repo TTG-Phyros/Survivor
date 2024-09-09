@@ -26,6 +26,8 @@ const CustomerDetails: React.FC = () => {
         </div>
       </header>
       <div className="all">
+        <div>
+          <button className="back-button" >back</button>
         <h1 className="title-of-page">Customer Details</h1>
         <div className="details-section">
           <div className="sidebar">
@@ -164,6 +166,7 @@ const CustomerDetails: React.FC = () => {
               </table>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

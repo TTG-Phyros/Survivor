@@ -5,13 +5,13 @@
   background-color: #f7f8fa;
 }
 
-.sidebar, .meeting-paymentbox, .recent-meetings, .payment-history {
+.meeting-paymentbox, .recent-meetings, .payment-history {
   flex: 1;
   background-color: #fff;
-  padding: 20px;
+  padding: 40px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+
 }
 
 .title-of-page {
@@ -56,7 +56,8 @@
 }
 
 .recent-meetings, .payment-history {
-  width: 95%;
+  max-width: 95%;
+  margin-bottom: 15px;
 }
 
 table {
@@ -106,14 +107,21 @@ table th, table td {
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    margin-right: 20px;
+    max-width: 40%;
   }
-  
-  @media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
+
+  .back-button {
+    background-color: #f7f8fa;
+    transition: background-color 0.3s ease;
+    float: right;
+    margin-top: 0;
+    margin-right: 40px;
+    border-radius: 8px;
+  }
+
+  .back-button:hover {
+    background-color: #ccc;
+  @media (max-width: 100%) {
   }
 
   .sidebar, .meeting-paymentbox, .recent-meetings, .payment-history {
@@ -188,6 +196,7 @@ table th, table td {
     display: flex;
     flex-wrap: wrap;
     margin-left: 20px;
+
   }
 
   .recent-meetings, .payment-history {
