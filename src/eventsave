@@ -1,0 +1,121 @@
+// import React, { useState } from 'react';
+// import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+// import 'leaflet/dist/leaflet.css';
+// import Calendar from 'react-calendar';
+// import Modal from 'react-modal';
+// import './Events.css';
+// import { LatLngExpression } from 'leaflet';
+// import { useNavigate } from 'react-router-dom';
+// import * as api from './api/Api.js';
+
+
+// const position: LatLngExpression = [52.978, -0.0235]; 
+
+// const Event: React.FC = () => {
+//   const navigate = useNavigate();
+
+  
+//   const [events, setEvents] = useState<{ date: Date; name: string }[]>([]);
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [newEventDate, setNewEventDate] = useState<Date>(new Date());
+//   const [newEventName, setNewEventName] = useState('');
+
+  
+//   const handleAddEvent = () => {
+//     if (newEventName) {
+//       setEvents([...events, { date: newEventDate, name: newEventName }]);
+//       setIsModalOpen(false);
+//       setNewEventName('');
+//     }
+//   };
+
+  
+//   const renderEvents = (date: Date) => {
+//     return events
+//       .filter(event => event.date.toDateString() === date.toDateString())
+//       .map((event, index) => (
+//         <div key={index} className="event">
+//           {event.name}
+//         </div>
+//       ));
+//   };
+
+//   return (
+//     <div>
+//       {/* Navbar */}
+//       <header className="navbar">
+//         <div className="navbar-logo">Soul Connection</div>
+//         <nav className="navbar-links">
+//           {/* Navigation buttons */}
+//           <button className="navbar-link active" onClick={() => { navigate("/dashboard"); window.location.reload() }}>Dashboard</button>
+//           <button className="navbar-link" onClick={() => { navigate("/coaches"); window.location.reload() }}>Coaches</button>
+//           <button className="navbar-link" onClick={() => { navigate("/customers"); window.location.reload() }}>Customers</button>
+//           <button className="navbar-link" onClick={() => { navigate("/tips"); window.location.reload() }}>Tips</button>
+//           <button className="navbar-link" onClick={() => { navigate("/events"); window.location.reload() }}>Events</button>
+//           <button className="navbar-link" onClick={() => { navigate("/clothes"); window.location.reload() }}>Clothes</button>
+//           <button className="navbar-link" onClick={() => { navigate("/compatibility"); window.location.reload() }}>Compatibility</button>
+//         </nav>
+//         <div className="navbar-actions">
+//           <button className="navbar-icon">🔔</button>
+//           <button className="navbar-icon">🇺🇸</button>
+//           <button className="navbar-icon" onClick={() => { api.disconnectEmployee(); window.location.reload() }}>👤</button>
+//         </div>
+//       </header>
+
+//       {/* Conteneur pour le calendrier et le bouton d'ajout d'événement */}
+//       <div className="event-section">
+//         <button className="add-event-button" onClick={() => setIsModalOpen(true)}>Add Event</button>
+//         <Calendar
+//           tileContent={({ date, view }) => view === 'month' && renderEvents(date)}
+//         />
+//       </div>
+
+//       {/* Modale pour l'ajout d'événements */}
+//       <Modal
+//         isOpen={isModalOpen}
+//         onRequestClose={() => setIsModalOpen(false)}
+//         contentLabel="Add Event"
+//         className="event-modal"
+//       >
+//         <h2>Add Event</h2>
+//         <label>
+//           Event Name:
+//           <input
+//             type="text"
+//             value={newEventName}
+//             onChange={(e) => setNewEventName(e.target.value)}
+//           />
+//         </label>
+//         <label>
+//           Event Date:
+//           <input
+//             type="date"
+//             value={newEventDate.toISOString().slice(0, 10)}
+//             onChange={(e) => setNewEventDate(new Date(e.target.value))}
+//           />
+//         </label>
+//         <button onClick={handleAddEvent}>Add</button>
+//         <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+//       </Modal>
+
+//       {/* Conteneur de la carte */}
+//       <div className="Event-container">
+//         <MapContainer
+//           center={position}
+//           zoom={13}
+//           scrollWheelZoom={false}
+//           style={{ height: '400px', width: '100%' }}
+//         >
+//           <TileLayer
+//             url="https:
+//           />
+//           <Marker position={position}>
+//             <Popup>Boston, UK</Popup>
+//           </Marker>
+//         </MapContainer>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Event;

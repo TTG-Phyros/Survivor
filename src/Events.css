@@ -1,6 +1,137 @@
-.map-container {
-  width: 35%;
-  height: 400px;
+/* Container principal du calendrier */
+.event-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Style pour le bouton d'ajout d'événement */
+.add-event-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.add-event-button:hover {
+  background-color: #0056b3;
+}
+
+/* Styles pour la modale d'ajout d'événements */
+.event-modal {
+  background-color: white;
+  padding: 20px;
+  max-width: 500px;
+  margin: auto;
   border-radius: 8px;
-  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.event-modal h2 {
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.event-modal label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.event-modal input {
+  margin-top: 5px;
+  padding: 10px;
+  width: calc(100% - 20px);
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.event-modal button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.event-modal button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Style des événements */
+.event {
+  background-color: #ffeb3b;
+  color: #333;
+  padding: 5px;
+  border-radius: 3px;
+  margin-top: 5px;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Amélioration des cellules du calendrier */
+.react-calendar__tile {
+  position: relative;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.react-calendar__tile--active {
+  background-color: #007bff;
+  color: white;
+}
+
+.react-calendar__tile--hover {
+  background-color: #f0f8ff;
+}
+
+.react-calendar__tile--now {
+  background-color: #e0f7fa;
+}
+
+.react-calendar__tile:enabled:hover {
+  background-color: #f0f8ff;
+  border-color: #007bff;
+}
+
+/* Alignement du texte dans le calendrier */
+.react-calendar__tile span {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Header du calendrier */
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 16px;
+  margin: 2px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #e0f7fa;
+  border-radius: 4px;
 }
