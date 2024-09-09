@@ -3,7 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: #f4f7fd;
   }
   
   .app {
@@ -20,7 +20,7 @@ body {
   
   header {
     padding: 10px 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #bbbbbb;
     margin-bottom: 20px;
   }
   
