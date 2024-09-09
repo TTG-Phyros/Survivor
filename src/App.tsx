@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Login from './Login';
 import CoachesList from './coaches-list';
-import CustomerDetails from './customer-details';
+//import CustomerDetails from './customer-details';
+import CustomersList from './customer-list';
 import Clothes from './Clothes';
 import AstroTest from './astro-test';
 import Tips from './Tips';
@@ -29,7 +30,7 @@ const App: React.FC = () => {
         <Route path="/dashboard" element={connected ? <Dashboard /> : <Login />} />
         <Route path="/login" element={connected ? <Dashboard/> : <Login />} />
         <Route path="/coaches" element={connected ? <CoachesList /> : <Login />} />
-        <Route path="/customers" element={connected ? <CustomerDetails /> : <Login />} />
+        <Route path="/customers" element={connected ? <CustomersList /> : <Login />} />
         <Route path="/clothes" element={connected ? <Clothes /> : <Login />} />
         <Route path="/compatibility" element={connected ? <AstroTest /> : <Login />} />
         <Route path="/tips" element={connected ? <Tips /> : <Login />} />
