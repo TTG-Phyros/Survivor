@@ -659,6 +659,28 @@ export const addCustomer = async (customerData) => {
   }
 };
 
+/**
+ * Fonction pour ajouter un event
+**/
+export const addEvent = async (eventData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/events`, {
+      name: eventData.name,
+      date: eventData.date,
+      duration: eventData.duration,
+      max_participants: eventData.max_participants,
+      location_x: eventData.location_x,
+      location_y: eventData.location_y,
+      type: eventData.type,
+      location_name: eventData.location_name,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout d\'un événement :', error.response?.data || error.message);
+    throw error;
+  }
+};
 
 /**
  * Fonction pour récupérer les infos basiques des clients
