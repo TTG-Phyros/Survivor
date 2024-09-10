@@ -19,9 +19,9 @@ const SoulConnection_Login: React.FC = () => {
                         console.log("Fetched All routes without images");
                         api.fetchAllRoutesOnlyImages().then(() => {
                             console.log("Fetched All routes with images");
+                            cookies.set("REFRESH_TIMEOUT", true, { expires: 1 });
                             window.location.reload();
                             navigate('/dashboard');
-                            cookies.set("REFRESH_TIMEOUT", true, { expires: 1 });
                         });
                     });
                 } else {
