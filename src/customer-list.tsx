@@ -345,9 +345,6 @@ const CoachesList: React.FC = () => {
         </button>
         {menuVisible === coach.id && (
           <div className="actions-menu">
-            <button onClick={() => handleAddCustomerClick()}>
-              Add / Remove Customer
-            </button>
             <button
               onClick={() =>
                 handleActionClick("Delete Customers", coach)
