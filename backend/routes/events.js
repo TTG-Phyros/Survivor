@@ -88,7 +88,7 @@ router.get('/month', async (req,res) => {
   }
 });
 
-// Endpoint pour récupérer les évenements du mois
+// Endpoint pour récupérer les évenements d'un delais en jour
 router.get('/delay/days/:days', async (req,res) => {
   if (!req.headers.token || req.headers.token === 'undefined') {
     console.log("The user is not connected")

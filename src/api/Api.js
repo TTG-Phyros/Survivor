@@ -428,11 +428,28 @@ export const getMonthEvents = async () => {
 };
 
 /**
- * Fonction pour récupérer les évenements du mois
+ * Fonction pour récupérer les évenements d'un delais
 **/
 export const getEventsViaDelayInDays = async (delay) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/events/delay/days/${delay}`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+    throw error;
+  }
+};
+
+/**
+ * Fonction pour récupérer les rencontres d'un delais
+**/
+export const getEncountersViaDelayInDays = async (delay) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/encounters/delay/days/${delay}`, {
       headers: {
         token: `${cookies.get("ACCOUNT_TOKEN")}`
       }

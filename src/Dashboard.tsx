@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
     location_y: number,
     type: string,
     employee_id: number,
-    location_name: string,
+    location_name: string
   };
 
   interface Customer {
@@ -44,17 +44,39 @@ const Dashboard: React.FC = () => {
     email: string,
     phone_number: string,
     astrological_sign: string,
-    creation_date: string,
+    creation_date: string
+  };
+
+  interface Encounter {
+    id: number,
+    customer_id: number,
+    date: string,
+    rating: number,
+    comment: string,
+    source: string
   };
 
   const [lineChartTimeRange, setLineChartTimeRange] = useState('30');
-  const [globalTimeRangeInDays, setGlobalTimeRangeInDays] = useState('30');
-  const [days, setDays] = useState(30);
-  const [barChartData, setbarChartData] = useState([{
+  const [pieChartTimeRange, setPieChartTimeRange] = useState('90');
+  const [barChartTimeRange, setBarChartTimeRange] = useState('30');
+  const [globalTimeRange, setglobalTimeRange] = useState('30');
+
+  const [barChartData7, setbarChartData7] = useState([{
     date: "",
     number: 0,
     array: []
   }]);
+  const [barChartData30, setbarChartData30] = useState([{
+    date: "",
+    number: 0,
+    array: []
+  }]);
+  const [barChartData90, setbarChartData90] = useState([{
+    date: "",
+    number: 0,
+    array: []
+  }]);
+
   const [lineChartData7, setLineChartData7] = useState([{
     x: new Date(),
     y: 0,
@@ -68,8 +90,31 @@ const Dashboard: React.FC = () => {
     y: 0,
   }]);
 
+  const [pieChartData7, setPieChartData7] = useState([{
+    name: "",
+    value: 0,
+    fill: ""
+  }]);
+  const [pieChartData30, setPieChartData30] = useState([{
+    name: "",
+    value: 0,
+    fill: ""
+  }]);
+  const [pieChartData90, setPieChartData90] = useState([{
+    name: "",
+    value: 0,
+    fill: ""
+  }]);
+
   const handleDaysChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setDays(parseInt(event.target.value));
+    setPieChartTimeRange(event.target.value);
+  };
+
+  const handleTimeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setLineChartTimeRange(event.target.value);
+    setBarChartTimeRange(event.target.value);
+    setPieChartTimeRange(event.target.value);
+    setglobalTimeRange(event.target.value);
   };
   
   function addDays(date: Date, days: number): Date {
@@ -78,10 +123,30 @@ const Dashboard: React.FC = () => {
     return result;
   }
 
-  
+  function hashStringToNumber(string: string) {
+    let hash = 0;
+    for (let i = 0; i < string.length; i++) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+  }
+
+  function numberToHexColor(number: number) {
+    const color = ((number >> 24) & 0xFF).toString(16) + 
+                  ((number >> 16) & 0xFF).toString(16) + 
+                  ((number >> 8) & 0xFF).toString(16) + 
+                  (number & 0xFF).toString(16);
+    return `#${color.slice(0, 6).padStart(6, '0')}`;
+  }
+
+  function stringToColor(string: string) {
+    const hash = hashStringToNumber(string);
+    return numberToHexColor(hash);
+  }
+
   useEffect(() => {
-    api.getEventsViaDelayInDays(globalTimeRangeInDays).then((weekEvents) => {
-      const groupedEvents = weekEvents.reduce((groups: any, event: Event) => {
+    api.getEventsViaDelayInDays(7).then((events) => {
+      const groupedEvents = events.reduce((groups: any, event: Event) => {
         const eventDate = new Date(event.date).toISOString().split('T')[0];
         if (!groups[eventDate]) {
           groups[eventDate] = [];
@@ -90,7 +155,7 @@ const Dashboard: React.FC = () => {
         return groups;
       }, {});
       const endDate = new Date();
-      const startDate = addDays(new Date(), -(globalTimeRangeInDays));
+      const startDate = addDays(new Date(), -(7));
       const sortedEventGroups = [];
       const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
@@ -98,7 +163,109 @@ const Dashboard: React.FC = () => {
           const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
           sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
       }
-      setbarChartData(sortedEventGroups);
+      setbarChartData7(sortedEventGroups);
+    });
+
+    api.getEventsViaDelayInDays(30).then((events) => {
+      const groupedEvents = events.reduce((groups: any, event: Event) => {
+        const eventDate = new Date(event.date).toISOString().split('T')[0];
+        if (!groups[eventDate]) {
+          groups[eventDate] = [];
+        }
+        groups[eventDate].push(event);
+        return groups;
+      }, {});
+      const endDate = new Date();
+      const startDate = addDays(new Date(), -(30));
+      const sortedEventGroups = [];
+      const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+          const dateString = date.toISOString().split('T')[0];
+          const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
+          sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
+      }
+      setbarChartData30(sortedEventGroups);
+    });
+
+    api.getEventsViaDelayInDays(90).then((events) => {
+      const groupedEvents = events.reduce((groups: any, event: Event) => {
+        const eventDate = new Date(event.date).toISOString().split('T')[0];
+        if (!groups[eventDate]) {
+          groups[eventDate] = [];
+        }
+        groups[eventDate].push(event);
+        return groups;
+      }, {});
+      const endDate = new Date();
+      const startDate = addDays(new Date(), -(90));
+      const sortedEventGroups = [];
+      const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+          const dateString = date.toISOString().split('T')[0];
+          const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
+          sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
+      }
+      setbarChartData90(sortedEventGroups);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.getEncountersViaDelayInDays(7).then((encounters) => {
+      const groupedEncounters = encounters.reduce((groups: any, encounter: Encounter) => {
+        const encounterSource = encounter.source;
+        if (!groups[encounterSource]) {
+          groups[encounterSource] = [];
+        }
+        groups[encounterSource].push(encounter);
+        return groups;
+      }, {});
+
+      const sortedEncounterGroups = Object.keys(groupedEncounters)
+        .map((eventName: string) => ({
+          name : eventName,
+          value : groupedEncounters[eventName].length,
+          fill : stringToColor(eventName)
+        }));
+      setPieChartData7(sortedEncounterGroups.length > 0 ? sortedEncounterGroups : []);
+    });
+
+    api.getEncountersViaDelayInDays(30).then((encounters) => {
+      const groupedEncounters = encounters.reduce((groups: any, encounter: Encounter) => {
+        const encounterSource = encounter.source;
+        if (!groups[encounterSource]) {
+          groups[encounterSource] = [];
+        }
+        groups[encounterSource].push(encounter);
+        return groups;
+      }, {});
+
+      const sortedEncounterGroups = Object.keys(groupedEncounters)
+        .map((eventName: string) => ({
+          name : eventName,
+          value : groupedEncounters[eventName].length,
+          fill : stringToColor(eventName)
+        }));
+      setPieChartData30(sortedEncounterGroups.length > 0 ? sortedEncounterGroups : []);
+    });
+
+    api.getEncountersViaDelayInDays(90).then((encounters) => {
+      const groupedEncounters = encounters.reduce((groups: any, encounter: Encounter) => {
+        const encounterSource = encounter.source;
+        if (!groups[encounterSource]) {
+          groups[encounterSource] = [];
+        }
+        groups[encounterSource].push(encounter);
+        return groups;
+      }, {});
+
+      const sortedEncounterGroups = Object.keys(groupedEncounters)
+        .map((eventName: string) => ({
+          name : eventName,
+          value : groupedEncounters[eventName].length,
+          fill : stringToColor(eventName)
+        }))
+        .sort((a, b) => (a.value - b.value) * -1);
+      setPieChartData90(sortedEncounterGroups.length > 0 ? sortedEncounterGroups : []);
     });
   }, []);
 
@@ -123,7 +290,6 @@ const Dashboard: React.FC = () => {
         groups[customerDate].push(customer);
         return groups;
       }, {});
-      console.log(groupedCustomers)
       const endDate = new Date();
       const startDate = addDays(new Date(), -(7));
       const sortedCustomerGroups = [];
@@ -143,7 +309,6 @@ const Dashboard: React.FC = () => {
         groups[customerDate].push(customer);
         return groups;
       }, {});
-      console.log(groupedCustomers)
       const endDate = new Date();
       const startDate = addDays(new Date(), -(30));
       const sortedCustomerGroups = [];
@@ -163,7 +328,6 @@ const Dashboard: React.FC = () => {
         groups[customerDate].push(customer);
         return groups;
       }, {});
-      console.log(groupedCustomers)
       const endDate = new Date();
       const startDate = addDays(new Date(), -(90));
       const sortedCustomerGroups = [];
@@ -175,11 +339,23 @@ const Dashboard: React.FC = () => {
     });
   }, []);
 
-  const getChartData = () => ({
+  const getBarChartData = () => ({
+    '7': barChartData7,
+    '30': barChartData30,
+    '90': barChartData90,
+  }[barChartTimeRange] || []);
+
+  const getLineChartData = () => ({
     '7': lineChartData7,
     '30': lineChartData30,
     '90': lineChartData90,
-  }[lineChartTimeRange] || []);  
+  }[lineChartTimeRange] || []);
+
+  const getPieChartData = () => ({
+    '7': pieChartData7,
+    '30': pieChartData30,
+    '90': pieChartData90,
+  }[pieChartTimeRange] || []);
 
   const options = {
     animationEnabled: true,
@@ -197,7 +373,7 @@ const Dashboard: React.FC = () => {
       {
         type: 'area',
         toolTipContent: '{x}: {y}',
-        dataPoints: getChartData()
+        dataPoints: getLineChartData()
       }
     ]
   };
@@ -269,9 +445,11 @@ const Dashboard: React.FC = () => {
           <p>Welcome!</p>
         </div>
         <div className="header-buttons">
-          <button className="button" onClick={() => setLineChartTimeRange('1m')}>
-            Last 30 Days
-          </button>
+          <select value={globalTimeRange} onChange={handleTimeChange} className="select-box">
+              <option value={7}>7 Days</option>
+              <option value={30}>30 Days</option>
+              <option value={90}>90 Days</option>
+            </select>
           <button className="button button-primary">Reports</button>
         </div>
       </header>
@@ -350,7 +528,7 @@ const Dashboard: React.FC = () => {
           <div className="barchar-container">
           <ResponsiveContainer width="97%" height="80%">
             <BarChart
-              data={barChartData}
+              data={getBarChartData()}
               barSize={30}
             >
               <XAxis dataKey="date" scale="point" padding={{ left: 10, right: 10 }}>
@@ -390,26 +568,44 @@ const Dashboard: React.FC = () => {
           <div className="chart-title">Meetings top sources</div>
 
           <div className="day-selector">
-            <select value={days} onChange={handleDaysChange} className="select-box">
+            <select value={pieChartTimeRange} onChange={handleDaysChange} className="select-box">
               <option value={7}>7 Days</option>
               <option value={30}>30 Days</option>
-              <option value={60}>60 Days</option>
+              <option value={90}>90 Days</option>
             </select>
           </div>
-
-          <PieChart width={400} height={400}>
-            <Pie
-              dataKey="value"
-              isAnimationActive={false}
-              data={pieChartData}
-              cx={200}
-              cy={200}
-              outerRadius={160}
-              fill="#8884d8"
-              label
-            />
-            <Tooltip />
-          </PieChart>
+          <div className="pie-chart-infos">
+            {getPieChartData().length > 0 ?
+            <ResponsiveContainer width="97%" height="39%">
+              <PieChart width={400} height={400} margin={{ top: 0, left: 50, right: 0, bottom: 0 }}>
+                <Pie
+                  dataKey="value"
+                  isAnimationActive={false}
+                  data={getPieChartData()}
+                  cx={200}
+                  cy={200}
+                  outerRadius={200}
+                  fill="#8884d8"
+                  />
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+            : <span className='big-text'>NO DATA</span>}
+            <div className="pie-chart-all-text">
+              {getPieChartData().map(encounters => (
+                <div className="pie-chart-text">
+                  <div className="pie-chart-text-top">
+                    <div className="square" style={{ backgroundColor: `${encounters.fill}` }}></div>
+                    <span className="grey-text">{encounters.name.charAt(0).toUpperCase()+ encounters.name.slice(1)}</span>
+                  </div>
+                  <div className="pie-chart-text-bottom">
+                    <span className="bold-text">{encounters.value} </span>
+                    <span className="grey-text" style={{marginTop : 1 }}>{Math.round(encounters.value / getPieChartData().length * 10000) / 100}%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
