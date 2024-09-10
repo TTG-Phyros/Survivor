@@ -57,7 +57,7 @@ const Dashboard: React.FC = () => {
   };
 
   const [lineChartTimeRange, setLineChartTimeRange] = useState('30');
-  const [pieChartTimeRange, setPieChartTimeRange] = useState('90');
+  const [pieChartTimeRange, setPieChartTimeRange] = useState('30');
   const [barChartTimeRange, setBarChartTimeRange] = useState('30');
   const [globalTimeRange, setglobalTimeRange] = useState('30');
 
