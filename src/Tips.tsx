@@ -54,8 +54,12 @@ const Tips: React.FC = () => {
                     className={`tip-title ${openTips === index ? 'active' : ''}`}
                     onClick={() => handleToggle(index)}
                     aria-expanded={openTips === index ? 'true' : 'false'}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && handleToggle(index)}
                   >
                     {tip.title}
+                    <span className={`arrow ${openTips === index ? 'up' : 'down'}`}>▼</span>
                   </td>
                 </tr>
                 {openTips === index && (
