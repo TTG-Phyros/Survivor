@@ -1,7 +1,16 @@
-import "./customer-list.css";
+import "./coaches-list.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCustomers, disconnectEmployee } from './api/Api';
+import { getCoaches, disconnectEmployee } from "./api/Api";
+
+interface Coach {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone?: string;
+  numberOfCustomers?: number;
+}
 
 interface Customer {
   id: number;
@@ -10,40 +19,69 @@ interface Customer {
   phone: string;
 }
 
-const CustomersList: React.FC = () => {
+const customersData: Customer[] = [
+  {
+    id: 7,
+    name: "Ethan Hunter",
+    email: "ethan@bergerpaints.com",
+    phone: "+435 675-2345",
+  },
+  {
+    id: 8,
+    name: "Justine Bauwens",
+    email: "justine@acstext.com",
+    phone: "+978 546-2342",
+  },
+];
+
+const CoachesList: React.FC = () => {
   const [menuVisible, setMenuVisible] = useState<number | null>(null);
+  const [isCustomerModalOpen, setIsCustomerModalOpen] =
+    useState<boolean>(false);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
-  const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] = useState<boolean>(false);
-  const [newCustomer, setNewCustomer] = useState({
-    name: "",
+  const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] =
+    useState<boolean>(false);
+  const [newCoach, setNewCoach] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
-    phone: "",
+    address: "",
+    birthdate: "",
+    description: "",
+    gender: "",
+    astrological_sign: "",
+    phone_number: "",
   });
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customerSearchQuery, setCustomerSearchQuery] = useState<string>("");
+  const [sortType, setSortType] = useState<"alphabetical" | "byCustomers">(
+    "alphabetical"
+  );
+  const [coaches, setCoaches] = useState<Coach[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchCustomers = async () => {
+    const fetchCoaches = async () => {
       try {
-        const response = await getCustomers();
+        const response = await getCoaches();
         if (response && response.value) {
-          setCustomers(response.value);
+          setCoaches(response.value);
         } else {
-          console.log(response);
-          setError('Aucune donnée de client disponible');
+          setError("Aucune donnée de coach disponible");
         }
         setLoading(false);
       } catch (error) {
-        console.error('Erreur lors de la récupération des clients:', error);
-        setError('Erreur lors de la récupération des clients');
+        console.error("Erreur lors de la récupération des coachs:", error);
+        setError("Erreur lors de la récupération des coachs");
         setLoading(false);
       }
     };
 
-    fetchCustomers();
+    fetchCoaches();
   }, []);
 
   useEffect(() => {
@@ -58,19 +96,48 @@ const CustomersList: React.FC = () => {
     };
   }, []);
 
+  const handleSortChange = () => {
+    setSortType((prev) =>
+      prev === "alphabetical" ? "byCustomers" : "alphabetical"
+    );
+  };
+
+  const handleMenuClick = (id: number) => {
+    setMenuVisible(menuVisible === id ? null : id);
+  };
+
+  const handleCustomerModalClose = () => {
+    setIsCustomerModalOpen(false);
+  };
+
+  const handleRemoveCustomerModalClose = () => {
+    setIsRemoveCustomerModalOpen(false);
+  };
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    customer.phone.includes(searchQuery)
+  const handleCustomerSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCustomerSearchQuery(event.target.value);
+  };
+
+  const filteredCustomers = customersData.filter(
+    (customer) =>
+      customer.name.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
+      customer.email
+        .toLowerCase()
+        .includes(customerSearchQuery.toLowerCase()) ||
+      customer.phone.includes(customerSearchQuery)
   );
 
-  const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
-    setNewCustomer(prevState => ({
+    setNewCoach((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -78,8 +145,12 @@ const CustomersList: React.FC = () => {
 
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("New customer data:", newCustomer);
+    console.log("New coach data:", newCoach);
     setIsFormOpen(false);
+  };
+
+  const handleAddCustomerClick = () => {
+    setIsCustomerModalOpen(true);
   };
 
   const handleRemoveCustomerClick = (customer: Customer) => {
@@ -94,6 +165,32 @@ const CustomersList: React.FC = () => {
     setIsRemoveCustomerModalOpen(false);
   };
 
+  const handleActionClick = (action: string, coach: Coach) => {
+    if (action === "Delete Coach") {
+      console.log(`Deleting coach: ${coach.firstname} ${coach.lastname}`);
+    }
+  };
+
+  const sortedCoaches = [...coaches].sort((a, b) => {
+    if (sortType === "alphabetical") {
+      return a.firstname.localeCompare(b.firstname);
+    } else if (
+      sortType === "byCustomers" &&
+      a.numberOfCustomers &&
+      b.numberOfCustomers
+    ) {
+      return b.numberOfCustomers - a.numberOfCustomers;
+    }
+    return 0;
+  });
+
+  const filteredCoaches = sortedCoaches.filter(
+    (coach) =>
+      coach.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      coach.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      coach.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const navigate = useNavigate();
 
   if (loading) {
@@ -105,28 +202,92 @@ const CustomersList: React.FC = () => {
   }
 
   return (
-    <div className="customers-list-container">
+    <div className="container">
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">
-          <button className="navbar-link" onClick={() => {navigate("/dashboard"); window.location.reload()}}>Dashboard</button>
-          <button className="navbar-link" onClick={() => {navigate("/coaches"); window.location.reload()}}>Coaches</button>
-          <button className="navbar-link active" onClick={() => {navigate("/customers"); window.location.reload()}}>Customers</button>
-          <button className="navbar-link" onClick={() => {navigate("/tips"); window.location.reload()}}>Tips</button>
-          <button className="navbar-link" onClick={() => {navigate("/events"); window.location.reload()}}>Events</button>
-          <button className="navbar-link" onClick={() => {navigate("/clothes"); window.location.reload()}}>Clothes</button>
-          <button className="navbar-link" onClick={() => {navigate("/compatibility"); window.location.reload()}}>Compatibility</button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/dashboard");
+              window.location.reload();
+            }}
+          >
+            Dashboard
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/coaches");
+              window.location.reload();
+            }}
+          >
+            Coaches
+          </button>
+          <button
+            className="navbar-link active"
+            onClick={() => {
+              navigate("/customers");
+              window.location.reload();
+            }}
+          >
+            Customers
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/tips");
+              window.location.reload();
+            }}
+          >
+            Tips
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/events");
+              window.location.reload();
+            }}
+          >
+            Events
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/clothes");
+              window.location.reload();
+            }}
+          >
+            Clothes
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/compatibility");
+              window.location.reload();
+            }}
+          >
+            Compatibility
+          </button>
         </nav>
         <div className="navbar-actions">
           <button className="navbar-icon">🔔</button>
           <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={() => { disconnectEmployee(); window.location.reload()}}>👤</button>
+          <button
+            className="navbar-icon"
+            onClick={() => {
+              disconnectEmployee();
+              window.location.reload();
+            }}
+          >
+            👤
+          </button>
         </div>
       </header>
-      <main className="customers-list-main">
+      <main className="coaches-list-main">
         <h1 className="title-of-page">Customers List</h1>
-        <p className="customers-list-subtitle">
-          You have a total of {filteredCustomers.length} customers.
+        <p className="coaches-list-subtitle">
+          You have a total of {filteredCoaches.length} Customers.
         </p>
 
         <div className="coaches-list-actions">
@@ -135,76 +296,222 @@ const CustomersList: React.FC = () => {
             placeholder="Search..."
             value={searchQuery}
             onChange={handleSearchChange}
-            className="search-input2"
+            className="search-input"
           />
-          <button className="add-button" onClick={() => setIsFormOpen(true)}>
-            Add new customer +
-          </button>
+          <div className="alinbuttondt">
+            <button className="add-button" onClick={() => setIsFormOpen(true)}>
+              Add new Customers +
+            </button>
+            <button className="sort-button" onClick={handleSortChange}>
+              Sort by{" "}
+              {sortType === "alphabetical" ? "Payment method" : "Alphabetical"}
+            </button>
+          </div>
         </div>
 
-        <ul className="customers-list">
-          {filteredCustomers.map(customer => (
-            <li key={customer.id} className="customer-item">
-              <div className="customer-info">
-                <div className="customer-name">{customer.name}</div>
-                <div className="customer-email">{customer.email}</div>
-                <div className="customer-phone">{customer.phone}</div>
-              </div>
-              <div className="customer-actions">
-                <button
-                  className="actions-button"
-                  onClick={() => handleRemoveCustomerClick(customer)}
-                >
-                  ⋮
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <table className="coaches-list-table">
+          <thead>
+            <tr>
+              <th>Customers</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Payment method</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+  {filteredCoaches.map((coach) => (
+    <tr key={coach.id}>
+      <td>
+        <a
+          href="#"
+          onClick={() => {
+            console.log(`Clicked on customer: ${coach.firstname} ${coach.lastname}`);
+            //redirect to customer details page
+          }}
+        >
+          {coach.firstname} {coach.lastname}
+        </a>
+      </td>
+      <td>{coach.email}</td>
+      <td>{coach.phone || "N/A"}</td>
+      <td>{coach.numberOfCustomers || "0"}</td>
+      <td className="actions-cell">
+        <button
+          className="actions-button"
+          onClick={() => handleMenuClick(coach.id)}
+        >
+          ⋮
+        </button>
+        {menuVisible === coach.id && (
+          <div className="actions-menu">
+            <button
+              onClick={() =>
+                handleActionClick("Delete Customers", coach)
+              }
+            >
+              Delete Customers
+            </button>
+          </div>
+        )}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+        </table>
+
+        {isCustomerModalOpen && (
+          <div className="modal2">
+            <div className="modal-content2">
+              <h2>Coaches List</h2>
+
+              <input
+                type="text"
+                placeholder="Search customers..."
+                value={customerSearchQuery}
+                onChange={handleCustomerSearchChange}
+                className="search-input2"
+              />
+
+              <ul>
+                {filteredCustomers.map((customer) => (
+                  <li key={customer.id}>
+                    <div className="customer-info">
+                      <div className="customer-name">{customer.name}</div>
+                      <div className="customer-email">{customer.email}</div>
+                      <div className="customer-phone">{customer.phone}</div>
+                    </div>
+                    <div className="customer-actions">
+                      <button
+                        onClick={() => handleRemoveCustomerClick(customer)}
+                      >
+                        Remove
+                      </button>
+                      <button>Add</button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <button className="close-button" onClick={handleCustomerModalClose}>
+              X
+            </button>
+          </div>
+        )}
 
         {isFormOpen && (
           <div className="modal">
             <div className="modal-content">
-              <h2>Add New Customer</h2>
-              <form onSubmit={handleFormSubmit} className="customer-form">
+              <h2>Add New Customers</h2>
+              <form onSubmit={handleFormSubmit}>
                 <div className="form-group">
-                  <label htmlFor="name">Name</label>
+                  <label>First Name</label>
                   <input
                     type="text"
-                    id="name"
-                    name="name"
-                    value={newCustomer.name}
+                    name="firstName"
+                    value={newCoach.firstName}
                     onChange={handleFormChange}
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label>Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={newCoach.lastName}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={newCoach.phone_number}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
                   <input
                     type="email"
-                    id="email"
                     name="email"
-                    value={newCustomer.email}
+                    value={newCoach.email}
                     onChange={handleFormChange}
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="phone">Phone</label>
+                  <label>Address</label>
                   <input
                     type="text"
-                    id="phone"
-                    name="phone"
-                    value={newCustomer.phone}
+                    name="address"
+                    value={newCoach.address}
                     onChange={handleFormChange}
                     required
                   />
                 </div>
+                <div className="form-group">
+                  <label>Birthdate</label>
+                  <input
+                    type="date"
+                    name="birthdate"
+                    value={newCoach.birthdate}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>description Information</label>
+                  <textarea
+                    name="description"
+                    value={newCoach.description}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>gender</label>
+                  <textarea
+                    name="gender"
+                    value={newCoach.gender}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>astrological_sign</label>
+                  <select
+                    name="astrological_sign"
+                    value={newCoach.astrological_sign}
+                    onChange={(event) => setNewCoach((prevState) => ({
+                      ...prevState,
+                      astrological_sign: event.target.value,
+                    }))}
+                    required
+                  >
+                    <option value="">Select Astrological Sign</option>
+                    <option value="Aries">Aries</option>
+                    <option value="Taurus">Taurus</option>
+                    <option value="Gemini">Gemini</option>
+                    <option value="Cancer">Cancer</option>
+                    <option value="Leo">Leo</option>
+                    <option value="Virgo">Virgo</option>
+                    <option value="Libra">Libra</option>
+                    <option value="Scorpio">Scorpio</option>
+                    <option value="Sagittarius">Sagittarius</option>
+                    <option value="Capricorn">Capricorn</option>
+                    <option value="Aquarius">Aquarius</option>
+                    <option value="Pisces">Pisces</option>
+                  </select>
+                </div>
+
                 <div className="form-actions">
                   <button type="button" onClick={() => setIsFormOpen(false)}>
                     Cancel
                   </button>
-                  <button type="submit">Add Customer</button>
+                  <button type="submit">Add Customers</button>
                 </div>
               </form>
             </div>
@@ -213,7 +520,7 @@ const CustomersList: React.FC = () => {
 
         {isRemoveCustomerModalOpen && (
           <div className="modal">
-            <div className="modal-content2">
+            <div className="modal-content">
               <h2>Remove Customer</h2>
               {selectedCustomer && (
                 <div>
@@ -223,16 +530,11 @@ const CustomersList: React.FC = () => {
                   <div className="form-actions">
                     <button
                       type="button"
-                      onClick={() => setIsRemoveCustomerModalOpen(false)}
-                      className="close-button"
+                      onClick={handleRemoveCustomerModalClose}
                     >
                       Cancel
                     </button>
-                    <button
-                      type="button"
-                      onClick={handleRemoveCustomerSubmit}
-                      className="close-button"
-                    >
+                    <button type="button" onClick={handleRemoveCustomerSubmit}>
                       Remove
                     </button>
                   </div>
@@ -246,4 +548,5 @@ const CustomersList: React.FC = () => {
   );
 };
 
-export default CustomersList;
+export default CoachesList;
+

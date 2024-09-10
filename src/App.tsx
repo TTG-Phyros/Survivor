@@ -16,7 +16,7 @@ import { useState } from 'react';
 const App: React.FC = () => {
   const [connected, setConnected] = useState<boolean | undefined>(undefined);
   //api.fetchAllRoutesWithoutImages();
-  //api.fetchAllRoutesOnlyImages();
+  // api.fetchAllRoutesOnlyImages();
 
   api.checkConnexionEmployee()
   .then((answer) => {

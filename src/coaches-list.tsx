@@ -1,7 +1,7 @@
 import "./coaches-list.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCoaches, disconnectEmployee } from './api/Api';
+import { getCoaches, disconnectEmployee } from "./api/Api";
 
 interface Coach {
   id: number;
@@ -36,21 +36,28 @@ const customersData: Customer[] = [
 
 const CoachesList: React.FC = () => {
   const [menuVisible, setMenuVisible] = useState<number | null>(null);
-  const [isCustomerModalOpen, setIsCustomerModalOpen] = useState<boolean>(false);
+  const [isCustomerModalOpen, setIsCustomerModalOpen] =
+    useState<boolean>(false);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
-  const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] = useState<boolean>(false);
+  const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] =
+    useState<boolean>(false);
   const [newCoach, setNewCoach] = useState({
     firstName: "",
     lastName: "",
     email: "",
     address: "",
     birthdate: "",
-    other: "",
+    gender: "",
+    job : ""
   });
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [customerSearchQuery, setCustomerSearchQuery] = useState<string>("");
-  const [sortType, setSortType] = useState<"alphabetical" | "byCustomers">("alphabetical");
+  const [sortType, setSortType] = useState<"alphabetical" | "byCustomers">(
+    "alphabetical"
+  );
   const [coaches, setCoaches] = useState<Coach[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,12 +69,12 @@ const CoachesList: React.FC = () => {
         if (response && response.value) {
           setCoaches(response.value);
         } else {
-          setError('Aucune donnée de coach disponible');
+          setError("Aucune donnée de coach disponible");
         }
         setLoading(false);
       } catch (error) {
-        console.error('Erreur lors de la récupération des coachs:', error);
-        setError('Erreur lors de la récupération des coachs');
+        console.error("Erreur lors de la récupération des coachs:", error);
+        setError("Erreur lors de la récupération des coachs");
         setLoading(false);
       }
     };
@@ -88,7 +95,9 @@ const CoachesList: React.FC = () => {
   }, []);
 
   const handleSortChange = () => {
-    setSortType(prev => prev === "alphabetical" ? "byCustomers" : "alphabetical");
+    setSortType((prev) =>
+      prev === "alphabetical" ? "byCustomers" : "alphabetical"
+    );
   };
 
   const handleMenuClick = (id: number) => {
@@ -107,19 +116,26 @@ const CoachesList: React.FC = () => {
     setSearchQuery(event.target.value);
   };
 
-  const handleCustomerSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCustomerSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setCustomerSearchQuery(event.target.value);
   };
 
-  const filteredCustomers = customersData.filter(customer =>
-    customer.name.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
-    customer.email.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
-    customer.phone.includes(customerSearchQuery)
+  const filteredCustomers = customersData.filter(
+    (customer) =>
+      customer.name.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
+      customer.email
+        .toLowerCase()
+        .includes(customerSearchQuery.toLowerCase()) ||
+      customer.phone.includes(customerSearchQuery)
   );
 
-  const handleFormChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleFormChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = event.target;
-    setNewCoach(prevState => ({
+    setNewCoach((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -156,16 +172,21 @@ const CoachesList: React.FC = () => {
   const sortedCoaches = [...coaches].sort((a, b) => {
     if (sortType === "alphabetical") {
       return a.firstname.localeCompare(b.firstname);
-    } else if (sortType === "byCustomers" && a.numberOfCustomers && b.numberOfCustomers) {
+    } else if (
+      sortType === "byCustomers" &&
+      a.numberOfCustomers &&
+      b.numberOfCustomers
+    ) {
       return b.numberOfCustomers - a.numberOfCustomers;
     }
     return 0;
   });
 
-  const filteredCoaches = sortedCoaches.filter(coach =>
-    coach.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    coach.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    coach.email.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCoaches = sortedCoaches.filter(
+    (coach) =>
+      coach.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      coach.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      coach.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const navigate = useNavigate();
@@ -183,18 +204,82 @@ const CoachesList: React.FC = () => {
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">
-          <button className="navbar-link" onClick={() => {navigate("/dashboard"); window.location.reload()}}>Dashboard</button>
-          <button className="navbar-link active" onClick={() => {navigate("/coaches"); window.location.reload()}}>Coaches</button>
-          <button className="navbar-link" onClick={() => {navigate("/customers"); window.location.reload()}}>Customers</button>
-          <button className="navbar-link" onClick={() => {navigate("/tips"); window.location.reload()}}>Tips</button>
-          <button className="navbar-link" onClick={() => {navigate("/events"); window.location.reload()}}>Events</button>
-          <button className="navbar-link" onClick={() => {navigate("/clothes"); window.location.reload()}}>Clothes</button>
-          <button className="navbar-link" onClick={() => {navigate("/compatibility"); window.location.reload()}}>Compatibility</button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/dashboard");
+              window.location.reload();
+            }}
+          >
+            Dashboard
+          </button>
+          <button
+            className="navbar-link active"
+            onClick={() => {
+              navigate("/coaches");
+              window.location.reload();
+            }}
+          >
+            Coaches
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/customers");
+              window.location.reload();
+            }}
+          >
+            Customers
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/tips");
+              window.location.reload();
+            }}
+          >
+            Tips
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/events");
+              window.location.reload();
+            }}
+          >
+            Events
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/clothes");
+              window.location.reload();
+            }}
+          >
+            Clothes
+          </button>
+          <button
+            className="navbar-link"
+            onClick={() => {
+              navigate("/compatibility");
+              window.location.reload();
+            }}
+          >
+            Compatibility
+          </button>
         </nav>
         <div className="navbar-actions">
           <button className="navbar-icon">🔔</button>
           <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={() => { disconnectEmployee(); window.location.reload()}}>👤</button>
+          <button
+            className="navbar-icon"
+            onClick={() => {
+              disconnectEmployee();
+              window.location.reload();
+            }}
+          >
+            👤
+          </button>
         </div>
       </header>
       <main className="coaches-list-main">
@@ -211,12 +296,17 @@ const CoachesList: React.FC = () => {
             onChange={handleSearchChange}
             className="search-input"
           />
-          <button className="add-button" onClick={() => setIsFormOpen(true)}>
-            Add new coach +
-          </button>
-          <button className="sort-button" onClick={handleSortChange}>
-            Sort by {sortType === "alphabetical" ? "Number of Customers" : "Alphabetical"}
-          </button>
+          <div className="alinbuttondt">
+            <button className="add-button" onClick={() => setIsFormOpen(true)}>
+              Add new coach +
+            </button>
+            <button className="sort-button" onClick={handleSortChange}>
+              Sort by{" "}
+              {sortType === "alphabetical"
+                ? "Number of Customers"
+                : "Alphabetical"}
+            </button>
+          </div>
         </div>
 
         <table className="coaches-list-table">
@@ -230,12 +320,14 @@ const CoachesList: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredCoaches.map(coach => (
+            {filteredCoaches.map((coach) => (
               <tr key={coach.id}>
-                <td>{coach.firstname} {coach.lastname}</td>
+                <td>
+                  {coach.firstname} {coach.lastname}
+                </td>
                 <td>{coach.email}</td>
-                <td>{coach.phone || 'N/A'}</td>
-                <td>{coach.numberOfCustomers || '0'}</td>
+                <td>{coach.phone || "N/A"}</td>
+                <td>{coach.numberOfCustomers || "0"}</td>
                 <td className="actions-cell">
                   <button
                     className="actions-button"
@@ -245,9 +337,7 @@ const CoachesList: React.FC = () => {
                   </button>
                   {menuVisible === coach.id && (
                     <div className="actions-menu">
-                      <button
-                        onClick={() => handleAddCustomerClick()}
-                      >
+                      <button onClick={() => handleAddCustomerClick()}>
                         Add / Remove Customer
                       </button>
                       <button
@@ -277,7 +367,7 @@ const CoachesList: React.FC = () => {
               />
 
               <ul>
-                {filteredCustomers.map(customer => (
+                {filteredCustomers.map((customer) => (
                   <li key={customer.id}>
                     <div className="customer-info">
                       <div className="customer-name">{customer.name}</div>
@@ -295,12 +385,8 @@ const CoachesList: React.FC = () => {
                   </li>
                 ))}
               </ul>
-
             </div>
-            <button
-              className="close-button"
-              onClick={handleCustomerModalClose}
-            >
+            <button className="close-button" onClick={handleCustomerModalClose}>
               X
             </button>
           </div>
@@ -362,10 +448,24 @@ const CoachesList: React.FC = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Other Information</label>
+                  <label>job</label>
+                  <select
+                    name="job"
+                    value={newCoach.job}
+                    onChange={handleFormChange}
+                    required
+                  >
+                    <option value="">Select Job</option>
+                    <option value="coach">Coach</option>
+                    <option value="toup du cu">Chômer</option>
+                    <option value="gappy (abs)">Gappy (abs)</option>
+                  </select>
+                  </div>
+                <div className="form-group">
+                  <label>gender</label>
                   <textarea
-                    name="other"
-                    value={newCoach.other}
+                    name="gender"
+                    value={newCoach.gender}
                     onChange={handleFormChange}
                   />
                 </div>
