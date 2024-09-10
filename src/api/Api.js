@@ -18,7 +18,6 @@ export const fetchEmployees = async () => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -35,7 +34,6 @@ export const fetchEmployeeByID = async (id) => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -51,7 +49,6 @@ export const fetchDistantEmployees = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -67,7 +64,6 @@ export const fetchDistantCustomers = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -83,7 +79,6 @@ export const fetchDistantClothes = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -99,7 +94,6 @@ export const fetchDistantPayments = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -115,7 +109,6 @@ export const fetchDistantEvents = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -131,7 +124,6 @@ export const fetchDistantEncounters = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -147,7 +139,6 @@ export const fetchDistantTips = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -170,7 +161,6 @@ export const connectEmployee = async (email, password) => {
     }
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -182,7 +172,6 @@ export const disconnectEmployee = async () => {
     cookies.remove("ACCOUNT_TOKEN");
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -200,7 +189,6 @@ export const checkConnexionEmployee = async () => {
     return true;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -217,7 +205,6 @@ export const fetchDistantEmployeesImages = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -237,7 +224,6 @@ export const getEmployeeImage = async (id) => {
     return response.data.image;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -253,7 +239,6 @@ export const fetchDistantCustomersImages = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -269,7 +254,6 @@ export const fetchDistantClothesImages = async () => {
     });
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -286,7 +270,6 @@ export const getEmployeesCount = async () => {
     return response.data.value;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -303,7 +286,6 @@ export const getCoachesCount = async () => {
     return response.data.value;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -320,7 +302,6 @@ export const getCoaches = async () => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -337,7 +318,6 @@ export const getCustomersCount = async () => {
     return response.data.value;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -355,7 +335,6 @@ export const getCustomersWithEncountersCount = async () => {
     return response.data.value;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -372,7 +351,6 @@ export const getEvents = async () => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -389,7 +367,6 @@ export const getDayEvents = async () => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -406,7 +383,6 @@ export const getWeekEvents = async () => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -423,7 +399,6 @@ export const getMonthEvents = async () => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -440,7 +415,6 @@ export const getEventsViaDelayInDays = async (delay) => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -457,7 +431,6 @@ export const getEncountersViaDelayInDays = async (delay) => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -474,7 +447,6 @@ export const getEventsCount = async () => {
     return response.data.value;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -491,7 +463,6 @@ export const getEventsDayCount = async (i) => {
     return response.data.value;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -508,7 +479,6 @@ export const getEventsWeekCount = async () => {
     return response.data.value;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -525,7 +495,6 @@ export const getEventsMonthCount = async () => {
     return response.data.value;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -542,7 +511,6 @@ export const getCustomers = async () => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -559,7 +527,6 @@ export const getCustomersBasicInfos = async () => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -576,7 +543,6 @@ export const getCustomerClothes = async (id) => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -585,16 +551,15 @@ export const getCustomerClothes = async (id) => {
 **/
 export const fetchAllRoutesWithoutImages = async () => {
   try {
-    fetchDistantTips();
-    // fetchDistantEmployees();
-    // fetchDistantCustomers();
-    // fetchDistantClothes();
-    // fetchDistantEvents();
-    // fetchDistantEncounters();
-    // fetchDistantPayments();
+    await fetchDistantTips();
+    await fetchDistantEmployees();
+    await fetchDistantCustomers();
+    await fetchDistantClothes();
+    await fetchDistantEvents();
+    await fetchDistantEncounters();
+    await fetchDistantPayments();
   } catch (error) {
     console.error('Il y a eu une erreur! Fetch ALL', error);
-    throw error;
   }
 };
 
@@ -603,12 +568,11 @@ export const fetchAllRoutesWithoutImages = async () => {
 **/
 export const fetchAllRoutesOnlyImages = async () => {
   try {
-    fetchDistantEmployeesImages();
-    fetchDistantCustomersImages();
-    fetchDistantClothesImages();
+    await fetchDistantEmployeesImages();
+    await fetchDistantCustomersImages();
+    await fetchDistantClothesImages();
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -625,7 +589,6 @@ export const getTips = async () => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };
 
@@ -647,7 +610,6 @@ export const addEmployee = async (employeeData) => {
     return response.data;
   } catch (error) {
     console.error('Erreur lors de l\'ajout d\'un employé :', error.response?.data || error.message);
-    throw error;
   }
 };
 
@@ -672,7 +634,6 @@ export const addCustomer = async (customerData) => {
     return response.data;
   } catch (error) {
     console.error('Erreur lors de l\'ajout d\'un client :', error.response?.data || error.message);
-    throw error;
   }
 };
 
@@ -695,7 +656,6 @@ export const addEvent = async (eventData) => {
     return response.data;
   } catch (error) {
     console.error('Erreur lors de l\'ajout d\'un événement :', error.response?.data || error.message);
-    throw error;
   }
 };
 
@@ -712,6 +672,5 @@ export const getCustomersBasicInfosInInterval = async (days) => {
     return response.data;
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
-    throw error;
   }
 };

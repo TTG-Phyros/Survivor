@@ -57,7 +57,7 @@ const Dashboard: React.FC = () => {
   };
 
   const [lineChartTimeRange, setLineChartTimeRange] = useState('30');
-  const [pieChartTimeRange, setPieChartTimeRange] = useState('90');
+  const [pieChartTimeRange, setPieChartTimeRange] = useState('30');
   const [barChartTimeRange, setBarChartTimeRange] = useState('30');
   const [globalTimeRange, setglobalTimeRange] = useState('30');
 
@@ -145,198 +145,203 @@ const Dashboard: React.FC = () => {
   }
 
   useEffect(() => {
-    api.getEventsViaDelayInDays(7).then((events) => {
-      const groupedEvents = events.reduce((groups: any, event: Event) => {
-        const eventDate = new Date(event.date).toISOString().split('T')[0];
-        if (!groups[eventDate]) {
-          groups[eventDate] = [];
+    try {
+      api.getEventsViaDelayInDays(7).then((events) => {
+        const groupedEvents = events.reduce((groups: any, event: Event) => {
+          const eventDate = new Date(event.date).toISOString().split('T')[0];
+          if (!groups[eventDate]) {
+            groups[eventDate] = [];
+          }
+          groups[eventDate].push(event);
+          return groups;
+        }, {});
+        const endDate = new Date();
+        const startDate = addDays(new Date(), -(7));
+        const sortedEventGroups = [];
+        const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+            const dateString = date.toISOString().split('T')[0];
+            const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
+            sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
         }
-        groups[eventDate].push(event);
-        return groups;
-      }, {});
-      const endDate = new Date();
-      const startDate = addDays(new Date(), -(7));
-      const sortedEventGroups = [];
-      const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
-          const dateString = date.toISOString().split('T')[0];
-          const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
-          sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
-      }
-      setbarChartData7(sortedEventGroups);
-    });
+        setbarChartData7(sortedEventGroups);
+      });
 
-    api.getEventsViaDelayInDays(30).then((events) => {
-      const groupedEvents = events.reduce((groups: any, event: Event) => {
-        const eventDate = new Date(event.date).toISOString().split('T')[0];
-        if (!groups[eventDate]) {
-          groups[eventDate] = [];
+      api.getEventsViaDelayInDays(30).then((events) => {
+        const groupedEvents = events.reduce((groups: any, event: Event) => {
+          const eventDate = new Date(event.date).toISOString().split('T')[0];
+          if (!groups[eventDate]) {
+            groups[eventDate] = [];
+          }
+          groups[eventDate].push(event);
+          return groups;
+        }, {});
+        const endDate = new Date();
+        const startDate = addDays(new Date(), -(30));
+        const sortedEventGroups = [];
+        const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+            const dateString = date.toISOString().split('T')[0];
+            const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
+            sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
         }
-        groups[eventDate].push(event);
-        return groups;
-      }, {});
-      const endDate = new Date();
-      const startDate = addDays(new Date(), -(30));
-      const sortedEventGroups = [];
-      const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
-          const dateString = date.toISOString().split('T')[0];
-          const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
-          sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
-      }
-      setbarChartData30(sortedEventGroups);
-    });
+        setbarChartData30(sortedEventGroups);
+      });
 
-    api.getEventsViaDelayInDays(90).then((events) => {
-      const groupedEvents = events.reduce((groups: any, event: Event) => {
-        const eventDate = new Date(event.date).toISOString().split('T')[0];
-        if (!groups[eventDate]) {
-          groups[eventDate] = [];
+      api.getEventsViaDelayInDays(90).then((events) => {
+        const groupedEvents = events.reduce((groups: any, event: Event) => {
+          const eventDate = new Date(event.date).toISOString().split('T')[0];
+          if (!groups[eventDate]) {
+            groups[eventDate] = [];
+          }
+          groups[eventDate].push(event);
+          return groups;
+        }, {});
+        const endDate = new Date();
+        const startDate = addDays(new Date(), -(90));
+        const sortedEventGroups = [];
+        const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+            const dateString = date.toISOString().split('T')[0];
+            const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
+            sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
         }
-        groups[eventDate].push(event);
-        return groups;
-      }, {});
-      const endDate = new Date();
-      const startDate = addDays(new Date(), -(90));
-      const sortedEventGroups = [];
-      const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
-          const dateString = date.toISOString().split('T')[0];
-          const dateName = `${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()} ${month_names_short[date.getMonth()]}`
-          sortedEventGroups.push(groupedEvents[dateString] ? { date : dateName, number : groupedEvents[dateString].length, array : groupedEvents[dateString] } : { date : dateName, number : 0, array : [] });
-      }
-      setbarChartData90(sortedEventGroups);
-    });
+        setbarChartData90(sortedEventGroups);
+      });
+    } catch (error) {
+      console.error('Il y a eu une erreur sur le dashboard!', error);
+    }
   }, []);
 
   useEffect(() => {
-    api.getEncountersViaDelayInDays(7).then((encounters) => {
-      const groupedEncounters = encounters.reduce((groups: any, encounter: Encounter) => {
-        const encounterSource = encounter.source;
-        if (!groups[encounterSource]) {
-          groups[encounterSource] = [];
-        }
-        groups[encounterSource].push(encounter);
-        return groups;
-      }, {});
+    try {
+      api.getEncountersViaDelayInDays(7).then((encounters) => {
+        const groupedEncounters = encounters.reduce((groups: any, encounter: Encounter) => {
+          const encounterSource = encounter.source;
+          if (!groups[encounterSource]) {
+            groups[encounterSource] = [];
+          }
+          groups[encounterSource].push(encounter);
+          return groups;
+        }, {});
 
-      const sortedEncounterGroups = Object.keys(groupedEncounters)
-        .map((eventName: string) => ({
-          name : eventName,
-          value : groupedEncounters[eventName].length,
-          fill : stringToColor(eventName)
-        }));
-      setPieChartData7(sortedEncounterGroups.length > 0 ? sortedEncounterGroups : []);
-    });
+        const sortedEncounterGroups = Object.keys(groupedEncounters)
+          .map((eventName: string) => ({
+            name : eventName,
+            value : groupedEncounters[eventName].length,
+            fill : stringToColor(eventName)
+          }));
+        setPieChartData7(sortedEncounterGroups.length > 0 ? sortedEncounterGroups : []);
+      });
 
-    api.getEncountersViaDelayInDays(30).then((encounters) => {
-      const groupedEncounters = encounters.reduce((groups: any, encounter: Encounter) => {
-        const encounterSource = encounter.source;
-        if (!groups[encounterSource]) {
-          groups[encounterSource] = [];
-        }
-        groups[encounterSource].push(encounter);
-        return groups;
-      }, {});
+      api.getEncountersViaDelayInDays(30).then((encounters) => {
+        const groupedEncounters = encounters.reduce((groups: any, encounter: Encounter) => {
+          const encounterSource = encounter.source;
+          if (!groups[encounterSource]) {
+            groups[encounterSource] = [];
+          }
+          groups[encounterSource].push(encounter);
+          return groups;
+        }, {});
 
-      const sortedEncounterGroups = Object.keys(groupedEncounters)
-        .map((eventName: string) => ({
-          name : eventName,
-          value : groupedEncounters[eventName].length,
-          fill : stringToColor(eventName)
-        }));
-      setPieChartData30(sortedEncounterGroups.length > 0 ? sortedEncounterGroups : []);
-    });
+        const sortedEncounterGroups = Object.keys(groupedEncounters)
+          .map((eventName: string) => ({
+            name : eventName,
+            value : groupedEncounters[eventName].length,
+            fill : stringToColor(eventName)
+          }));
+        setPieChartData30(sortedEncounterGroups.length > 0 ? sortedEncounterGroups : []);
+      });
 
-    api.getEncountersViaDelayInDays(90).then((encounters) => {
-      const groupedEncounters = encounters.reduce((groups: any, encounter: Encounter) => {
-        const encounterSource = encounter.source;
-        if (!groups[encounterSource]) {
-          groups[encounterSource] = [];
-        }
-        groups[encounterSource].push(encounter);
-        return groups;
-      }, {});
+      api.getEncountersViaDelayInDays(90).then((encounters) => {
+        const groupedEncounters = encounters.reduce((groups: any, encounter: Encounter) => {
+          const encounterSource = encounter.source;
+          if (!groups[encounterSource]) {
+            groups[encounterSource] = [];
+          }
+          groups[encounterSource].push(encounter);
+          return groups;
+        }, {});
 
-      const sortedEncounterGroups = Object.keys(groupedEncounters)
-        .map((eventName: string) => ({
-          name : eventName,
-          value : groupedEncounters[eventName].length,
-          fill : stringToColor(eventName)
-        }))
-        .sort((a, b) => (a.value - b.value) * -1);
-      setPieChartData90(sortedEncounterGroups.length > 0 ? sortedEncounterGroups : []);
-    });
+        const sortedEncounterGroups = Object.keys(groupedEncounters)
+          .map((eventName: string) => ({
+            name : eventName,
+            value : groupedEncounters[eventName].length,
+            fill : stringToColor(eventName)
+          }))
+          .sort((a, b) => (a.value - b.value) * -1);
+        setPieChartData90(sortedEncounterGroups.length > 0 ? sortedEncounterGroups : []);
+      });
+    } catch (error) {
+      console.error('Il y a eu une erreur sur le dashboard!', error);
+    }
   }, []);
-
-  const pieChartData = [
-    { name: 'Dating app', value: 40 },
-    { name: 'Social Media', value: 30 },
-    { name: 'Referral', value: 20 },
-    { name: 'Organic Search', value: 10 }
-  ];
 
   const handleLineChartTimeRange = (range: string) => {
     setLineChartTimeRange(range);
   };
 
   useEffect(() => {
-    api.getCustomersBasicInfosInInterval(7).then((customers) => {
-      const groupedCustomers = customers.reduce((groups: any, customer: Customer) => {
-        const customerDate = new Date(customer.creation_date).toISOString().split('T')[0];
-        if (!groups[customerDate]) {
-          groups[customerDate] = [];
+    try {
+      api.getCustomersBasicInfosInInterval(7).then((customers) => {
+        const groupedCustomers = customers.reduce((groups: any, customer: Customer) => {
+          const customerDate = new Date(customer.creation_date).toISOString().split('T')[0];
+          if (!groups[customerDate]) {
+            groups[customerDate] = [];
+          }
+          groups[customerDate].push(customer);
+          return groups;
+        }, {});
+        const endDate = new Date();
+        const startDate = addDays(new Date(), -(7));
+        const sortedCustomerGroups = [];
+        for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+            const dateString = date.toISOString().split('T')[0];
+            sortedCustomerGroups.push(groupedCustomers[dateString] ? { x : new Date(dateString), y : groupedCustomers[dateString].length } : { x : new Date(dateString), y : 0 });
         }
-        groups[customerDate].push(customer);
-        return groups;
-      }, {});
-      const endDate = new Date();
-      const startDate = addDays(new Date(), -(7));
-      const sortedCustomerGroups = [];
-      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
-          const dateString = date.toISOString().split('T')[0];
-          sortedCustomerGroups.push(groupedCustomers[dateString] ? { x : new Date(dateString), y : groupedCustomers[dateString].length } : { x : new Date(dateString), y : 0 });
-      }
-      setLineChartData7(sortedCustomerGroups);
-    });
+        setLineChartData7(sortedCustomerGroups);
+      });
 
-    api.getCustomersBasicInfosInInterval(30).then((customers) => {
-      const groupedCustomers = customers.reduce((groups: any, customer: Customer) => {
-        const customerDate = new Date(customer.creation_date).toISOString().split('T')[0];
-        if (!groups[customerDate]) {
-          groups[customerDate] = [];
+      api.getCustomersBasicInfosInInterval(30).then((customers) => {
+        const groupedCustomers = customers.reduce((groups: any, customer: Customer) => {
+          const customerDate = new Date(customer.creation_date).toISOString().split('T')[0];
+          if (!groups[customerDate]) {
+            groups[customerDate] = [];
+          }
+          groups[customerDate].push(customer);
+          return groups;
+        }, {});
+        const endDate = new Date();
+        const startDate = addDays(new Date(), -(30));
+        const sortedCustomerGroups = [];
+        for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+            const dateString = date.toISOString().split('T')[0];
+            sortedCustomerGroups.push(groupedCustomers[dateString] ? { x : new Date(dateString), y : groupedCustomers[dateString].length } : { x : new Date(dateString), y : 0 });
         }
-        groups[customerDate].push(customer);
-        return groups;
-      }, {});
-      const endDate = new Date();
-      const startDate = addDays(new Date(), -(30));
-      const sortedCustomerGroups = [];
-      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
-          const dateString = date.toISOString().split('T')[0];
-          sortedCustomerGroups.push(groupedCustomers[dateString] ? { x : new Date(dateString), y : groupedCustomers[dateString].length } : { x : new Date(dateString), y : 0 });
-      }
-      setLineChartData30(sortedCustomerGroups);
-    });
+        setLineChartData30(sortedCustomerGroups);
+      });
 
-    api.getCustomersBasicInfosInInterval(90).then((customers) => {
-      const groupedCustomers = customers.reduce((groups: any, customer: Customer) => {
-        const customerDate = new Date(customer.creation_date).toISOString().split('T')[0];
-        if (!groups[customerDate]) {
-          groups[customerDate] = [];
+      api.getCustomersBasicInfosInInterval(90).then((customers) => {
+        const groupedCustomers = customers.reduce((groups: any, customer: Customer) => {
+          const customerDate = new Date(customer.creation_date).toISOString().split('T')[0];
+          if (!groups[customerDate]) {
+            groups[customerDate] = [];
+          }
+          groups[customerDate].push(customer);
+          return groups;
+        }, {});
+        const endDate = new Date();
+        const startDate = addDays(new Date(), -(90));
+        const sortedCustomerGroups = [];
+        for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+            const dateString = date.toISOString().split('T')[0];
+            sortedCustomerGroups.push(groupedCustomers[dateString] ? { x : new Date(dateString), y : groupedCustomers[dateString].length } : { x : new Date(dateString), y : 0 });
         }
-        groups[customerDate].push(customer);
-        return groups;
-      }, {});
-      const endDate = new Date();
-      const startDate = addDays(new Date(), -(90));
-      const sortedCustomerGroups = [];
-      for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
-          const dateString = date.toISOString().split('T')[0];
-          sortedCustomerGroups.push(groupedCustomers[dateString] ? { x : new Date(dateString), y : groupedCustomers[dateString].length } : { x : new Date(dateString), y : 0 });
-      }
-      setLineChartData90(sortedCustomerGroups);
-    });
+        setLineChartData90(sortedCustomerGroups);
+      });
+    } catch (error) {
+      console.error('Il y a eu une erreur sur le dashboard!', error);
+    }
   }, []);
 
   const getBarChartData = () => ({
@@ -388,36 +393,40 @@ const Dashboard: React.FC = () => {
   const [eventsMonthCount, setEventsMonthCount] = useState<number | null>(null);
 
   useEffect(() => {
-    api.getCustomersCount().then(count => {
-        setCustomerCount(count);
-      }).catch(error => {
-        console.error('Failed to fetch customer count:', error);
-      });
-    api.getCoachesCount().then(count => {
-        setCoachCount(count);
-      }).catch(error => {
-        console.error('Failed to fetch customer count:', error);
-      });
-    api.getCustomersWithEncountersCount().then(count => {
-        setCustomerWithEncountersCount(count);
-      }).catch(error => {
-        console.error('Failed to fetch customer count:', error);
-      });
-    api.getEventsDayCount().then(count => {
-        setEventsDayCount(count);
-      }).catch(error => {
-        console.error('Failed to fetch customer count:', error);
-      });
-    api.getEventsWeekCount().then(count => {
-        setEventsWeekCount(count);
-      }).catch(error => {
-        console.error('Failed to fetch customer count:', error);
-      });
-    api.getEventsMonthCount().then(count => {
-        setEventsMonthCount(count);
-      }).catch(error => {
-        console.error('Failed to fetch customer count:', error);
-      });
+    try {
+      api.getCustomersCount().then(count => {
+          setCustomerCount(count);
+        }).catch(error => {
+          console.error('Failed to fetch customer count:', error);
+        });
+      api.getCoachesCount().then(count => {
+          setCoachCount(count);
+        }).catch(error => {
+          console.error('Failed to fetch customer count:', error);
+        });
+      api.getCustomersWithEncountersCount().then(count => {
+          setCustomerWithEncountersCount(count);
+        }).catch(error => {
+          console.error('Failed to fetch customer count:', error);
+        });
+      api.getEventsDayCount().then(count => {
+          setEventsDayCount(count);
+        }).catch(error => {
+          console.error('Failed to fetch customer count:', error);
+        });
+      api.getEventsWeekCount().then(count => {
+          setEventsWeekCount(count);
+        }).catch(error => {
+          console.error('Failed to fetch customer count:', error);
+        });
+      api.getEventsMonthCount().then(count => {
+          setEventsMonthCount(count);
+        }).catch(error => {
+          console.error('Failed to fetch customer count:', error);
+        });
+    } catch (error) {
+      console.error('Il y a eu une erreur sur le dashboard!', error);
+    }
   }, []);
 
   return (
@@ -450,7 +459,7 @@ const Dashboard: React.FC = () => {
               <option value={30}>30 Days</option>
               <option value={90}>90 Days</option>
             </select>
-          <button className="button button-primary">Reports</button>
+          <button className="button" style={{backgroundColor : "#0052cc", color: "white", border : "None"}}>Reports</button>
         </div>
       </header>
 

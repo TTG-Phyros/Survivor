@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import './Login.css';
 import * as api from './api/Api';
+const cookies = require('js-cookie');
 
 const SoulConnection_Login: React.FC = () => {
     const navigate = useNavigate();
@@ -13,8 +14,20 @@ const SoulConnection_Login: React.FC = () => {
     const handleLogin = (email: string, password: string) => {
         api.connectEmployee(email, password).then((response) => {
             if (response) {
-                window.location.reload();
-                navigate('/dashboard');
+                if (!cookies.get("REFRESH_TIMEOUT")) {
+                    api.fetchAllRoutesWithoutImages().then(() => {
+                        console.log("Fetched All routes without images");
+                        api.fetchAllRoutesOnlyImages().then(() => {
+                            console.log("Fetched All routes with images");
+                            window.location.reload();
+                            navigate('/dashboard');
+                            cookies.set("REFRESH_TIMEOUT", true, { expires: 1 });
+                        });
+                    });
+                } else {
+                    window.location.reload();
+                    navigate('/dashboard');
+                }
             } else {
                 setError(true);
             }
