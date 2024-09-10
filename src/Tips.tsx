@@ -21,7 +21,7 @@ const Tips: React.FC = () => {
   };
 
   return (
-    <div className="app">
+    <div className="container">
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">

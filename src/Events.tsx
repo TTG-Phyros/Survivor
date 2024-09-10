@@ -82,7 +82,7 @@ const Event: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='container'>
       <header className="navbar">
         <div className="navbar-logo">Soul Connection</div>
         <nav className="navbar-links">
