@@ -651,6 +651,7 @@ export const addEvent = async (eventData) => {
       location_x: eventData.location_x,
       location_y: eventData.location_y,
       type: eventData.type,
+      employee_id: eventData.employee_id,
       location_name: eventData.location_name,
     });
 

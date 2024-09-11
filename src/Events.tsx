@@ -7,12 +7,13 @@ import './Events.css';
 import { LatLngExpression } from 'leaflet';
 import L from 'leaflet';
 import Navbar from './Navbar';
+import { addEvent } from './api/Api';
 
-const position: LatLngExpression = [52.978, -0.0235]; // Default map center
+const position: LatLngExpression = [48.862463, 2.304890];
 
 const Event: React.FC = () => {
-  
-  const [mapEvents, setMapEvents] = useState<{ id: number; position: LatLngExpression; name: string; date: Date; duration: number; maxParticipants: number; type: string; secondaryId: number }[]>([]);
+
+  const [mapEvents, setMapEvents] = useState<{ position: LatLngExpression; name: string; date: Date; duration: number; maxParticipants: number; type: string; }[]>([]);
   const [modalState, setModalState] = useState({
     isOpen: false,
     address: '',
@@ -20,32 +21,47 @@ const Event: React.FC = () => {
     date: new Date(),
     duration: 0,
     maxParticipants: 0,
-    type: '',
-    id: 0,
-    secondaryId: 0
+    type: ''
   });
 
   const handleAddMapEvent = async () => {
-    const { address, name, date, duration, maxParticipants, type, id, secondaryId } = modalState;
+    const { address, name, date, duration, maxParticipants, type } = modalState;
     if (address && name) {
       try {
         const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json`);
         const results = await response.json();
+
         if (results && results.length > 0) {
           const lat = parseFloat(results[0].lat);
           const lon = parseFloat(results[0].lon);
-          const newEvent = {
-            id,
-            position: [lat, lon] as LatLngExpression,
+
+          const eventData = {
             name,
-            date,
+            date: date.toISOString(),
             duration,
-            maxParticipants,
+            max_participants: maxParticipants,
+            location_x: lat,
+            location_y: lon,
             type,
-            secondaryId
+            employee_id: 42,
+            location_name: address
           };
-          setMapEvents(prevEvents => [...prevEvents, newEvent]);
-          closeModal();
+          const addedEvent = await addEvent(eventData);
+
+          if (addedEvent) {
+            const newEvent = {
+              position: [lat, lon] as LatLngExpression,
+              name,
+              date,
+              duration,
+              maxParticipants,
+              type
+            };
+            setMapEvents(prevEvents => [...prevEvents, newEvent]);
+            closeModal();
+          } else {
+            alert('Failed to add the event to the backend.');
+          }
         } else {
           alert('Address not found. Please check and try again.');
         }
@@ -84,7 +100,7 @@ const Event: React.FC = () => {
       <div className="event-section" style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px' }}>
         <h1>Events</h1>
         <div className="button-container">
-          <button className="add-event-button" onClick={openModal}>Add Map Event</button>
+          <button className="add-event-button" onClick={openModal}>Add Event</button>
         </div>
 
         {/* Calendar Section */}
@@ -116,7 +132,6 @@ const Event: React.FC = () => {
                     Duration: {event.duration} hours<br />
                     Max Participants: {event.maxParticipants}<br />
                     Type: {event.type}<br />
-                    ID: {event.id}, Secondary ID: {event.secondaryId}
                   </div>
                 </Popup>
               </Marker>
@@ -138,9 +153,7 @@ const Event: React.FC = () => {
           Date: 'date',
           Duration: 'duration',
           MaxParticipants: 'maxParticipants',
-          Type: 'type',
-          ID: 'id',
-          SecondaryID: 'secondaryId'
+          Type: 'type'
         }).map(([label, name]) => (
           <label key={name}>
             {label}:
@@ -159,6 +172,7 @@ const Event: React.FC = () => {
         <button onClick={handleAddMapEvent}>Add</button>
         <button onClick={closeModal}>Cancel</button>
       </Modal>
+
     </div>
   );
 };
