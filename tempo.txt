@@ -118,8 +118,8 @@ const Event: React.FC = () => {
       <Navbar />
 
       <div className="event-section" style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px' }}>
-        <div className="event-header">
-          <h1>Events</h1>
+        <h1>Events</h1>
+        <div className="button-container">
           <button className="add-event-button" onClick={openModal}>Add Event</button>
         </div>
 
