@@ -1,7 +1,8 @@
 import "./coaches-list.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCoaches, disconnectEmployee } from "./api/Api";
+import { getCoaches } from "./api/Api";
+import Navbar from "./Navbar";
 
 interface Coach {
   id: number;
@@ -189,8 +190,6 @@ const CoachesList: React.FC = () => {
       coach.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const navigate = useNavigate();
-
   if (loading) {
     return <p>Chargement en cours...</p>;
   }
@@ -201,23 +200,7 @@ const CoachesList: React.FC = () => {
 
   return (
     <div className="container">
-      <header className="navbar">
-        <div className="navbar-logo">Soul Connection</div>
-        <nav className="navbar-links">
-          <button className="navbar-link" onClick={() => navigate("/dashboard")}>Dashboard</button>
-          <button className="navbar-link active" onClick={() => navigate("/coaches")}>Coaches</button>
-          <button className="navbar-link" onClick={() => navigate("/customers")}>Customers</button>
-          <button className="navbar-link" onClick={() => navigate("/tips")}>Tips</button>
-          <button className="navbar-link" onClick={() => navigate("/events")}>Events</button>
-          <button className="navbar-link" onClick={() => navigate("/clothes")}>Clothes</button>
-          <button className="navbar-link" onClick={() => navigate("/compatibility")}>Compatibility</button>
-        </nav>
-        <div className="navbar-actions">
-          <button className="navbar-icon">🔔</button>
-          <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={()=>disconnectEmployee()}>👤</button> {/* Appel de la fonction logout */}
-        </div>
-      </header>
+      <Navbar />
       <main className="coaches-list-main">
         <h1 className="title-of-page">Coaches List</h1>
         <p className="coaches-list-subtitle">

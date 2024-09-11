@@ -1,27 +1,63 @@
 // Navbar.tsx
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { disconnectEmployee } from './api/Api.js'
 import './Navbar.css'
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <header className="navbar">
       <div className="navbar-logo">Soul Connection</div>
       <nav className="navbar-links">
-        <button className="navbar-link" onClick={() => {navigate("/dashboard"); window.location.reload()}}>Dashboard</button>
-        <button className="navbar-link" onClick={() => {navigate("/coaches"); window.location.reload()}}>Coaches</button>
-        <button className="navbar-link" onClick={() => {navigate("/customers"); window.location.reload()}}>Customers</button>
-        <button className="navbar-link" onClick={() => {navigate("/tips"); window.location.reload()}}>Tips</button>
-        <button className="navbar-link" onClick={() => {navigate("/events"); window.location.reload()}}>Events</button>
-        <button className="navbar-link" onClick={() => {navigate("/clothes"); window.location.reload()}}>Clothes</button>
-        <button className="navbar-link active" onClick={() => {navigate("/compatibility"); window.location.reload()}}>Compatibility</button>
+        <button
+          className={`navbar-link ${location.pathname === '/dashboard' ? 'active' : ''}`}
+          onClick={() => navigate("/dashboard")}
+        >
+          Dashboard
+        </button>
+        <button
+          className={`navbar-link ${location.pathname === '/coaches' ? 'active' : ''}`}
+          onClick={() => navigate("/coaches")}
+        >
+          Coaches
+        </button>
+        <button
+          className={`navbar-link ${location.pathname === '/customers' ? 'active' : ''}`}
+          onClick={() => navigate("/customers")}
+        >
+          Customers
+        </button>
+        <button
+          className={`navbar-link ${location.pathname === '/tips' ? 'active' : ''}`}
+          onClick={() => navigate("/tips")}
+        >
+          Tips
+        </button>
+        <button
+          className={`navbar-link ${location.pathname === '/events' ? 'active' : ''}`}
+          onClick={() => navigate("/events")}
+        >
+          Events
+        </button>
+        <button
+          className={`navbar-link ${location.pathname === '/clothes' ? 'active' : ''}`}
+          onClick={() => navigate("/clothes")}
+        >
+          Clothes
+        </button>
+        <button
+          className={`navbar-link ${location.pathname === '/compatibility' ? 'active' : ''}`}
+          onClick={() => navigate("/compatibility")}
+        >
+          Compatibility
+        </button>
       </nav>
       <div className="navbar-actions">
         <button className="navbar-icon">🔔</button>
         <button className="navbar-icon">🇺🇸</button>
-        <button className="navbar-icon" onClick={() => {disconnectEmployee(); window.location.reload()}}>👤</button>
+        <button className="navbar-icon" onClick={()=>disconnectEmployee()}>👤</button>
       </div>
     </header>
   );

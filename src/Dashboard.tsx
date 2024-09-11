@@ -17,8 +17,8 @@ import {
 } from 'recharts';
 import CanvasJSReact from '@canvasjs/react-charts';
 import { WorldMap } from 'react-svg-worldmap';
-import { useNavigate } from 'react-router';
 import * as api from './api/Api.js'
+import Navbar from './Navbar';
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
@@ -383,8 +383,6 @@ const Dashboard: React.FC = () => {
     ]
   };
 
-  const navigate = useNavigate();
-
   const [customerCount, setCustomerCount] = useState<number | null>(null);
   const [coachCount, setCoachCount] = useState<number | null>(null);
   const [customerWithEncountersCount, setCustomerWithEncountersCount] = useState<number | null>(null);
@@ -431,23 +429,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      <header className="navbar">
-      <div className="navbar-logo">Soul Connection</div>
-      <nav className="navbar-links">
-        <button className="navbar-link active" onClick={() => navigate("/dashboard")}>Dashboard</button>
-        <button className="navbar-link" onClick={() => navigate("/coaches")}>Coaches</button>
-        <button className="navbar-link" onClick={() => navigate("/customers")}>Customers</button>
-        <button className="navbar-link" onClick={() => navigate("/tips")}>Tips</button>
-        <button className="navbar-link" onClick={() => navigate("/events")}>Events</button>
-        <button className="navbar-link" onClick={() => navigate("/clothes")}>Clothes</button>
-        <button className="navbar-link" onClick={() => navigate("/compatibility")}>Compatibility</button>
-      </nav>
-      <div className="navbar-actions">
-        <button className="navbar-icon">🔔</button>
-        <button className="navbar-icon">🇺🇸</button>
-        <button className="navbar-icon" onClick={()=>api.disconnectEmployee()}>👤</button> {/* Appel de la fonction logout */}
-      </div>
-    </header>
+      <Navbar />
       <header className="header">
         <div className="header-title">
           <h1>Dashboard</h1>

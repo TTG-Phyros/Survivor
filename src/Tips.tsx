@@ -1,11 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Tips.css';
 import * as api from './api/Api.js'
+import Navbar from './Navbar';
 
 const Tips: React.FC = () => {
-  const navigate = useNavigate();
-
   const [openTips, setOpenTips] = React.useState<number | null>(null);
   const [tipsData, setTipsData] = React.useState([{
     title: "",
@@ -22,24 +20,7 @@ const Tips: React.FC = () => {
 
   return (
     <div className="container">
-      <header className="navbar">
-        <div className="navbar-logo">Soul Connection</div>
-        <nav className="navbar-links">
-          <button className="navbar-link" onClick={() => navigate("/dashboard")}>Dashboard</button>
-          <button className="navbar-link" onClick={() => navigate("/coaches")}>Coaches</button>
-          <button className="navbar-link" onClick={() => navigate("/customers")}>Customers</button>
-          <button className="navbar-link active" onClick={() => navigate("/tips")}>Tips</button>
-          <button className="navbar-link" onClick={() => navigate("/events")}>Events</button>
-          <button className="navbar-link" onClick={() => navigate("/clothes")}>Clothes</button>
-          <button className="navbar-link" onClick={() => navigate("/compatibility")}>Compatibility</button>
-        </nav>
-        <div className="navbar-actions">
-          <button className="navbar-icon">🔔</button>
-          <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={()=>api.disconnectEmployee()}>👤</button> {/* Appel de la fonction logout */}
-        </div>
-      </header>
-
+      <Navbar />
       {/* Contenu des conseils */}
       <div className="container">
         <header>

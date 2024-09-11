@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Clothes.css';
-import { useNavigate } from 'react-router-dom';
 import * as api from './api/Api';
+import Navbar from './Navbar';
 
 let hats: any = [""];
 let tops: any = [""];
@@ -37,8 +37,6 @@ const processClothes = async (id: number) => {
 };
 
 const Clothes: React.FC = () => {
-  const navigate = useNavigate();
-
   const [hatCount, setHatCount] = useState(0);
   const [topCount, setTopCount] = useState(0);
   const [bottomCount, setBottomCount] = useState(0);
@@ -102,23 +100,7 @@ const Clothes: React.FC = () => {
   return (
     <div>
       <div className="container">
-      <header className="navbar">
-        <div className="navbar-logo">Soul Connection</div>
-        <nav className="navbar-links">
-          <button className="navbar-link" onClick={() => navigate("/dashboard")}>Dashboard</button>
-          <button className="navbar-link" onClick={() => navigate("/coaches")}>Coaches</button>
-          <button className="navbar-link" onClick={() => navigate("/customers")}>Customers</button>
-          <button className="navbar-link" onClick={() => navigate("/tips")}>Tips</button>
-          <button className="navbar-link" onClick={() => navigate("/events")}>Events</button>
-          <button className="navbar-link active" onClick={() => navigate("/clothes")}>Clothes</button>
-          <button className="navbar-link" onClick={() => navigate("/compatibility")}>Compatibility</button>
-        </nav>
-        <div className="navbar-actions">
-          <button className="navbar-icon">🔔</button>
-          <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={()=>api.disconnectEmployee()}>👤</button> {/* Appel de la fonction logout */}
-        </div>
-      </header>
+        <Navbar />
       </div>
       <div className="clothes">
         <h1>Clothes Page</h1>

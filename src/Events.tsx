@@ -5,15 +5,12 @@ import Calendar from 'react-calendar';
 import Modal from 'react-modal';
 import './Events.css';
 import { LatLngExpression } from 'leaflet';
-import { useNavigate } from 'react-router-dom';
-import * as api from './api/Api.js';
 import L from 'leaflet';
+import Navbar from './Navbar';
 
-const position: LatLngExpression = [52.978, -0.0235]; // Boston les frères
+const position: LatLngExpression = [52.978, -0.0235];
 
 const Event: React.FC = () => {
-  const navigate = useNavigate();
-
   const [events, setEvents] = useState<{ date: Date; name: string }[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newEventDate, setNewEventDate] = useState<Date>(new Date());
@@ -83,24 +80,7 @@ const Event: React.FC = () => {
 
   return (
     <div className='container'>
-      <header className="navbar">
-        <div className="navbar-logo">Soul Connection</div>
-        <nav className="navbar-links">
-          <button className="navbar-link" onClick={() => navigate("/dashboard")}>Dashboard</button>
-          <button className="navbar-link" onClick={() => navigate("/coaches")}>Coaches</button>
-          <button className="navbar-link" onClick={() => navigate("/customers")}>Customers</button>
-          <button className="navbar-link" onClick={() => navigate("/tips")}>Tips</button>
-          <button className="navbar-link active" onClick={() => navigate("/events")}>Events</button>
-          <button className="navbar-link" onClick={() => navigate("/clothes")}>Clothes</button>
-          <button className="navbar-link" onClick={() => navigate("/compatibility")}>Compatibility</button>
-        </nav>
-        <div className="navbar-actions">
-          <button className="navbar-icon">🔔</button>
-          <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={()=>api.disconnectEmployee()}>👤</button> {/* Appel de la fonction logout */}
-        </div>
-      </header>
-
+      <Navbar />
       <div className="event-section">
         <h1>Events</h1>
         <div className="button-container">

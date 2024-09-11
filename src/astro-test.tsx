@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./astro-test.css";
-import { useNavigate } from 'react-router';
 import * as api from './api/Api.js'
 import compatibilityData from './compatibilityData';
+import Navbar from "./Navbar";
 
 const AstroTest: React.FC = () => {
   const [selectedCustomer1, setSelectedCustomer1] = useState<number | null>(null);
@@ -94,27 +94,9 @@ const AstroTest: React.FC = () => {
     setResult(compatibilityResult);
   };
 
-  const navigate = useNavigate();
-
   return (
     <div className="container ">
-      <header className="navbar">
-        <div className="navbar-logo">Soul Connection</div>
-        <nav className="navbar-links">
-          <button className="navbar-link" onClick={() => navigate("/dashboard")}>Dashboard</button>
-          <button className="navbar-link" onClick={() => navigate("/coaches")}>Coaches</button>
-          <button className="navbar-link" onClick={() => navigate("/customers")}>Customers</button>
-          <button className="navbar-link" onClick={() => navigate("/tips")}>Tips</button>
-          <button className="navbar-link" onClick={() => navigate("/events")}>Events</button>
-          <button className="navbar-link" onClick={() => navigate("/clothes")}>Clothes</button>
-          <button className="navbar-link active" onClick={() => navigate("/compatibility")}>Compatibility</button>
-        </nav>
-        <div className="navbar-actions">
-          <button className="navbar-icon">🔔</button>
-          <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={()=>api.disconnectEmployee()}>👤</button> {/* Appel de la fonction logout */}
-        </div>
-      </header>
+      <Navbar />
       <div className="astro-test">
         <div className="astro-test2">
 
