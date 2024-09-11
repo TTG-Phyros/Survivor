@@ -170,6 +170,7 @@ export const connectEmployee = async (email, password) => {
 export const disconnectEmployee = async () => {
   try {
     cookies.remove("ACCOUNT_TOKEN");
+    window.location.href = '/login';
   } catch (error) {
     console.error('Il y a eu une erreur!', error);
   }
@@ -674,3 +675,30 @@ export const getCustomersBasicInfosInInterval = async (days) => {
     console.error('Il y a eu une erreur!', error);
   }
 };
+
+// Ajouter un intercepteur de requêtes
+axios.interceptors.request.use(
+  (config) => {
+    const token = cookies.get('ACCOUNT_TOKEN');
+    if (token) {
+      config.headers['token'] = token;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Ajouter un intercepteur de réponse pour vérifier l'expiration du token
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);

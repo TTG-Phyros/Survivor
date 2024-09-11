@@ -12,7 +12,7 @@ const verifyToken = (req, res, next) => {
     req.user = decoded.id;
     next();
   } catch (err) {
-    res.status(401).json({ message: 'Token is not valid' });
+    res.status(401).json({ message: 'Le token est invalide ou expiré' });
   }
 };
 

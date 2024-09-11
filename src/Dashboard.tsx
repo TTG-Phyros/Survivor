@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
     setPieChartTimeRange(event.target.value);
     setglobalTimeRange(event.target.value);
   };
-  
+
   function addDays(date: Date, days: number): Date {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
@@ -132,9 +132,9 @@ const Dashboard: React.FC = () => {
   }
 
   function numberToHexColor(number: number) {
-    const color = ((number >> 24) & 0xFF).toString(16) + 
-                  ((number >> 16) & 0xFF).toString(16) + 
-                  ((number >> 8) & 0xFF).toString(16) + 
+    const color = ((number >> 24) & 0xFF).toString(16) +
+                  ((number >> 16) & 0xFF).toString(16) +
+                  ((number >> 8) & 0xFF).toString(16) +
                   (number & 0xFF).toString(16);
     return `#${color.slice(0, 6).padStart(6, '0')}`;
   }
@@ -432,22 +432,22 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
       <header className="navbar">
-        <div className="navbar-logo">Soul Connection</div>
-        <nav className="navbar-links">
-          <button className="navbar-link active" onClick={() => {navigate("/dashboard"); window.location.reload()}}>Dashboard</button>
-          <button className="navbar-link" onClick={() => {navigate("/coaches"); window.location.reload()}}>Coaches</button>
-          <button className="navbar-link" onClick={() => {navigate("/customers"); window.location.reload()}}>Customers</button>
-          <button className="navbar-link" onClick={() => {navigate("/tips"); window.location.reload()}}>Tips</button>
-          <button className="navbar-link" onClick={() => {navigate("/events"); window.location.reload()}}>Events</button>
-          <button className="navbar-link" onClick={() => {navigate("/clothes"); window.location.reload()}}>Clothes</button>
-          <button className="navbar-link" onClick={() => {navigate("/compatibility"); window.location.reload()}}>Compatibility</button>
-        </nav>
-        <div className="navbar-actions">
-          <button className="navbar-icon">🔔</button>
-          <button className="navbar-icon">🇺🇸</button>
-          <button className="navbar-icon" onClick={() => {api.disconnectEmployee(); window.location.reload()}}>👤</button>
-        </div>
-      </header>
+      <div className="navbar-logo">Soul Connection</div>
+      <nav className="navbar-links">
+        <button className="navbar-link active" onClick={() => navigate("/dashboard")}>Dashboard</button>
+        <button className="navbar-link" onClick={() => navigate("/coaches")}>Coaches</button>
+        <button className="navbar-link" onClick={() => navigate("/customers")}>Customers</button>
+        <button className="navbar-link" onClick={() => navigate("/tips")}>Tips</button>
+        <button className="navbar-link" onClick={() => navigate("/events")}>Events</button>
+        <button className="navbar-link" onClick={() => navigate("/clothes")}>Clothes</button>
+        <button className="navbar-link" onClick={() => navigate("/compatibility")}>Compatibility</button>
+      </nav>
+      <div className="navbar-actions">
+        <button className="navbar-icon">🔔</button>
+        <button className="navbar-icon">🇺🇸</button>
+        <button className="navbar-icon" onClick={()=>api.disconnectEmployee()}>👤</button> {/* Appel de la fonction logout */}
+      </div>
+    </header>
       <header className="header">
         <div className="header-title">
           <h1>Dashboard</h1>
