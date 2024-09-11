@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import Calendar from 'react-calendar';
@@ -7,7 +7,7 @@ import './Events.css';
 import { LatLngExpression } from 'leaflet';
 import L from 'leaflet';
 import Navbar from './Navbar';
-import { addEvent } from './api/Api';
+import { addEvent, getEvents } from './api/Api';
 
 const position: LatLngExpression = [48.862463, 2.304890];
 
@@ -23,6 +23,27 @@ const Event: React.FC = () => {
     maxParticipants: 0,
     type: ''
   });
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const events = await getEvents();
+        const formattedEvents = events.map((event: any) => ({
+          position: [event.location_x, event.location_y] as LatLngExpression,
+          name: event.name,
+          date: new Date(event.date),
+          duration: event.duration,
+          maxParticipants: event.max_participants,
+          type: event.type
+        }));
+        setMapEvents(formattedEvents);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const handleAddMapEvent = async () => {
     const { address, name, date, duration, maxParticipants, type } = modalState;
