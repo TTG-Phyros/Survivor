@@ -1,39 +1,15 @@
 import "./coaches-list.css";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getCoaches } from "./api/Api";
+import * as api from "./api/Api";
 import Navbar from "./Navbar";
 
-interface Coach {
+interface Customer {
   id: number;
   firstname: string;
   lastname: string;
   email: string;
-  phone?: string;
-  numberOfCustomers?: number;
+  phone_number: string;
 }
-
-interface Customer {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-}
-
-const customersData: Customer[] = [
-  {
-    id: 7,
-    name: "Ethan Hunter",
-    email: "ethan@bergerpaints.com",
-    phone: "+435 675-2345",
-  },
-  {
-    id: 8,
-    name: "Justine Bauwens",
-    email: "justine@acstext.com",
-    phone: "+978 546-2342",
-  },
-];
 
 const CoachesList: React.FC = () => {
   const [menuVisible, setMenuVisible] = useState<number | null>(null);
@@ -42,9 +18,13 @@ const CoachesList: React.FC = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] =
     useState<boolean>(false);
-  const [newCoach, setNewCoach] = useState({
-    firstName: "",
-    lastName: "",
+  const [isRemoveCustomerConfirmationModalOpen, setIsRemoveCustomerConfirmationModalOpen] =
+    useState<boolean>(false);
+  const [isAddCustomerConfirmationModalOpen, setIsAddCustomerConfirmationModalOpen] =
+    useState<boolean>(false);
+  const [newCustomer, setNewCoach] = useState({
+    firstname: "",
+    lastname: "",
     email: "",
     address: "",
     birthdate: "",
@@ -61,28 +41,30 @@ const CoachesList: React.FC = () => {
   const [sortType, setSortType] = useState<"alphabetical" | "byCustomers">(
     "alphabetical"
   );
-  const [coaches, setCoaches] = useState<Coach[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchCoaches = async () => {
-      try {
-        const response = await getCoaches();
-        if (response && response.value) {
-          setCoaches(response.value);
-        } else {
-          setError("Aucune donnée de coach disponible");
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des coachs:", error);
-        setError("Erreur lors de la récupération des coachs");
-        setLoading(false);
+  const fetchCustomers = async () => {
+    try {
+      const response = await api.getCustomers();
+      if (response) {
+        setCustomers(response);
+      } else {
+        setError("Aucune donnée de customers disponible");
       }
-    };
+      setLoading(false);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des customers:", error);
+      setError("Erreur lors de la récupération des customers");
+      setLoading(false);
+    }
+  };
 
-    fetchCoaches();
+  useEffect(() => {
+    fetchCustomers();
+    setFilteredCustomers(filterCustomerSearch());
   }, []);
 
   useEffect(() => {
@@ -117,22 +99,31 @@ const CoachesList: React.FC = () => {
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
+    setFilteredCustomers(filterCustomerSearch());
   };
+
+  const sortCustomerSearch = () => {
+    return customers.sort((a, b) => {
+      if (sortType === "alphabetical") {
+        return (a.firstname + " " + a.lastname).localeCompare(b.firstname);
+      }
+      return 0;
+    });
+  };
+
+  const filterCustomerSearch = () => {
+    return sortCustomerSearch().filter(
+    (customer) =>
+      customer.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      customer.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchQuery.toLowerCase())
+  )};
 
   const handleCustomerSearchChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setCustomerSearchQuery(event.target.value);
   };
-
-  const filteredCustomers = customersData.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
-      customer.email
-        .toLowerCase()
-        .includes(customerSearchQuery.toLowerCase()) ||
-      customer.phone.includes(customerSearchQuery)
-  );
 
   const handleFormChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -144,55 +135,35 @@ const CoachesList: React.FC = () => {
     }));
   };
 
-  const handleFormSubmit = (event: React.FormEvent) => {
+  const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("New coach data:", newCoach);
+    await api.addCustomer(newCustomer);
     setIsFormOpen(false);
+    fetchCustomers();
+    setIsAddCustomerConfirmationModalOpen(true);
   };
 
-  const handleAddCustomerClick = () => {
-    setIsCustomerModalOpen(true);
-  };
-
-  const handleRemoveCustomerClick = (customer: Customer) => {
-    setSelectedCustomer(customer);
-    setIsRemoveCustomerModalOpen(true);
-  };
-
-  const handleRemoveCustomerSubmit = () => {
+  const handleRemoveCustomerSubmit = async () => {
     if (selectedCustomer) {
-      console.log(`Removing customer: ${selectedCustomer.name}`);
+      try {
+        await api.removeCustomer(selectedCustomer.id);
+        setSelectedCustomer(null);
+        setIsRemoveCustomerModalOpen(false);
+        setIsRemoveCustomerConfirmationModalOpen(true);
+        fetchCustomers();
+      } catch (error) {
+        console.error("Error removing customer:", error);
+      }
     }
-    setIsRemoveCustomerModalOpen(false);
   };
 
-  const handleActionClick = (action: string, coach: Coach) => {
-    if (action === "Delete Coach") {
-      console.log(`Deleting coach: ${coach.firstname} ${coach.lastname}`);
+  const handleActionClick = (action: string, customer: Customer) => {
+    if (action === "Delete Customers") {
+      setMenuVisible(null);
+      setIsRemoveCustomerModalOpen(true);
+      setSelectedCustomer(customer);
     }
   };
-
-  const sortedCoaches = [...coaches].sort((a, b) => {
-    if (sortType === "alphabetical") {
-      return a.firstname.localeCompare(b.firstname);
-    } else if (
-      sortType === "byCustomers" &&
-      a.numberOfCustomers &&
-      b.numberOfCustomers
-    ) {
-      return b.numberOfCustomers - a.numberOfCustomers;
-    }
-    return 0;
-  });
-
-  const filteredCoaches = sortedCoaches.filter(
-    (coach) =>
-      coach.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      coach.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      coach.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const navigate = useNavigate();
 
   if (loading) {
     return <p>Chargement en cours...</p>;
@@ -208,7 +179,7 @@ const CoachesList: React.FC = () => {
       <main className="coaches-list-main">
         <h1 className="title-of-page">Customers List</h1>
         <p className="coaches-list-subtitle">
-          You have a total of {filteredCoaches.length} Customers.
+          You have a total of {customers.length} Customers.
         </p>
 
         <div className="coaches-list-actions">
@@ -241,85 +212,46 @@ const CoachesList: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-  {filteredCoaches.map((coach) => (
-    <tr key={coach.id}>
-      <td>
-        <a
-          href="#"
-          onClick={() => {
-            console.log(`Clicked on customer: ${coach.firstname} ${coach.lastname}`);
-            //redirect to customer details page
-          }}
-        >
-          {coach.firstname} {coach.lastname}
-        </a>
-      </td>
-      <td>{coach.email}</td>
-      <td>{coach.phone || "N/A"}</td>
-      <td>{coach.numberOfCustomers || "0"}</td>
-      <td className="actions-cell">
-        <button
-          className="actions-button"
-          onClick={() => handleMenuClick(coach.id)}
-        >
-          ⋮
-        </button>
-        {menuVisible === coach.id && (
-          <div className="actions-menu">
-            <button
-              onClick={() =>
-                handleActionClick("Delete Customers", coach)
-              }
-            >
-              Delete Customers
-            </button>
-          </div>
-        )}
-      </td>
-    </tr>
-  ))}
-</tbody>
+            {(filteredCustomers.length > 0 ? filteredCustomers : sortCustomerSearch()).map((customer) => (
+              <tr key={customer.id}>
+                <td>
+                  <a
+                    href="#"
+                    onClick={() => {
+                      console.log(`Clicked on customer: ${customer.firstname} ${customer.lastname}`);
+                      //redirect to customer details page
+                    }}
+                  >
+                    {customer.firstname} {customer.lastname}
+                  </a>
+                </td>
+                <td>{customer.email}</td>
+                <td>{customer.phone_number || "N/A"}</td>
+                <td>Paypal</td>
+                <td className="actions-cell">
+                  <button
+                    className="actions-button"
+                    onClick={() => handleMenuClick(customer.id)}
+                  >
+                    ⋮
+                  </button>
+                  {menuVisible === customer.id && (
+                    <div className="actions-menu">
+                      <button
+                        onClick={() =>
+                          handleActionClick("Delete Customers", customer)
+                        }
+                      >
+                        Delete Customers
+                      </button>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
 
         </table>
-
-        {isCustomerModalOpen && (
-          <div className="modal2">
-            <div className="modal-content2">
-              <h2>Coaches List</h2>
-
-              <input
-                type="text"
-                placeholder="Search customers..."
-                value={customerSearchQuery}
-                onChange={handleCustomerSearchChange}
-                className="search-input2"
-              />
-
-              <ul>
-                {filteredCustomers.map((customer) => (
-                  <li key={customer.id}>
-                    <div className="customer-info">
-                      <div className="customer-name">{customer.name}</div>
-                      <div className="customer-email">{customer.email}</div>
-                      <div className="customer-phone">{customer.phone}</div>
-                    </div>
-                    <div className="customer-actions">
-                      <button
-                        onClick={() => handleRemoveCustomerClick(customer)}
-                      >
-                        Remove
-                      </button>
-                      <button>Add</button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <button className="close-button" onClick={handleCustomerModalClose}>
-              X
-            </button>
-          </div>
-        )}
 
         {isFormOpen && (
           <div className="modal">
@@ -330,8 +262,8 @@ const CoachesList: React.FC = () => {
                   <label>First Name</label>
                   <input
                     type="text"
-                    name="firstName"
-                    value={newCoach.firstName}
+                    name="firstname"
+                    value={newCustomer.firstname}
                     onChange={handleFormChange}
                     required
                   />
@@ -340,8 +272,8 @@ const CoachesList: React.FC = () => {
                   <label>Last Name</label>
                   <input
                     type="text"
-                    name="lastName"
-                    value={newCoach.lastName}
+                    name="lastname"
+                    value={newCustomer.lastname}
                     onChange={handleFormChange}
                     required
                   />
@@ -350,8 +282,8 @@ const CoachesList: React.FC = () => {
                   <label>Phone</label>
                   <input
                     type="text"
-                    name="phone"
-                    value={newCoach.phone_number}
+                    name="phone_number"
+                    value={newCustomer.phone_number}
                     onChange={handleFormChange}
                   />
                 </div>
@@ -360,7 +292,7 @@ const CoachesList: React.FC = () => {
                   <input
                     type="email"
                     name="email"
-                    value={newCoach.email}
+                    value={newCustomer.email}
                     onChange={handleFormChange}
                     required
                   />
@@ -370,7 +302,7 @@ const CoachesList: React.FC = () => {
                   <input
                     type="text"
                     name="address"
-                    value={newCoach.address}
+                    value={newCustomer.address}
                     onChange={handleFormChange}
                     required
                   />
@@ -380,32 +312,32 @@ const CoachesList: React.FC = () => {
                   <input
                     type="date"
                     name="birthdate"
-                    value={newCoach.birthdate}
+                    value={newCustomer.birthdate}
                     onChange={handleFormChange}
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label>description Information</label>
+                  <label>Description</label>
                   <textarea
                     name="description"
-                    value={newCoach.description}
+                    value={newCustomer.description}
                     onChange={handleFormChange}
                   />
                 </div>
                 <div className="form-group">
-                  <label>gender</label>
+                  <label>Gender</label>
                   <textarea
                     name="gender"
-                    value={newCoach.gender}
+                    value={newCustomer.gender}
                     onChange={handleFormChange}
                   />
                 </div>
                 <div className="form-group">
-                  <label>astrological_sign</label>
+                  <label>Astrological sign</label>
                   <select
                     name="astrological_sign"
-                    value={newCoach.astrological_sign}
+                    value={newCustomer.astrological_sign}
                     onChange={(event) => setNewCoach((prevState) => ({
                       ...prevState,
                       astrological_sign: event.target.value,
@@ -446,7 +378,7 @@ const CoachesList: React.FC = () => {
               {selectedCustomer && (
                 <div>
                   <p>
-                    Are you sure you want to remove {selectedCustomer.name}?
+                    Are you sure you want to remove {selectedCustomer.firstname + " " + selectedCustomer.lastname}?
                   </p>
                   <div className="form-actions">
                     <button
@@ -461,6 +393,42 @@ const CoachesList: React.FC = () => {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {isRemoveCustomerConfirmationModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Customer Removed</h2>
+                <div>
+                  <p>
+                    Customer has been removed
+                  </p>
+                  <div className="form-actions">
+                    <button type="button" onClick={() => {setFilteredCustomers(filterCustomerSearch()); setIsRemoveCustomerConfirmationModalOpen(false)}}>
+                      Ok
+                    </button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        )}
+
+        {isAddCustomerConfirmationModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Customer Added</h2>
+                <div>
+                  <p>
+                    Customer has been added
+                  </p>
+                  <div className="form-actions">
+                    <button type="button" onClick={() => {setFilteredCustomers(filterCustomerSearch()); setIsAddCustomerConfirmationModalOpen(false)}}>
+                      Ok
+                    </button>
+                  </div>
+                </div>
             </div>
           </div>
         )}

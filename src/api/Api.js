@@ -777,3 +777,15 @@ export const getEmployeeRelations = async (employeeID) => {
   }
 };
 
+/**
+ * Fonction pour supprimer un client
+**/
+export const removeCustomer = async (customerID) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/customers/${customerID}`);
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la suppression d\'un client :', error.response?.data || error.message);
+  }
+};

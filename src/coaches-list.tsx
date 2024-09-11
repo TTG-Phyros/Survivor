@@ -216,12 +216,20 @@ const CoachesList: React.FC = () => {
     setIsRemoveEmployeeModalOpen(true);
   };
 
-  const handleRemoveEmployeeClickConfirmed = (employee: Coach) => {
-    api.removeEmployee(employee.id);
-    setSelectedEmployee(null);
-    setIsRemoveEmployeeModalOpen(false);
-    setIsRemoveEmployeeModalConfirmationOpen(true);
-    fetchCoaches();
+  const handleRemoveEmployeeClickConfirmed = async (employee: Coach) => {
+    if (employee) {
+      try {
+        await api.removeEmployee(employee.id);
+        // Update the customers state after removal
+        setCoaches(coaches.filter(c => c.id !== employee.id));
+        setSelectedEmployee(null);
+        setIsRemoveEmployeeModalOpen(false);
+        setIsRemoveEmployeeModalConfirmationOpen(true);
+        fetchCoaches();
+      } catch (error) {
+        console.error("Error removing customer:", error);
+      }
+    }
   };
 
   const handleRemoveCustomerClick = (customer: Customer) => {
