@@ -96,6 +96,29 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Endpoint pour récupérer l'ID de l'employé à partir du token
+router.get('/me', async (req, res) => {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.status(401).json({ status: 'failure', message: 'Token is required' });
+  }
+
+  try {
+    const result = await pool.query('SELECT id FROM employees WHERE token=$1', [token]);
+
+    if (result.rows.length > 0) {
+      const employeeId = result.rows[0].id;
+      return res.json({ status: 'success', id: employeeId });
+    } else {
+      return res.status(404).json({ status: 'failure', message: 'Employee not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching employee ID:', error);
+    return res.status(500).json({ status: 'failure', message: 'Server error' });
+  }
+});
+
 // Endpoint pour récupérer le nombre d'employés
 router.get('/count', async (req,res) => {
   if (!req.headers.token || req.headers.token === 'undefined') {

@@ -653,10 +653,30 @@ export const addCustomer = async (customerData) => {
 };
 
 /**
- * Fonction pour ajouter un event
+ * Fonction pour récupérer l'ID de l'employé à partir du token
+**/
+const getEmployeeId = async () => {
+  try {
+    const token = `${cookies.get("ACCOUNT_TOKEN")}`;
+    const response = await axios.get(`${API_BASE_URL}/employees/me`, {
+      headers: {
+        Authorization: token
+      }
+    });
+    return response.data.id;
+  } catch (error) {
+    console.error('Erreur lors de la récupération de l\'ID de l\'employé :', error.response?.data || error.message);
+    throw new Error('Erreur lors de la récupération de l\'ID de l\'employé');
+  }
+};
+
+/**
+ * Fonction pour ajouter un événement
 **/
 export const addEvent = async (eventData) => {
   try {
+    const employeeId = await getEmployeeId();
+
     const response = await axios.post(`${API_BASE_URL}/events`, {
       name: eventData.name,
       date: eventData.date,
@@ -666,6 +686,7 @@ export const addEvent = async (eventData) => {
       location_y: eventData.location_y,
       type: eventData.type,
       location_name: eventData.location_name,
+      employee_id: employeeId
     });
 
     return response.data;

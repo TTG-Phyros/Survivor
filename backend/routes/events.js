@@ -19,18 +19,18 @@ router.get('/', async (req,res) => {
 
 // Endpoint pour ajouter un nouvel event
 router.post('/', async (req, res) => {
-  const { name, date, duration, max_participants, location_x, location_y, type, location_name } = req.body;
+  const { name, date, duration, max_participants, location_x, location_y, type, employee_id, location_name } = req.body;
 
-  if (!name || !date || !duration || !max_participants || !location_x || !location_y || !type || !location_name) {
+  if (!name || !date || !duration || !max_participants || !location_x || !location_y || !type || !employee_id || !location_name) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   try {
     const result = await pool.query(
-      `INSERT INTO events (name, date, duration, max_participants, location_x, location_y, type, location_name)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      `INSERT INTO events (name, date, duration, max_participants, location_x, location_y, type, employee_id, location_name)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        RETURNING *`,
-      [name, date, duration, max_participants, location_x, location_y, type, location_name]
+      [name, date, duration, max_participants, location_x, location_y, type, employee_id, location_name]
     );
 
     res.status(201).json(result.rows[0]);
