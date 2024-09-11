@@ -12,6 +12,7 @@ import Tips from './Tips';
 import Events from './Events';
 import * as api from'./api/Api';
 import { useState } from 'react';
+import CustomersDetails from './customer-details';
 
 const App: React.FC = () => {
   const [connected, setConnected] = useState<boolean | undefined>(undefined);
@@ -35,6 +36,7 @@ const App: React.FC = () => {
         <Route path="/compatibility" element={connected ? <AstroTest /> : <Login />} />
         <Route path="/tips" element={connected ? <Tips /> : <Login />} />
         <Route path="/events" element={connected ? <Events /> : <Login />} />
+        <Route path="/customer-details" element={connected ? <CustomersDetails /> : <Login />} />
       </Routes>
     </Router>
   );
