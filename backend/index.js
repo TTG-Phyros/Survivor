@@ -21,6 +21,7 @@ global.MD5 = function(d){var r = M(V(Y(X(d),8*d.length)));return r.toLowerCase()
 const clothesRoutes = require('./routes/clothes');
 const customerRoutes = require('./routes/customers');
 const employeeRoutes = require('./routes/employees');
+const relationsRoutes = require('./routes/relations');
 const encountersRoutes = require('./routes/encounters');
 const eventsRoutes = require('./routes/events');
 const refresh_dataRoutes = require('./routes/refresh_data');
@@ -30,6 +31,7 @@ const tipsRoutes = require('./routes/tips');
 app.use('/api/clothes', clothesRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/employees', employeeRoutes);
+app.use('/api/relations', relationsRoutes);
 app.use('/api/encounters', encountersRoutes);
 app.use('/api/events', eventsRoutes);
 app.use('/api/refresh_data', refresh_dataRoutes);

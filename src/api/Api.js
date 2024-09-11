@@ -606,11 +606,25 @@ export const addEmployee = async (employeeData) => {
       gender: employeeData.gender,
       job: employeeData.job,
       image: employeeData.image,
+      phoneNumber: employeeData.phone
     });
 
     return response.data;
   } catch (error) {
     console.error('Erreur lors de l\'ajout d\'un employé :', error.response?.data || error.message);
+  }
+};
+
+/**
+ * Fonction pour enlever un employé
+**/
+export const removeEmployee = async (employeeID) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/employees/${employeeID}`);
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la suppression d\'un employé :', error.response?.data || error.message);
   }
 };
 
@@ -702,3 +716,43 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+/**
+ * Fonction pour ajouter un client à un employé
+**/
+export const addEmployeeCustomerRelation = async (employeeID, customerID) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/relations/${employeeID}/${customerID}`);
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout d\'une relation client / employé :', error.response?.data || error.message);
+  }
+};
+
+/**
+ * Fonction pour retirer un client à un employé
+**/
+export const removeEmployeeCustomerRelation = async (employeeID, customerID) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/relations/${employeeID}/${customerID}`);
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout d\'une relation client / employé :', error.response?.data || error.message);
+  }
+};
+
+/**
+ * Fonction pour récupérer un client à un employé
+**/
+export const getEmployeeRelations = async (employeeID) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/relations/${employeeID}`);
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des relations d\'un employé :', error.response?.data || error.message);
+  }
+};
+

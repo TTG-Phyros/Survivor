@@ -1,7 +1,7 @@
 import "./coaches-list.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCoaches } from "./api/Api";
+import * as api from "./api/Api";
 import Navbar from "./Navbar";
 
 interface Coach {
@@ -15,43 +15,43 @@ interface Coach {
 
 interface Customer {
   id: number;
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
-  phone: string;
+  phone_number: string;
+  astrological_sign: string;
 }
 
-const customersData: Customer[] = [
-  {
-    id: 7,
-    name: "Ethan Hunter",
-    email: "ethan@bergerpaints.com",
-    phone: "+435 675-2345",
-  },
-  {
-    id: 8,
-    name: "Justine Bauwens",
-    email: "justine@acstext.com",
-    phone: "+978 546-2342",
-  },
-];
+interface Relation {
+  id: number;
+  customer_id: number;
+  coach_id: number;
+  update_date: string;
+}
 
 const CoachesList: React.FC = () => {
   const [menuVisible, setMenuVisible] = useState<number | null>(null);
-  const [isCustomerModalOpen, setIsCustomerModalOpen] =
-    useState<boolean>(false);
+  const [isCustomerModalOpen, setIsCustomerModalOpen] = useState<boolean>(false);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
-  const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] =
-    useState<boolean>(false);
+  const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] = useState<boolean>(false);
+  const [isAddEmployeeModalOpen, setIsAddEmployeeModalOpen] = useState<boolean>(false);
+  const [isRemoveEmployeeModalOpen, setIsRemoveEmployeeModalOpen] = useState<boolean>(false);
+  const [isRemoveEmployeeModalConfirmationOpen, setIsRemoveEmployeeModalConfirmationOpen] = useState<boolean>(false);
   const [newCoach, setNewCoach] = useState({
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     email: "",
     address: "",
     birthdate: "",
+    phone:"",
     gender: "",
     job : ""
   });
+  const [currentCoachRelationList, setCurrentCoachRelationList] = useState<Relation[] | null>(null);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null
+  );
+  const [selectedEmployee, setSelectedEmployee] = useState<Coach | null>(
     null
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -60,27 +60,72 @@ const CoachesList: React.FC = () => {
     "alphabetical"
   );
   const [coaches, setCoaches] = useState<Coach[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchCoaches = async () => {
-      try {
-        const response = await getCoaches();
-        if (response && response.value) {
-          setCoaches(response.value);
-        } else {
-          setError("Aucune donnée de coach disponible");
-        }
+  const fetchCoaches = async () => {
+    try {
+      const response = await api.getCoaches();
+      if (response && response.value) {
+        const coachesList: [] = response.value;
+        await coachesList.map(async (coach: Coach) => {
+          const relations = await api.getEmployeeRelations(coach.id);
+          coach.numberOfCustomers = relations.length;
+          return coach;
+        });
+        setCoaches(response.value);
         setLoading(false);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des coachs:", error);
-        setError("Erreur lors de la récupération des coachs");
+      } else {
+        setError("Aucune donnée de coach disponible");
         setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("Erreur lors de la récupération des coachs:", error);
+      setError("Erreur lors de la récupération des coachs");
+      setLoading(false);
+    }
+  };
 
-    fetchCoaches();
+  const fetchCustomers = async () => {
+    try {
+      const response = await api.getCustomersBasicInfos();
+      if (response) {
+        setCustomers(response);
+      } else {
+        setError("Aucune donnée de customers disponible");
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des customers:", error);
+      setError("Erreur lors de la récupération des customers");
+      setLoading(false);
+    }
+  };
+
+  const fetchCurrentCoachRelations = async (coach: Coach | null) => {
+    if (!coach) {
+      return;
+    }
+    try {
+      const response = await api.getEmployeeRelations(coach.id);
+      console.log(response);
+      if (response) {
+        setCurrentCoachRelationList(response);
+      } else {
+        setError("Aucune donnée de relations disponible");
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des customers:", error);
+      setError("Erreur lors de la récupération des customers");
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCoaches()
+    fetchCustomers();
   }, []);
 
   useEffect(() => {
@@ -113,6 +158,14 @@ const CoachesList: React.FC = () => {
     setIsRemoveCustomerModalOpen(false);
   };
 
+  const handleAddedEmployeeConfirmation = () => {
+    setIsAddEmployeeModalOpen(false);
+  };
+
+  const handleRemoveEmployeeModalClose = () => {
+    setIsRemoveEmployeeModalOpen(false);
+  };
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
@@ -123,13 +176,13 @@ const CoachesList: React.FC = () => {
     setCustomerSearchQuery(event.target.value);
   };
 
-  const filteredCustomers = customersData.filter(
+  const filteredCustomers = customers.filter(
     (customer) =>
-      customer.name.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
+      (customer.firstname + " " + customer.lastname).toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
       customer.email
         .toLowerCase()
         .includes(customerSearchQuery.toLowerCase()) ||
-      customer.phone.includes(customerSearchQuery)
+      customer.phone_number.includes(customerSearchQuery)
   );
 
   const handleFormChange = (
@@ -145,11 +198,30 @@ const CoachesList: React.FC = () => {
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log("New coach data:", newCoach);
+    api.addEmployee(newCoach)
     setIsFormOpen(false);
+    setIsAddEmployeeModalOpen(true);
+    fetchCoaches();
   };
 
-  const handleAddCustomerClick = () => {
+  const handleAddCustomerClick = (coach: Coach) => {
+    fetchCurrentCoachRelations(coach);
+    setSelectedEmployee(coach);
     setIsCustomerModalOpen(true);
+    setMenuVisible(null);
+  };
+
+  const handleRemoveEmployeeClick = (employee: Coach) => {
+    setSelectedEmployee(employee);
+    setIsRemoveEmployeeModalOpen(true);
+  };
+
+  const handleRemoveEmployeeClickConfirmed = (employee: Coach) => {
+    api.removeEmployee(employee.id);
+    setSelectedEmployee(null);
+    setIsRemoveEmployeeModalOpen(false);
+    setIsRemoveEmployeeModalConfirmationOpen(true);
+    fetchCoaches();
   };
 
   const handleRemoveCustomerClick = (customer: Customer) => {
@@ -157,16 +229,22 @@ const CoachesList: React.FC = () => {
     setIsRemoveCustomerModalOpen(true);
   };
 
+  const handleAddCustomerToCoachClick = (customer: Customer) => {
+    api.addEmployeeCustomerRelation(selectedEmployee?.id, customer?.id).then(() => {
+      fetchCurrentCoachRelations(selectedEmployee);
+    });
+  };
+
   const handleRemoveCustomerSubmit = () => {
-    if (selectedCustomer) {
-      console.log(`Removing customer: ${selectedCustomer.name}`);
-    }
+    api.removeEmployeeCustomerRelation(selectedEmployee?.id, selectedCustomer?.id).then(() => {
+      fetchCurrentCoachRelations(selectedEmployee);
+    });
     setIsRemoveCustomerModalOpen(false);
   };
 
   const handleActionClick = (action: string, coach: Coach) => {
     if (action === "Delete Coach") {
-      console.log(`Deleting coach: ${coach.firstname} ${coach.lastname}`);
+      handleRemoveEmployeeClick(coach)
     }
   };
 
@@ -197,7 +275,6 @@ const CoachesList: React.FC = () => {
   if (error) {
     return <p>{error}</p>;
   }
-
   return (
     <div className="container">
       <Navbar />
@@ -256,7 +333,7 @@ const CoachesList: React.FC = () => {
                   </button>
                   {menuVisible === coach.id && (
                     <div className="actions-menu">
-                      <button onClick={() => handleAddCustomerClick()}>
+                      <button onClick={() => handleAddCustomerClick(coach)}>
                         Add / Remove Customer
                       </button>
                       <button
@@ -289,17 +366,24 @@ const CoachesList: React.FC = () => {
                 {filteredCustomers.map((customer) => (
                   <li key={customer.id}>
                     <div className="customer-info">
-                      <div className="customer-name">{customer.name}</div>
+                      <div className="customer-name">{customer.firstname + " " + customer.lastname}</div>
                       <div className="customer-email">{customer.email}</div>
-                      <div className="customer-phone">{customer.phone}</div>
+                      <div className="customer-phone">{customer.phone_number}</div>
                     </div>
                     <div className="customer-actions">
-                      <button
-                        onClick={() => handleRemoveCustomerClick(customer)}
-                      >
-                        Remove
-                      </button>
-                      <button>Add</button>
+                      {currentCoachRelationList?.some((relation: Relation) => relation.customer_id === customer.id) ? (
+                        <button
+                          onClick={() => handleRemoveCustomerClick(customer)}
+                        >
+                          Remove
+                        </button>
+                      ): (
+                        <button
+                          onClick={() => handleAddCustomerToCoachClick(customer)}
+                        >
+                          Add
+                        </button>
+                      )}
                     </div>
                   </li>
                 ))}
@@ -320,8 +404,8 @@ const CoachesList: React.FC = () => {
                   <label>First Name</label>
                   <input
                     type="text"
-                    name="firstName"
-                    value={newCoach.firstName}
+                    name="firstname"
+                    value={newCoach.firstname}
                     onChange={handleFormChange}
                     required
                   />
@@ -330,8 +414,8 @@ const CoachesList: React.FC = () => {
                   <label>Last Name</label>
                   <input
                     type="text"
-                    name="lastName"
-                    value={newCoach.lastName}
+                    name="lastname"
+                    value={newCoach.lastname}
                     onChange={handleFormChange}
                     required
                   />
@@ -342,6 +426,16 @@ const CoachesList: React.FC = () => {
                     type="email"
                     name="email"
                     value={newCoach.email}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Phone number</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={newCoach.phone}
                     onChange={handleFormChange}
                     required
                   />
@@ -375,9 +469,17 @@ const CoachesList: React.FC = () => {
                     required
                   >
                     <option value="">Select Job</option>
-                    <option value="coach">Coach</option>
-                    <option value="toup du cu">Chômer</option>
-                    <option value="gappy (abs)">Gappy (abs)</option>
+                    <option value="Coach">Coach</option>
+                    <option value="COO">COO</option>
+                    <option value="Sales Representative">Sales Representative</option>
+                    <option value="Sales Manager">Sales Manager</option>
+                    <option value="Marketing Specialist">Marketing Specialist</option>
+                    <option value="Financial Analyst">Financial Analyst</option>
+                    <option value="VP of Marketing">VP of Marketing</option>
+                    <option value="CTO">CTO</option>
+                    <option value="CEO">CEO</option>
+                    <option value="Finance Manager">Finance Manager</option>
+                    <option value="Marketing Manager">Marketing Manager</option>
                   </select>
                   </div>
                 <div className="form-group">
@@ -406,7 +508,7 @@ const CoachesList: React.FC = () => {
               {selectedCustomer && (
                 <div>
                   <p>
-                    Are you sure you want to remove {selectedCustomer.name}?
+                    Are you sure you want to remove {selectedCustomer.firstname + " " + selectedCustomer.lastname}?
                   </p>
                   <div className="form-actions">
                     <button
@@ -421,6 +523,68 @@ const CoachesList: React.FC = () => {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {isAddEmployeeModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Employee Added</h2>
+                <div>
+                  <p>
+                    Employee has been added
+                  </p>
+                  <div className="form-actions">
+                    <button type="button" onClick={handleAddedEmployeeConfirmation}>
+                      Ok
+                    </button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        )}
+
+        {isRemoveEmployeeModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Remove Employee</h2>
+              {selectedEmployee && (
+                <div>
+                  <p>
+                    Are you sure you want to remove {selectedEmployee.firstname} {selectedEmployee.lastname} ?
+                  </p>
+                  <div className="form-actions">
+                    <button
+                      type="button"
+                      onClick={handleRemoveEmployeeModalClose}
+                    >
+                      Cancel
+                    </button>
+                    <button type="button" onClick={() => handleRemoveEmployeeClickConfirmed(selectedEmployee)}>
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {isRemoveEmployeeModalConfirmationOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Employee Removed</h2>
+                <div>
+                  <p>
+                    Employee has been removed
+                  </p>
+                  <div className="form-actions">
+                    <button type="button" onClick={() => setIsRemoveEmployeeModalConfirmationOpen(false)}>
+                      Ok
+                    </button>
+                  </div>
+                </div>
             </div>
           </div>
         )}

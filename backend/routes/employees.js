@@ -29,9 +29,9 @@ router.get('/', async (req, res) => {
 
 // Endpoint pour ajouter un nouvel employé
 router.post('/', async (req, res) => {
-  const { email, firstname, lastname, birthdate, gender, job, image } = req.body;
+  const { email, firstname, lastname, birthdate, gender, job, image, phoneNumber } = req.body;
 
-  if (!email || !firstname || !lastname || !birthdate || !gender || !job) {
+  if (!email || !firstname || !lastname || !birthdate || !gender || !job || !phoneNumber) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -46,10 +46,10 @@ router.post('/', async (req, res) => {
 
   try {
     const result = await pool.query(
-      `INSERT INTO employees (email, firstname, lastname, birthdate, gender, job, image)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `INSERT INTO employees (email, firstname, lastname, birthdate, gender, job, image, phone_number)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING *`,
-      [email, firstname, lastname, birthdate, gender, job, imageBinary]
+      [email, firstname, lastname, birthdate, gender, job, imageBinary, phoneNumber]
     );
 
     res.status(201).json(result.rows[0]);
@@ -65,11 +65,11 @@ router.post('/login', async (req, res) => {
   if (!email || !password) {
     return res.status(400).send('email and password parameters are required');
   }
-  const employeesResult = await pool.query('SELECT * FROM employees WHERE email=$1', [ email ]);
-  if (password.length > 0 && employeesResult.rows.length > 0 && employeesResult.rows[0].password === global.MD5(password)) {
-    return res.json({ status: 'success', message: 'User has been connected', token : employeesResult.rows[0].token });
-  }
   try {
+    const employeesResult = await pool.query('SELECT * FROM employees WHERE email=$1', [ email ]);
+    if (password.length > 0 && employeesResult.rows.length > 0 && employeesResult.rows[0].password === global.MD5(password)) {
+      return res.json({ status: 'success', message: 'User has been connected', token : employeesResult.rows[0].token });
+    }
     const loginResponse = await axios.post(
       `${global.DISTANT_API_BASE_URL}/employees/login`,
       {
