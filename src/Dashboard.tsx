@@ -560,6 +560,7 @@ const Dashboard: React.FC = () => {
         <div className="chart map-chart">
           <div className="chart-title">Customers by Country</div>
           <div className="chart-subtitle">Distribution of customers by country.</div>
+
           <WorldMap
             color="blue"
             valueSuffix=" customers"
@@ -571,6 +572,32 @@ const Dashboard: React.FC = () => {
               { country: "FR", value: 1200 },
             ]}
           />
+
+          <div className="top-countries">
+            {(() => {
+              const countryData = [
+                { country: "FR", value: 1200 },
+                { country: "US", value: 500 },
+                { country: "CN", value: 300 },
+                { country: "GB", value: 200 },
+              ];
+            
+              const totalValue = countryData.reduce((sum, item) => sum + item.value, 0);
+            
+              return countryData
+                .sort((a, b) => b.value - a.value)
+                .map((item, index) => {
+                  const percentage = ((item.value / totalValue) * 100).toFixed(2);
+                  return (
+                    <div key={index} className="country-item">
+                      <p>{item.country}</p>
+                      <h3>{item.value} customers</h3>
+                      <p>{percentage}% of total</p>
+                    </div>
+                  );
+                });
+            })()}
+          </div>
         </div>
 
         <div className="chart pie-chart">
