@@ -11,46 +11,25 @@ const Navbar = () => {
     <header className="navbar">
       <div className="navbar-logo">Soul Connection</div>
       <nav className="navbar-links">
-        <button
-          className={`navbar-link ${location.pathname === '/dashboard' ? 'active' : ''}`}
-          onClick={() => navigate("/dashboard")}
-        >
+        <button className={`navbar-link ${location.pathname === '/dashboard' ? 'active' : ''}`} onClick={() => navigate("/dashboard")}>
           Dashboard
         </button>
-        <button
-          className={`navbar-link ${location.pathname === '/coaches' ? 'active' : ''}`}
-          onClick={() => navigate("/coaches")}
-        >
+        <button className={`navbar-link ${location.pathname === '/coaches' ? 'active' : ''}`} onClick={() => navigate("/coaches")}>
           Coaches
         </button>
-        <button
-          className={`navbar-link ${location.pathname === '/customers' ? 'active' : ''}`}
-          onClick={() => navigate("/customers")}
-        >
+        <button className={`navbar-link ${location.pathname === '/customers' ? 'active' : ''}`} onClick={() => navigate("/customers")}>
           Customers
         </button>
-        <button
-          className={`navbar-link ${location.pathname === '/tips' ? 'active' : ''}`}
-          onClick={() => navigate("/tips")}
-        >
+        <button className={`navbar-link ${location.pathname === '/tips' ? 'active' : ''}`} onClick={() => navigate("/tips")}>
           Tips
         </button>
-        <button
-          className={`navbar-link ${location.pathname === '/events' ? 'active' : ''}`}
-          onClick={() => navigate("/events")}
-        >
+        <button className={`navbar-link ${location.pathname === '/events' ? 'active' : ''}`} onClick={() => navigate("/events")}>
           Events
         </button>
-        <button
-          className={`navbar-link ${location.pathname === '/clothes' ? 'active' : ''}`}
-          onClick={() => navigate("/clothes")}
-        >
+        <button className={`navbar-link ${location.pathname === '/clothes' ? 'active' : ''}`} onClick={() => navigate("/clothes")}>
           Clothes
         </button>
-        <button
-          className={`navbar-link ${location.pathname === '/compatibility' ? 'active' : ''}`}
-          onClick={() => navigate("/compatibility")}
-        >
+        <button className={`navbar-link ${location.pathname === '/compatibility' ? 'active' : ''}`} onClick={() => navigate("/compatibility")}>
           Compatibility
         </button>
       </nav>
