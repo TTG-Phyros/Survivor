@@ -25,7 +25,7 @@ const SoulConnection_Login: React.FC = () => {
                         });
                     });
                 } else {
-                    window.location.reload();
+                    window.location.href = '/';
                     navigate('/dashboard');
                 }
             } else {

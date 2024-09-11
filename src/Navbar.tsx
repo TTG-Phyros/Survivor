@@ -11,7 +11,7 @@ const Navbar = () => {
     <header className="navbar">
       <div className="navbar-logo">Soul Connection</div>
       <nav className="navbar-links">
-        <button className={`navbar-link ${location.pathname === '/dashboard' ? 'active' : ''}`} onClick={() => navigate("/dashboard")}>
+        <button className={`navbar-link ${location.pathname === '/dashboard' || location.pathname === '/' ? 'active' : ''}`} onClick={() => navigate("/dashboard")}>
           Dashboard
         </button>
         <button className={`navbar-link ${location.pathname === '/coaches' ? 'active' : ''}`} onClick={() => navigate("/coaches")}>
