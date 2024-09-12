@@ -6,6 +6,22 @@ const cookies = require('js-cookie');
 const API_BASE_URL = 'http://localhost:5000/api';
 
 /**
+ * Fonction pour ajouter une ligne d'historique à un client.
+**/
+export const addCustomerHistory = async (customerID, action) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/history/${customerID}/${action}`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+  }
+};
+
+/**
  * Fonction pour récupérer la liste des employés depuis l'API.
 **/
 export const fetchEmployees = async () => {
@@ -791,6 +807,7 @@ export const addEmployeeCustomerRelation = async (employeeID, customerID) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/relations/${employeeID}/${customerID}`);
 
+    addCustomerHistory(customerID, `Add relation with employee n°${employeeID}`);
     return response.data;
   } catch (error) {
     console.error('Erreur lors de l\'ajout d\'une relation client / employé :', error.response?.data || error.message);
@@ -804,6 +821,7 @@ export const removeEmployeeCustomerRelation = async (employeeID, customerID) => 
   try {
     const response = await axios.delete(`${API_BASE_URL}/relations/${employeeID}/${customerID}`);
 
+    addCustomerHistory(customerID, `Remove relation with employee n°${employeeID}`);
     return response.data;
   } catch (error) {
     console.error('Erreur lors de l\'ajout d\'une relation client / employé :', error.response?.data || error.message);
@@ -833,5 +851,18 @@ export const removeCustomer = async (customerID) => {
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la suppression d\'un client :', error.response?.data || error.message);
+  }
+};
+
+/**
+ * Fonction pour récupérer un historique client
+**/
+export const getHistoryFromClient = async (customerID) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/history/${customerID}`);
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la récupération de l\'historique d\'un client :', error.response?.data || error.message);
   }
 };

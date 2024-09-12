@@ -16,8 +16,6 @@ interface Customer {
 const CustomersList: React.FC = () => {
   const navigate = useNavigate();
   const [menuVisible, setMenuVisible] = useState<number | null>(null);
-  const [isCustomerModalOpen, setIsCustomerModalOpen] =
-    useState<boolean>(false);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [isRemoveCustomerModalOpen, setIsRemoveCustomerModalOpen] =
     useState<boolean>(false);
@@ -40,7 +38,6 @@ const CustomersList: React.FC = () => {
     null
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [customerSearchQuery, setCustomerSearchQuery] = useState<string>("");
   const [sortType, setSortType] = useState<"alphabetical" | "byCustomers">(
     "alphabetical"
   );
@@ -92,10 +89,6 @@ const CustomersList: React.FC = () => {
     setMenuVisible(menuVisible === id ? null : id);
   };
 
-  const handleCustomerModalClose = () => {
-    setIsCustomerModalOpen(false);
-  };
-
   const handleRemoveCustomerModalClose = () => {
     setIsRemoveCustomerModalOpen(false);
   };
@@ -121,12 +114,6 @@ const CustomersList: React.FC = () => {
       customer.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
       customer.email.toLowerCase().includes(searchQuery.toLowerCase())
   )};
-
-  const handleCustomerSearchChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCustomerSearchQuery(event.target.value);
-  };
 
   const handleFormChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

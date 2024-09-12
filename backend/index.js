@@ -26,6 +26,7 @@ const encountersRoutes = require('./routes/encounters');
 const eventsRoutes = require('./routes/events');
 const refresh_dataRoutes = require('./routes/refresh_data');
 const tipsRoutes = require('./routes/tips');
+const customerHistoryRoutes = require('./routes/history');
 
 // Utiliser les routes
 app.use('/api/clothes', clothesRoutes);
@@ -36,6 +37,7 @@ app.use('/api/encounters', encountersRoutes);
 app.use('/api/events', eventsRoutes);
 app.use('/api/refresh_data', refresh_dataRoutes);
 app.use('/api/tips', tipsRoutes);
+app.use('/api/history', customerHistoryRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
