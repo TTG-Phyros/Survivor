@@ -36,7 +36,8 @@ const App: React.FC = () => {
         <Route path="/compatibility" element={connected ? <AstroTest /> : <Login />} />
         <Route path="/tips" element={connected ? <Tips /> : <Login />} />
         <Route path="/events" element={connected ? <Events /> : <Login />} />
-        <Route path="/customer-details" element={connected ? <CustomersDetails /> : <Login />} />
+        <Route path="/customer-details/:id" element={connected ? <CustomersDetails /> : <Login />} />
+        {/* <Route path="/customer-details" element={connected ? <CustomersDetails /> : <Login />} /> */}
       </Routes>
     </Router>
   );

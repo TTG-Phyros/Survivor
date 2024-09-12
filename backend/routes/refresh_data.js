@@ -361,11 +361,11 @@ router.get('/payments', async (req, res) => {
           // console.log(`Importing payment n°${row.id}`);
           const existing_line = await pool.query('SELECT * FROM payments WHERE id = $1', [row.id]);
           if (existing_line.rows.length > 0) {
-            await pool.query('UPDATE payments SET date=$1, payment_method=$2, amount=$3, comment=$4 WHERE id=$5',
-              [row.date, row.payment_method, row.amount, row.comment, row.id]);
+            await pool.query('UPDATE payments SET customer_id=$1, date=$2, payment_method=$3, amount=$4, comment=$5 WHERE id=$6',
+              [id, row.date, row.payment_method, row.amount, row.comment, row.id]);
           } else {
-            await pool.query('INSERT INTO payments (id, date, payment_method, amount, comment) VALUES ($1, $2, $3, $4, $5)',
-              [row.id, row.date, row.payment_method, row.amount, row.comment]);
+            await pool.query('INSERT INTO payments (id, customer_id, date, payment_method, amount, comment) VALUES ($1, $2, $3, $4, $5, $6)',
+              [row.id, id, row.date, row.payment_method, row.amount, row.comment]);
           }
         } catch (err) {
           console.error(err.message);

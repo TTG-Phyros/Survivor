@@ -135,7 +135,14 @@ router.get('/:id', async (req, res) => {
   }
   try {
     const result = await pool.query('SELECT * FROM customers WHERE id = $1', [id]);
-    res.json(result.rows);
+    result.rows = result.rows.map(row => {
+      const imageBase64 = row.image ? Buffer.from(row.image).toString('base64') : null;
+      return {
+          ...row,
+          image: imageBase64
+      };
+    })
+    res.json(result.rows[0]);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

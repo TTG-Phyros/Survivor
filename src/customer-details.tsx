@@ -1,39 +1,110 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./customer-details.css";
 import Navbar from "./Navbar";
-
+import { useParams, useNavigate } from "react-router-dom";
+import * as api from "./api/Api.js"
 
 const CustomerDetails: React.FC = () => {
+  const navigate = useNavigate();
+
+  const { id } = useParams<{ id: string }>();
+  const [customerInfo, setCustomerInfo] = useState<Customer | null>(null);
+  const [customerEncounters, setCustomerEncounters] = useState<Encounter[] | null>(null);
+  const [customerPayments, setCustomerPayments] = useState<Payment[] | null>(null);
+
+  interface Payment {
+    id: number;
+    date: string;
+    payment_method: number;
+    amount: number;
+    comment: string;
+  }
+
+  interface Encounter {
+    id: number;
+    customer_id: number;
+    date: string;
+    rating: number;
+    comment: string;
+    source: string;
+  }
+
+  interface Customer {
+    id: number,
+    email: string,
+    firstname: string,
+    lastname: string,
+    birthdate: string,
+    gender: string,
+    description: string,
+    astrological_sign: string,
+    phone_number: string,
+    address: string,
+    image: string,
+  }
+
+  useEffect(() => {
+    api.getCustomerById(id).then(infos => {
+      setCustomerInfo(infos);
+    }).catch(error => {
+      console.error('Failed to fetch customer:', error);
+    });
+    api.getEncountersViaCustomerId(id).then(infos => {
+      setCustomerEncounters(infos);
+    }).catch(error => {
+      console.error('Failed to fetch customer encounters:', error);
+    });
+    api.getCustomerPayments(id).then(infos => {
+      setCustomerPayments(infos);
+    }).catch(error => {
+      console.error('Failed to fetch customer encounters:', error);
+    });
+  }, []);
+
+  const convertRatingToStars = (rating: number): string => {
+    const maxStars = 5;
+    const filledStar = '★';
+    const emptyStar = '☆';
+    
+    // Ensure the rating is within the bounds (0 to 5)
+    const boundedRating = Math.max(0, Math.min(rating, maxStars));
+    
+    // Create the string of stars
+    const filledStars = filledStar.repeat(boundedRating);
+    const emptyStars = emptyStar.repeat(maxStars - boundedRating);
+    
+    return filledStars + emptyStars;
+  }
 
   return (
     <div className="container">
       <Navbar />
       <div className="all">
         <div>
-          <button className="back-button" >back</button>
+          <button className="back-button" onClick={() => {navigate("/customers")}}>back</button>
         <h1 className="title-of-page">Customer Details</h1>
         <div className="details-section">
           <div className="sidebar">
             <div className="profile-section">
               <div className="sidebara">
                 <img
-                  src="/test.jpg"
-                  alt="Francis Mitcham"
+                  src={`data:image/jpeg;base64,${customerInfo?.image}`}
+                  alt={`${customerInfo?.firstname} ${customerInfo?.lastname}`}
                   className="profile-picture"
                 />
-                <div className="peater">Francis Mitcham</div>
+                <div className="peater">{customerInfo?.firstname + " " + customerInfo?.lastname}</div>
               </div>
               <div className="contact-info">
                 <p>
-                  User ID: <span>UD003054</span>
+                  User ID: <span>{customerInfo?.id}</span>
                 </p>
                 <p>
-                  Email: <span>francis.mitcham@tmail.com</span>
+                  Email: <span>{customerInfo?.email}</span>
                 </p>
                 <p>
                   Address :{" "}
                   <span>
-                    551 Swanston Street, Melbourne Victoria 3053 Australia
+                    {customerInfo?.address}
                   </span>
                 </p>
                 <p>
@@ -43,22 +114,22 @@ const CustomerDetails: React.FC = () => {
                   Coach: <span>Nicolas Latourne</span>
                 </p>
                 <p>
-                  Description: <span>Active</span>
+                  Description: <span>{customerInfo?.description}</span>
                 </p>
               </div>
             </div>
             <div className="statistics">
               <div>
                 <p>Total Encounters</p>
-                <span>23</span>
+                <span>{customerEncounters?.length}</span>
               </div>
               <div>
                 <p>Positives</p>
-                <span>20</span>
+                <span>{customerEncounters?.filter(item => item.rating >= 3).length}</span>
               </div>
               <div>
                 <p>In Progress</p>
-                <span>3</span>
+                <span>{customerEncounters?.filter(item => item.rating < 3).length}</span>
               </div>
             </div>
           </div>
@@ -75,7 +146,15 @@ const CustomerDetails: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  {customerEncounters && customerEncounters.map((encounter) => (
+                    <tr key={encounter.id}>
+                      <td>{encounter.date.slice(0, 10)}</td>
+                      <td>{convertRatingToStars(encounter.rating)}</td>
+                      <td>{encounter.comment}</td>
+                      <td className="source">{encounter.source}</td>
+                    </tr>
+                  ))}
+                  {/* <tr>
                     <td>23 Jul. 2024</td>
                     <td>⭑⭑⭑⭑⭑</td>
                     <td>A very good moment!</td>
@@ -104,7 +183,7 @@ const CustomerDetails: React.FC = () => {
                     <td>⭑⭑⭑☆☆</td>
                     <td>Need to see her again, she was interesting.</td>
                     <td className="source">Social Network</td>
-                  </tr>
+                  </tr> */}
                 </tbody>
               </table>
             </div>
@@ -121,7 +200,15 @@ const CustomerDetails: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                {customerPayments && customerPayments.map((payment) => (
+                  <tr key={payment.id}>
+                    <td>{payment.date.slice(0, 10)}</td>
+                    <td>{payment.payment_method}</td>
+                    <td>{payment.amount}</td>
+                    <td>{payment.comment}</td>
+                  </tr>
+                ))}
+                  {/* <tr>
                     <td>20 Jul. 2024</td>
                     <td>Visa</td>
                     <td>- $49.00</td>
@@ -144,7 +231,7 @@ const CustomerDetails: React.FC = () => {
                     <td>Visa</td>
                     <td>- $49.00</td>
                     <td>Monthly Subscription</td>
-                  </tr>
+                  </tr> */}
                 </tbody>
               </table>
             </div>

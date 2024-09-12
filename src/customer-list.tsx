@@ -2,6 +2,7 @@ import "./coaches-list.css";
 import React, { useState, useEffect } from "react";
 import * as api from "./api/Api";
 import Navbar from "./Navbar";
+import { useNavigate } from 'react-router-dom';
 
 interface Customer {
   id: number;
@@ -12,6 +13,7 @@ interface Customer {
 }
 
 const CoachesList: React.FC = () => {
+  const navigate = useNavigate();
   const [menuVisible, setMenuVisible] = useState<number | null>(null);
   const [isCustomerModalOpen, setIsCustomerModalOpen] =
     useState<boolean>(false);
@@ -218,6 +220,7 @@ const CoachesList: React.FC = () => {
                   <a
                     href="#"
                     onClick={() => {
+                      navigate(`/customer-details/${customer.id}`);
                       console.log(`Clicked on customer: ${customer.firstname} ${customer.lastname}`);
                       //redirect to customer details page
                     }}

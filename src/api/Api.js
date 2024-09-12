@@ -436,6 +436,22 @@ export const getEncountersViaDelayInDays = async (delay) => {
 };
 
 /**
+ * Fonction pour récupérer les rencontres d'un client
+**/
+export const getEncountersViaCustomerId = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/encounters/customer/${id}`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+  }
+};
+
+/**
  * Fonction pour récupérer le nombre d'évenements
 **/
 export const getEventsCount = async () => {
@@ -505,6 +521,38 @@ export const getEventsMonthCount = async () => {
 export const getCustomers = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/customers`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+  }
+};
+
+/**
+ * Fonction pour récupérer un client par ID
+**/
+export const getCustomerById = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/customers/${id}`, {
+      headers: {
+        token: `${cookies.get("ACCOUNT_TOKEN")}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Il y a eu une erreur!', error);
+  }
+};
+
+/**
+ * Fonction pour récupérer l'historique de paiement client par ID
+**/
+export const getCustomerPayments = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/customers/${id}/payments_history`, {
       headers: {
         token: `${cookies.get("ACCOUNT_TOKEN")}`
       }
