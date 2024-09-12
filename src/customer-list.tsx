@@ -9,9 +9,10 @@ interface Customer {
   lastname: string;
   email: string;
   phone_number: string;
+  image?: string;
 }
 
-const CoachesList: React.FC = () => {
+const CustomersList: React.FC = () => {
   const [menuVisible, setMenuVisible] = useState<number | null>(null);
   const [isCustomerModalOpen, setIsCustomerModalOpen] =
     useState<boolean>(false);
@@ -205,6 +206,7 @@ const CoachesList: React.FC = () => {
           <thead>
             <tr>
               <th>Customers</th>
+              <th>Profile</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Payment method</th>
@@ -214,12 +216,19 @@ const CoachesList: React.FC = () => {
           <tbody>
             {(filteredCustomers.length > 0 ? filteredCustomers : sortCustomerSearch()).map((customer) => (
               <tr key={customer.id}>
+                <td className="coach-info">
+                  <img
+                    src={`data:image/jpeg;base64,${customer.image}`}
+                    alt={`${customer.firstname} ${customer.lastname}`}
+                    className="coach-image"
+                  />
+                  <span className="coach-name">{customer.firstname} {customer.lastname}</span>
+                </td>
                 <td>
                   <a
                     href="#"
                     onClick={() => {
                       console.log(`Clicked on customer: ${customer.firstname} ${customer.lastname}`);
-                      //redirect to customer details page
                     }}
                   >
                     {customer.firstname} {customer.lastname}
@@ -250,9 +259,7 @@ const CoachesList: React.FC = () => {
               </tr>
             ))}
           </tbody>
-
         </table>
-
         {isFormOpen && (
           <div className="modal">
             <div className="modal-content">
@@ -437,4 +444,4 @@ const CoachesList: React.FC = () => {
   );
 };
 
-export default CoachesList;
+export default CustomersList;
