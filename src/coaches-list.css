@@ -131,6 +131,7 @@ body {
   padding: 12px 15px;
   border: 1px solid #ddd;
   text-align: left;
+  vertical-align: middle; /* Centre verticalement le contenu de la cellule */
 }
 
 .coaches-list-table th {
@@ -387,4 +388,27 @@ li {
 .alinbuttondt {
   margin-left: auto;
   border-radius: 10px;
+}
+
+/* Styles pour le conteneur de l'image et du texte */
+.coach-info {
+  display: flex;
+  align-items: center; /* Aligne verticalement l'image et le texte */
+  flex: 1; /* Permet à l'élément de prendre tout l'espace disponible */
+  min-height: 70px; /* Hauteur minimale pour éviter qu'il ne devienne trop petit */
+}
+
+/* Styles pour l'image du coach */
+.coach-image {
+  width: 50px; /* Ajuste la largeur comme nécessaire */
+  height: 50px; /* Ajuste la hauteur comme nécessaire */
+  object-fit: cover; /* Maintient les proportions de l'image sans déformation */
+  border-radius: 50%; /* Optionnel, donne un aspect circulaire à l'image */
+  margin-right: 10px; /* Espace entre l'image et le texte */
+}
+
+/* Styles pour le nom du coach */
+.coach-name {
+  font-size: 16px; /* Ajuste la taille de la police comme nécessaire */
+  white-space: nowrap; /* Empêche le texte de se casser en plusieurs lignes */
 }

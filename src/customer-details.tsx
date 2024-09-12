@@ -3,6 +3,32 @@ import "./customer-details.css";
 import Navbar from "./Navbar";
 import { useParams, useNavigate } from "react-router-dom";
 import * as api from "./api/Api.js"
+const ModificationHistory: React.FC = () => {
+  const [showHistory, setShowHistory] = useState(false);
+
+  const handleToggleHistory = () => {
+    setShowHistory(!showHistory);
+  };
+
+  return (
+    <div>
+      <button className="history-button" onClick={handleToggleHistory}>
+        {showHistory ? 'hide ' : 'Afficher l\'historique des modifications'}
+      </button>
+
+      {showHistory && (
+        <div className="modification-history">
+          <h3>modification history</h3>
+          <ul>
+            <li>Nom modifié de "Jean Dupont" à "Jean Durand" (01/09/2023)</li>
+            <li>Numéro de téléphone modifié (15/08/2023)</li>
+            <li>Genre modifié de "Homme" à "Non spécifié" (10/07/2023)</li>
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CustomerDetails: React.FC = () => {
   const navigate = useNavigate();

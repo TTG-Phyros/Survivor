@@ -1,6 +1,5 @@
 import "./coaches-list.css";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import * as api from "./api/Api";
 import Navbar from "./Navbar";
 
@@ -11,6 +10,7 @@ interface Coach {
   email: string;
   phone?: string;
   numberOfCustomers?: number;
+  imageUrl?: string;
 }
 
 interface Customer {
@@ -37,6 +37,7 @@ const CoachesList: React.FC = () => {
   const [isAddEmployeeModalOpen, setIsAddEmployeeModalOpen] = useState<boolean>(false);
   const [isRemoveEmployeeModalOpen, setIsRemoveEmployeeModalOpen] = useState<boolean>(false);
   const [isRemoveEmployeeModalConfirmationOpen, setIsRemoveEmployeeModalConfirmationOpen] = useState<boolean>(false);
+  const [coachImages, setCoachImages] = useState<{ [key: number]: string }>({});
   const [newCoach, setNewCoach] = useState({
     firstname: "",
     lastname: "",
@@ -68,13 +69,23 @@ const CoachesList: React.FC = () => {
     try {
       const response = await api.getCoaches();
       if (response && response.value) {
-        const coachesList: [] = response.value;
-        await coachesList.map(async (coach: Coach) => {
-          const relations = await api.getEmployeeRelations(coach.id);
-          coach.numberOfCustomers = relations.length;
-          return coach;
-        });
-        setCoaches(response.value);
+        const coachesList: Coach[] = response.value;
+
+        await Promise.all(
+          coachesList.map(async (coach: Coach) => {
+            const relations = await api.getEmployeeRelations(coach.id);
+            coach.numberOfCustomers = relations.length;
+
+            const image = await api.getEmployeeImage(coach.id);
+            setCoachImages(prevImages => ({
+              ...prevImages,
+              [coach.id]: image,
+            }));
+
+            return coach;
+          })
+        );
+        setCoaches(coachesList);
         setLoading(false);
       } else {
         setError("Aucune donnée de coach disponible");
@@ -220,7 +231,6 @@ const CoachesList: React.FC = () => {
     if (employee) {
       try {
         await api.removeEmployee(employee.id);
-        // Update the customers state after removal
         setCoaches(coaches.filter(c => c.id !== employee.id));
         setSelectedEmployee(null);
         setIsRemoveEmployeeModalOpen(false);
@@ -326,17 +336,19 @@ const CoachesList: React.FC = () => {
           <tbody>
             {filteredCoaches.map((coach) => (
               <tr key={coach.id}>
-                <td>
-                  {coach.firstname} {coach.lastname}
+                <td className="coach-info">
+                  <img
+                    src={`data:image/jpeg;base64,${coachImages[coach.id]}`}
+                    alt={`${coach.firstname} ${coach.lastname}`}
+                    className="coach-image"
+                  />
+                  <span className="coach-name">{coach.firstname} {coach.lastname}</span>
                 </td>
                 <td>{coach.email}</td>
                 <td>{coach.phone || "N/A"}</td>
                 <td>{coach.numberOfCustomers || "0"}</td>
                 <td className="actions-cell">
-                  <button
-                    className="actions-button"
-                    onClick={() => handleMenuClick(coach.id)}
-                  >
+                  <button className="actions-button" onClick={() => handleMenuClick(coach.id)}>
                     ⋮
                   </button>
                   {menuVisible === coach.id && (
@@ -344,9 +356,7 @@ const CoachesList: React.FC = () => {
                       <button onClick={() => handleAddCustomerClick(coach)}>
                         Add / Remove Customer
                       </button>
-                      <button
-                        onClick={() => handleActionClick("Delete Coach", coach)}
-                      >
+                      <button onClick={() => handleActionClick("Delete Coach", coach)}>
                         Delete Coach
                       </button>
                     </div>
@@ -356,7 +366,6 @@ const CoachesList: React.FC = () => {
             ))}
           </tbody>
         </table>
-
         {isCustomerModalOpen && (
           <div className="modal2">
             <div className="modal-content2">

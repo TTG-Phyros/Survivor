@@ -214,10 +214,7 @@ export const fetchDistantEmployeesImages = async () => {
 **/
 export const getEmployeeImage = async (id) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/employees/employee_id/image`, {
-      params: {
-        id: id
-      },
+    const response = await axios.get(`${API_BASE_URL}/employees/${id}/image`, {
       headers: {
         token: `${cookies.get("ACCOUNT_TOKEN")}`
       }
@@ -227,6 +224,7 @@ export const getEmployeeImage = async (id) => {
     console.error('Il y a eu une erreur!', error);
   }
 };
+
 
 /**
  * Fonction pour refresh les images des employés depuis l'API distante
