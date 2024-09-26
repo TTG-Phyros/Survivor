@@ -1,46 +1,77 @@
-# Getting Started with Create React App
+# Survivor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Survivor** est un projet web destiné à créer un site de dashboard pour l'entreprise fictive **Soul Connection**. Ce site offre des outils et des statistiques aux coachs en séduction, afin qu'ils puissent mieux accompagner leurs clients. Il inclut également une interface de gestion pour les managers, qui peuvent administrer les comptes des coachs et des clients.
 
-## Available Scripts
+## 🎯 Objectif
 
-In the project directory, you can run:
+Le but de **Survivor** est de fournir une plateforme intuitive et puissante permettant à l'équipe de **Soul Connection** de suivre et d'analyser des données clients, tout en facilitant la gestion des comptes et des interactions.
 
-### `npm start`
+### Fonctionnalités principales pour les coachs :
+- **Statistiques clients** : Les coachs peuvent visualiser et analyser des statistiques sur leurs clients, pour mieux adapter leurs conseils.
+- **Outil de garde-robe** : Permet aux coachs d'aider leurs clients à choisir les vêtements les plus adaptés à leurs rendez-vous ou événements.
+- **Outil de compatibilité astrologique** : Vérification de la compatibilité astrologique entre deux clients pour de meilleures suggestions relationnelles.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Fonctionnalités principales pour les managers :
+- **Gestion des comptes** : Création, suppression et modification des comptes coachs et clients.
+- **Assignation de coachs** : Les managers peuvent assigner ou réassigner un coach à un client selon leurs besoins.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🛠️ Développement technique
 
-### `npm test`
+Le projet **Survivor** repose sur une architecture web moderne et intègre une base de données migrée depuis une API fournie par **Soul Connection**, qui était vouée à disparaître. Cette migration permet de garantir la pérennité des données dans une base de données interne.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Difficultés techniques :
+- **Flexibilité des consignes** : La forme et le fond du site peuvent être modifiés à tout moment, y compris la veille de la livraison du projet, ce qui a nécessité une grande agilité dans le développement.
+- **Migration de données** : La base de données a dû être migrée d'une API externe vers notre propre infrastructure pour garantir la continuité des services.
+  
+## 📋 Fonctionnalités du site
 
-### `npm run build`
+- **Dashboard interactif** : Interface utilisateur intuitive permettant aux coachs de suivre les statistiques des clients.
+- **Outils spécifiques** : Garde-robe et compatibilité astrologique accessibles depuis le dashboard.
+- **Gestion des utilisateurs** : Les managers peuvent ajouter ou supprimer des utilisateurs, et gérer les affectations entre coachs et clients.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🚧 Fonctionnalités à venir
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [ ] Intégration de nouvelles statistiques pour mieux analyser les performances des coachs et clients.
+- [ ] Amélioration de l'interface de gestion des utilisateurs pour une administration plus fluide.
+- [ ] Notifications en temps réel pour les managers et les coachs lors des mises à jour importantes.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🖼️ Captures d'écran
 
-### `npm run eject`
+![Menu du connection](https://github.com/TTG-Phyros/repositoriesPhotos/blob/main/Survivor/Survivor_Login.png)
+![Page Dashboard](https://github.com/TTG-Phyros/repositoriesPhotos/blob/main/Survivor/Survivor_Dashboard.png)
+![Page Customers](https://github.com/TTG-Phyros/repositoriesPhotos/blob/main/Survivor/Survivor_Customer_List.png)
+![Page Customer Details](https://github.com/TTG-Phyros/repositoriesPhotos/blob/main/Survivor/Survivor_Customer_Details.png)
+![Page Events](https://github.com/TTG-Phyros/repositoriesPhotos/blob/main/Survivor/Survivor_Events.png)
+![Page Compatibility](https://github.com/TTG-Phyros/repositoriesPhotos/blob/main/Survivor/Survivor_Compatibility.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 🚀 Installation
+### Prérequis
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    [MakeFile, NodeJS, ExpressJS, ReactJS, PostGresSQL, Axios]
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Instructions
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Clone le dépôt :
 
-## Learn More
+    git clone https://github.com/ton-compte/Survivor.git
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Accède au dossier du projet :
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    cd Survivor
+
+### Compile le projet :
+
+Dans la racine du projet : npm install
+    - npm start
+Dans le dossier backend : npm install
+    - node index.js
+
+### Pour lancer le site : 
+
+Dans la racine du projet : npm start
+Dans le dossier backend : node index.js
+
+## Auteur
+
+| [<img src="https://github.com/Priax.png?size=85" width=85><br><sub>Vincent Montero Fontaine</sub>](https://github.com/Priax) | [<img src="https://github.com/BaptisteMERY.png?size=85" width=85><br><sub>Baptiste Mery</sub>](https://github.com/BaptisteMERY) | [<img src="https://github.com/TTG-Phyros.png?size=85" width=85><br><sub>Nicolas Audibert</sub>](https://github.com/TTG-Phyros) | [<img src="https://github.com/Gappy7.png?size=85" width=85><br><sub>Anthony Girard</sub>](https://github.com/Gappy7)
+| :---: | :---: | :---: | :---: |
